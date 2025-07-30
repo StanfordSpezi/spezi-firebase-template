@@ -1,4 +1,4 @@
-import { QuantityUnit } from '../codes/quantityUnit.js'
+import { type QuantityUnit } from '../codes/quantityUnit.js'
 
 export interface ObservationQuantity {
   date: Date
