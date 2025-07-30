@@ -1,0 +1,18 @@
+{
+  "name": "spezi-firebase-template",
+  "version": "1.0.0",
+  "description": "A Firebase template for Spezi applications with FHIR support",
+  "scripts": {
+    "install": "npm --prefix functions/models install && npm --prefix functions install",
+    "lint": "npm --prefix functions/models run lint && npm --prefix functions run lint", 
+    "lint:fix": "npm --prefix functions/models run lint:fix && npm --prefix functions run lint:fix",
+    "build": "npm --prefix functions/models run build && npm --prefix functions run build",
+    "clean": "npm --prefix functions/models run clean && npm --prefix functions run clean",
+    "prepare": "npm run clean && npm run install && npm run build",
+    "test:ci": "firebase emulators:exec --only auth,firestore,storage 'npm --prefix functions run test:emulators'",
+    "serve:seeded": "npm --prefix functions run serve:seeded"
+  },
+  "keywords": ["firebase", "spezi", "fhir", "healthcare", "template"],
+  "author": "Stanford Biodesign Digital Health Group",
+  "license": "MIT"
+}
