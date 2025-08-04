@@ -1,19 +1,21 @@
-import { z } from 'zod'
-import { UserType } from './userType.js'
-import { SchemaConverter } from '../helpers/schemaConverter.js'
+import { z } from "zod";
+import { UserType } from "./userType.js";
+import { SchemaConverter } from "../helpers/schemaConverter.js";
 
 export const userConverter = new SchemaConverter({
-  schema: z.object({
-    type: z.nativeEnum(UserType),
-    disabled: z.boolean().default(false),
-    organization: z.string().optional(),
-    clinician: z.string().optional(),
-    displayName: z.string().optional(),
-    email: z.string().email().optional(),
-    phoneNumbers: z.array(z.string()).default([]),
-    createdAt: z.date(),
-    lastActiveDate: z.date(),
-  }).transform((values) => new User(values)),
+  schema: z
+    .object({
+      type: z.nativeEnum(UserType),
+      disabled: z.boolean().default(false),
+      organization: z.string().optional(),
+      clinician: z.string().optional(),
+      displayName: z.string().optional(),
+      email: z.string().email().optional(),
+      phoneNumbers: z.array(z.string()).default([]),
+      createdAt: z.date(),
+      lastActiveDate: z.date(),
+    })
+    .transform((values) => new User(values)),
   encode: (object) => ({
     type: object.type,
     disabled: object.disabled,
@@ -25,38 +27,38 @@ export const userConverter = new SchemaConverter({
     createdAt: object.createdAt,
     lastActiveDate: object.lastActiveDate,
   }),
-})
+});
 
 export class User {
-  readonly type: UserType
-  readonly disabled: boolean
-  readonly organization?: string
-  readonly clinician?: string
-  readonly displayName?: string
-  readonly email?: string
-  readonly phoneNumbers: string[]
-  readonly createdAt: Date
-  readonly lastActiveDate: Date
+  readonly type: UserType;
+  readonly disabled: boolean;
+  readonly organization?: string;
+  readonly clinician?: string;
+  readonly displayName?: string;
+  readonly email?: string;
+  readonly phoneNumbers: string[];
+  readonly createdAt: Date;
+  readonly lastActiveDate: Date;
 
   constructor(input: {
-    type: UserType
-    disabled: boolean
-    organization?: string
-    clinician?: string
-    displayName?: string
-    email?: string
-    phoneNumbers: string[]
-    createdAt: Date
-    lastActiveDate: Date
+    type: UserType;
+    disabled: boolean;
+    organization?: string;
+    clinician?: string;
+    displayName?: string;
+    email?: string;
+    phoneNumbers: string[];
+    createdAt: Date;
+    lastActiveDate: Date;
   }) {
-    this.type = input.type
-    this.disabled = input.disabled
-    this.organization = input.organization
-    this.clinician = input.clinician
-    this.displayName = input.displayName
-    this.email = input.email
-    this.phoneNumbers = input.phoneNumbers
-    this.createdAt = input.createdAt
-    this.lastActiveDate = input.lastActiveDate
+    this.type = input.type;
+    this.disabled = input.disabled;
+    this.organization = input.organization;
+    this.clinician = input.clinician;
+    this.displayName = input.displayName;
+    this.email = input.email;
+    this.phoneNumbers = input.phoneNumbers;
+    this.createdAt = input.createdAt;
+    this.lastActiveDate = input.lastActiveDate;
   }
 }
