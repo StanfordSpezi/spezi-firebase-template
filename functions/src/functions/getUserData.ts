@@ -37,7 +37,7 @@ export const getUserData = onCall(
         return {
           id: doc.id,
           date: observation.raw().effectiveDateTime,
-          steps: observation.stepCount?.value || 0,
+          steps: observation.stepCount?.value ?? 0,
         }
       })
 

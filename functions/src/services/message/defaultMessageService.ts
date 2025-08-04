@@ -15,7 +15,7 @@ export class DefaultMessageService implements MessageService {
   async addMessage(
     userId: string,
     message: UserMessage,
-    options: {
+    _options: {
       notify: boolean
       user: User | null
     },

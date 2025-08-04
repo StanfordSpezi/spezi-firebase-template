@@ -6,6 +6,10 @@ import {
 } from 'firebase-admin/firestore'
 import { type SchemaConverter } from '@stanfordbdhg/spezi-firebase-models'
 
+function isSerializableObject(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value) && !(value instanceof Date) && !(value instanceof Timestamp)
+}
+
 export class DatabaseConverter<T, U> implements FirestoreDataConverter<T> {
   private converter: SchemaConverter<T, U>
 
@@ -15,26 +19,26 @@ export class DatabaseConverter<T, U> implements FirestoreDataConverter<T> {
 
   toFirestore(modelObject: T): DocumentData {
     const data = this.converter.encode(modelObject)
-    return this.convertDatesToTimestamps(data)
+    return this.convertDatesToTimestamps(data) as DocumentData
   }
 
   fromFirestore(
     snapshot: QueryDocumentSnapshot,
   ): T {
-    const data = snapshot.data()
+    const data: unknown = snapshot.data()
     const convertedData = this.convertTimestampsToDates(data)
     return this.converter.schema.parse(convertedData)
   }
 
-  private convertDatesToTimestamps(obj: any): any {
+  private convertDatesToTimestamps(obj: unknown): unknown {
     if (obj instanceof Date) {
       return Timestamp.fromDate(obj)
     }
     if (Array.isArray(obj)) {
       return obj.map((item) => this.convertDatesToTimestamps(item))
     }
-    if (obj && typeof obj === 'object') {
-      const result: any = {}
+    if (isSerializableObject(obj)) {
+      const result: Record<string, unknown> = {}
       for (const [key, value] of Object.entries(obj)) {
         result[key] = this.convertDatesToTimestamps(value)
       }
@@ -43,15 +47,15 @@ export class DatabaseConverter<T, U> implements FirestoreDataConverter<T> {
     return obj
   }
 
-  private convertTimestampsToDates(obj: any): any {
+  private convertTimestampsToDates(obj: unknown): unknown {
     if (obj instanceof Timestamp) {
       return obj.toDate()
     }
     if (Array.isArray(obj)) {
       return obj.map((item) => this.convertTimestampsToDates(item))
     }
-    if (obj && typeof obj === 'object') {
-      const result: any = {}
+    if (isSerializableObject(obj)) {
+      const result: Record<string, unknown> = {}
       for (const [key, value] of Object.entries(obj)) {
         result[key] = this.convertTimestampsToDates(value)
       }
@@ -61,8 +65,8 @@ export class DatabaseConverter<T, U> implements FirestoreDataConverter<T> {
   }
 }
 
-export class FHIRDatabaseConverter<T> extends DatabaseConverter<T, any> {
-  constructor(converter: SchemaConverter<T, any>) {
+export class FHIRDatabaseConverter<T> extends DatabaseConverter<T, unknown> {
+  constructor(converter: SchemaConverter<T, unknown>) {
     super(converter)
   }
 }

@@ -26,16 +26,17 @@ export const addStepCount = onCall(
       const userId = auth.uid
       const collections = new CollectionsService(getFirestore())
 
+      const observationId = `${userId}-${date.getTime()}`
       const observation = FHIRObservation.createStepCount({
-        id: `${userId}-${date.getTime()}`,
+        id: observationId,
         date: date,
         steps: data.steps,
       })
 
       const stepCountCollection = collections.userObservations(userId, 'stepCount')
-      await stepCountCollection.doc(observation.id!).set(observation)
+      await stepCountCollection.doc(observationId).set(observation)
 
-      return { success: true, observationId: observation.id }
+      return { success: true, observationId }
     } catch (error) {
       console.error('Error adding step count:', error)
       throw new HttpsError('internal', 'Failed to add step count')

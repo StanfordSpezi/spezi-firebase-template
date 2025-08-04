@@ -29,7 +29,7 @@ export const dismissMessage = onCall(
       await messageService.dismissMessage(
         userId,
         data.messageId,
-        data.didPerformAction || false,
+        data.didPerformAction ?? false,
       )
 
       return { success: true }
