@@ -4,11 +4,12 @@
   "description": "A Firebase template for Spezi applications with FHIR support",
   "scripts": {
     "install": "npm --prefix functions/models install && npm --prefix functions install",
-    "lint": "npm --prefix functions/models run lint && npm --prefix functions run lint",
-    "lint:fix": "npm --prefix functions/models run lint:fix && npm --prefix functions run lint:fix",
     "build": "npm --prefix functions/models run build && npm --prefix functions run build",
     "clean": "npm --prefix functions/models run clean && npm --prefix functions run clean",
     "prepare": "npm run clean && npm run install && npm run build",
+    "lint": "eslint .",
+    "lint:ci": "eslint --output-file eslint_report.json --format json .",
+    "lint:fix": "eslint . --fix",
     "test:ci": "firebase emulators:exec --only auth,firestore,storage 'npm --prefix functions run test:emulators'",
     "serve:seeded": "npm --prefix functions run serve:seeded"
   },
