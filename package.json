@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "description": "A Firebase template for Spezi applications with FHIR support",
   "scripts": {
-    "install": "npm --prefix functions/models install && npm --prefix functions install",
-    "build": "npm --prefix functions/models run build && npm --prefix functions run build",
-    "clean": "npm --prefix functions/models run clean && npm --prefix functions run clean",
+    "install": "npm --prefix functions install",
+    "build": "npm --prefix functions run build",
+    "clean": "npm --prefix functions run clean",
     "prepare": "npm run clean && npm run install && npm run build",
     "lint": "eslint .",
     "lint:ci": "eslint --output-file eslint_report.json --format json .",
