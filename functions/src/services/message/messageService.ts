@@ -1,7 +1,7 @@
 import {
   type User,
   type UserMessage,
-} from "@stanfordbdhg/spezi-firebase-models";
+} from "../../types/index.js";
 import { type Document } from "../database/databaseService.js";
 
 export interface MessageService {

@@ -1,15 +1,14 @@
-import {
-  fhirObservationConverter,
-  fhirQuestionnaireResponseConverter,
-  userConverter,
-  userMessageConverter,
-  type UserObservationCollection,
-} from "@stanfordbdhg/spezi-firebase-models";
 import { type Firestore } from "firebase-admin/firestore";
 import {
   DatabaseConverter,
   FHIRDatabaseConverter,
 } from "./databaseConverter.js";
+import {
+  fhirObservationConverter,
+  userConverter,
+  userMessageConverter,
+  type UserObservationCollection,
+} from "../../types/index.js";
 
 export class CollectionsService {
   readonly firestore: Firestore;
@@ -46,7 +45,7 @@ export class CollectionsService {
       .doc(userId)
       .collection("questionnaireResponses")
       .withConverter(
-        new FHIRDatabaseConverter(fhirQuestionnaireResponseConverter),
+        new FHIRDatabaseConverter(fhirObservationConverter),
       );
   }
 }

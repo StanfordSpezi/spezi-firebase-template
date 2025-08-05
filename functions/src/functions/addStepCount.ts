@@ -1,4 +1,3 @@
-import { FHIRObservation } from "@stanfordbdhg/spezi-firebase-models";
 import { getFirestore } from "firebase-admin/firestore";
 import {
   onCall,
@@ -6,6 +5,7 @@ import {
   HttpsError,
 } from "firebase-functions/v2/https";
 import { CollectionsService } from "../services/database/collections.js";
+import { FHIRHelpers } from "../helpers/fhirHelpers.js";
 
 interface AddStepCountData {
   date: string;
@@ -31,7 +31,7 @@ export const addStepCount = onCall(
       const collections = new CollectionsService(getFirestore());
 
       const observationId = `${userId}-${date.getTime()}`;
-      const observation = FHIRObservation.createStepCount({
+      const observation = FHIRHelpers.createStepCountObservation({
         id: observationId,
         date: date,
         steps: data.steps,

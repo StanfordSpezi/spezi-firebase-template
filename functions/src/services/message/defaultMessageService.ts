@@ -1,7 +1,7 @@
 import {
   type User,
   type UserMessage,
-} from "@stanfordbdhg/spezi-firebase-models";
+} from "../../types/index.js";
 import { type MessageService } from "./messageService.js";
 import { CollectionsService } from "../database/collections.js";
 import {
@@ -9,20 +9,31 @@ import {
   type DatabaseService,
   convertDocument,
 } from "../database/databaseService.js";
+import {
+  FirebaseNotificationService,
+  FirestoreDeviceStorage,
+  Message,
+} from "@stanfordspezi/spezi-firebase-cloud-messaging";
+import { getMessaging } from "firebase-admin/messaging";
 
 export class DefaultMessageService implements MessageService {
   private databaseService: DatabaseService;
   private collections: CollectionsService;
+  private notificationService: FirebaseNotificationService;
 
   constructor(databaseService: DatabaseService) {
     this.databaseService = databaseService;
     this.collections = new CollectionsService(databaseService.firestore());
+    this.notificationService = new FirebaseNotificationService(
+      getMessaging(),
+      new FirestoreDeviceStorage(databaseService.firestore())
+    );
   }
 
   async addMessage(
     userId: string,
     message: UserMessage,
-    _options: {
+    options: {
       notify: boolean;
       user: User | null;
     },
@@ -30,6 +41,29 @@ export class DefaultMessageService implements MessageService {
     const messagesCollection = this.collections.userMessages(userId);
     const docRef = await messagesCollection.add(message);
     const snapshot = await docRef.get();
+    
+    // Send push notification if requested
+    if (options.notify) {
+      try {
+        const notificationMessage = Message.createInformation({
+          title: { en: message.title },
+          description: { en: message.description },
+          action: message.action,
+          isDismissible: !message.isDismissed,
+        });
+
+        await this.notificationService.sendMessageNotification(userId, {
+          id: docRef.id,
+          path: `/users/${userId}/messages/${docRef.id}`,
+          lastUpdate: new Date(),
+          content: notificationMessage,
+        });
+      } catch (error) {
+        console.error("Failed to send push notification:", error);
+        // Don't fail the entire operation if notification fails
+      }
+    }
+    
     return convertDocument(snapshot) as Document<UserMessage> | undefined;
   }
 

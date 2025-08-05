@@ -1,4 +1,4 @@
-import { type SchemaConverter } from "@stanfordbdhg/spezi-firebase-models";
+import { type SchemaConverter } from "@stanfordspezi/spezi-firebase-utils";
 import {
   type DocumentData,
   type FirestoreDataConverter,
@@ -16,14 +16,14 @@ const isSerializableObject = (
   !(value instanceof Timestamp);
 
 export class DatabaseConverter<T, U> implements FirestoreDataConverter<T> {
-  private converter: SchemaConverter<T, U>;
+  private converter: SchemaConverter<any, U>;
 
-  constructor(converter: SchemaConverter<T, U>) {
+  constructor(converter: SchemaConverter<any, U>) {
     this.converter = converter;
   }
 
   toFirestore(modelObject: T): DocumentData {
-    const data = this.converter.encode(modelObject);
+    const data = this.converter.encode(modelObject as any);
     return this.convertDatesToTimestamps(data) as DocumentData;
   }
 
@@ -69,7 +69,7 @@ export class DatabaseConverter<T, U> implements FirestoreDataConverter<T> {
 }
 
 export class FHIRDatabaseConverter<T> extends DatabaseConverter<T, unknown> {
-  constructor(converter: SchemaConverter<T, unknown>) {
+  constructor(converter: SchemaConverter<any, unknown>) {
     super(converter);
   }
 }

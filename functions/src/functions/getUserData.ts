@@ -1,3 +1,5 @@
+/// <reference types="fhir" />
+
 import { getFirestore } from "firebase-admin/firestore";
 import {
   onCall,
@@ -38,22 +40,16 @@ export const getUserData = onCall(
 
       const stepCountSnapshot = await stepCountQuery.get();
       const stepCountData = stepCountSnapshot.docs.map((doc) => {
-        const observation = doc.data();
+        const observation = doc.data() as fhir4b.Observation;
         return {
           id: doc.id,
-          date: observation.raw().effectiveDateTime,
-          steps: observation.stepCount?.value ?? 0,
+          date: observation.effectiveDateTime,
+          steps: observation.valueQuantity?.value ?? 0,
         };
       });
 
       return {
-        user: {
-          type: user?.type,
-          displayName: user?.displayName,
-          email: user?.email,
-          createdAt: user?.createdAt,
-          lastActiveDate: user?.lastActiveDate,
-        },
+        user: user ?? {},  
         stepCountData,
       };
     } catch (error) {
