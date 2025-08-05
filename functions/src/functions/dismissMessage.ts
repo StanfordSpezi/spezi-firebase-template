@@ -6,11 +6,14 @@ import {
 } from "firebase-functions/v2/https";
 import { DefaultDatabaseService } from "../services/database/databaseService.js";
 import { DefaultMessageService } from "../services/message/defaultMessageService.js";
+import { z } from "zod";
 
-interface DismissMessageData {
-  messageId: string;
-  didPerformAction?: boolean;
-}
+const dismissMessageDataSchema = z.object({
+  messageId: z.string().min(1, "Message ID cannot be empty"),
+  didPerformAction: z.boolean().optional().default(false),
+});
+
+type DismissMessageData = z.infer<typeof dismissMessageDataSchema>;
 
 export const dismissMessage = onCall(
   { cors: true },
@@ -21,19 +24,25 @@ export const dismissMessage = onCall(
       throw new HttpsError("unauthenticated", "Authentication required");
     }
 
-    if (!data.messageId) {
-      throw new HttpsError("invalid-argument", "Message ID is required");
+    // Validate input using Zod schema
+    const validationResult = dismissMessageDataSchema.safeParse(data);
+    if (!validationResult.success) {
+      throw new HttpsError(
+        "invalid-argument",
+        `Invalid dismiss message data: ${validationResult.error.message}`
+      );
     }
 
     try {
+      const validatedData = validationResult.data;
       const userId = auth.uid;
       const databaseService = new DefaultDatabaseService(getFirestore());
       const messageService = new DefaultMessageService(databaseService);
 
       await messageService.dismissMessage(
         userId,
-        data.messageId,
-        data.didPerformAction ?? false,
+        validatedData.messageId,
+        validatedData.didPerformAction,
       );
 
       return { success: true };

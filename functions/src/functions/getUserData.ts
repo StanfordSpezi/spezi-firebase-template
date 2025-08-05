@@ -7,6 +7,7 @@ import {
   HttpsError,
 } from "firebase-functions/v2/https";
 import { CollectionsService } from "../services/database/collections.js";
+import { observationSchema } from "@stanfordspezi/spezi-firebase-fhir";
 
 export const getUserData = onCall(
   { cors: true },
@@ -40,7 +41,11 @@ export const getUserData = onCall(
 
       const stepCountSnapshot = await stepCountQuery.get();
       const stepCountData = stepCountSnapshot.docs.map((doc) => {
-        const observation = doc.data() as fhir4b.Observation;
+        const rawObservation = doc.data();
+        
+        // Validate the observation using the FHIR schema
+        const observation = observationSchema.parse(rawObservation);
+        
         return {
           id: doc.id,
           date: observation.effectiveDateTime,

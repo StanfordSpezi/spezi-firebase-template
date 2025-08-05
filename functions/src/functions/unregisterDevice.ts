@@ -7,6 +7,7 @@ import {
 } from "firebase-functions/v2/https";
 import {
   createUnregisterDeviceHandler,
+  unregisterDeviceInputSchema,
   FirebaseNotificationService,
   FirestoreDeviceStorage,
 } from "@stanfordspezi/spezi-firebase-cloud-messaging";
@@ -21,14 +22,23 @@ const unregisterDeviceHandler = createUnregisterDeviceHandler(notificationServic
 export const unregisterDevice = onCall(
   { cors: true },
   async (request: CallableRequest) => {
-    const { auth } = request;
+    const { auth, data } = request;
 
     if (!auth) {
       throw new HttpsError("unauthenticated", "Authentication required");
     }
 
+    // Validate input using the provided schema from the messaging package
+    const validationResult = unregisterDeviceInputSchema.safeParse(data);
+    if (!validationResult.success) {
+      throw new HttpsError(
+        "invalid-argument",
+        `Invalid device unregistration data: ${validationResult.error.message}`
+      );
+    }
+
     try {
-      return await unregisterDeviceHandler(auth.uid, request.data);
+      return await unregisterDeviceHandler(auth.uid, validationResult.data);
     } catch (error) {
       console.error("Error unregistering device:", error);
       throw new HttpsError("internal", "Failed to unregister device");

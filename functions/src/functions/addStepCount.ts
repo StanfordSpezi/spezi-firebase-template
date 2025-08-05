@@ -1,3 +1,5 @@
+/// <reference types="fhir" />
+
 import { getFirestore } from "firebase-admin/firestore";
 import {
   onCall,
@@ -5,12 +7,15 @@ import {
   HttpsError,
 } from "firebase-functions/v2/https";
 import { CollectionsService } from "../services/database/collections.js";
-import { FHIRHelpers } from "../helpers/fhirHelpers.js";
+import { observationSchema } from "@stanfordspezi/spezi-firebase-fhir";
+import { z } from "zod";
 
-interface AddStepCountData {
-  date: string;
-  steps: number;
-}
+const addStepCountDataSchema = z.object({
+  date: z.string().datetime(),
+  steps: z.number().int().min(0).max(100000),
+});
+
+type AddStepCountData = z.infer<typeof addStepCountDataSchema>;
 
 export const addStepCount = onCall(
   { cors: true },
@@ -21,27 +26,54 @@ export const addStepCount = onCall(
       throw new HttpsError("unauthenticated", "Authentication required");
     }
 
-    if (!data.date || typeof data.steps !== "number" || data.steps < 0) {
-      throw new HttpsError("invalid-argument", "Invalid step count data");
+    // Validate input using Zod schema
+    const validationResult = addStepCountDataSchema.safeParse(data);
+    if (!validationResult.success) {
+      throw new HttpsError(
+        "invalid-argument", 
+        `Invalid step count data: ${validationResult.error.message}`
+      );
     }
 
     try {
-      const date = new Date(data.date);
+      const validatedData = validationResult.data;
+      const date = new Date(validatedData.date);
       const userId = auth.uid;
       const collections = new CollectionsService(getFirestore());
 
+      // Create FHIR R4B Observation directly using the standardized schema
       const observationId = `${userId}-${date.getTime()}`;
-      const observation = FHIRHelpers.createStepCountObservation({
+      const observation: fhir4b.Observation = {
+        resourceType: "Observation",
         id: observationId,
-        date: date,
-        steps: data.steps,
-      });
+        status: "final",
+        code: {
+          text: "Number of steps in 24 hour Measured",
+          coding: [
+            {
+              system: "http://loinc.org",
+              code: "55423-8",
+              display: "Number of steps in 24 hour Measured",
+            },
+          ],
+        },
+        valueQuantity: {
+          value: validatedData.steps,
+          unit: "steps",
+          system: "http://unitsofmeasure.org",
+          code: "{steps}",
+        },
+        effectiveDateTime: date.toISOString(),
+      };
+
+      // Validate the observation using the FHIR schema
+      const validatedObservation = observationSchema.parse(observation);
 
       const stepCountCollection = collections.userObservations(
         userId,
         "stepCount",
       );
-      await stepCountCollection.doc(observationId).set(observation);
+      await stepCountCollection.doc(observationId).set(validatedObservation);
 
       return { success: true, observationId };
     } catch (error) {
