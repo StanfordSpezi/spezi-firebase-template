@@ -1,0 +1,66 @@
+import { z } from 'zod'
+import { type UserType } from './userType.js'
+import { SchemaConverter } from '../helpers/schemaConverter.js'
+
+export const userConverter = new SchemaConverter({
+  schema: z.object({
+    type: z.nativeEnum({
+      owner: 'owner' as const,
+      clinician: 'clinician' as const, 
+      patient: 'patient' as const,
+    }),
+    disabled: z.boolean().default(false),
+    organization: z.string().optional(),
+    clinician: z.string().optional(),
+    displayName: z.string().optional(),
+    email: z.string().email().optional(),
+    phoneNumbers: z.array(z.string()).default([]),
+    createdAt: z.date(),
+    lastActiveDate: z.date(),
+  }).transform((values) => new User(values)),
+  encode: (object) => ({
+    type: object.type,
+    disabled: object.disabled,
+    organization: object.organization,
+    clinician: object.clinician,
+    displayName: object.displayName,
+    email: object.email,
+    phoneNumbers: object.phoneNumbers,
+    createdAt: object.createdAt,
+    lastActiveDate: object.lastActiveDate,
+  }),
+})
+
+export class User {
+  readonly type: UserType
+  readonly disabled: boolean
+  readonly organization?: string
+  readonly clinician?: string
+  readonly displayName?: string
+  readonly email?: string
+  readonly phoneNumbers: string[]
+  readonly createdAt: Date
+  readonly lastActiveDate: Date
+
+  constructor(input: {
+    type: UserType
+    disabled: boolean
+    organization?: string
+    clinician?: string
+    displayName?: string
+    email?: string
+    phoneNumbers: string[]
+    createdAt: Date
+    lastActiveDate: Date
+  }) {
+    this.type = input.type
+    this.disabled = input.disabled
+    this.organization = input.organization
+    this.clinician = input.clinician
+    this.displayName = input.displayName
+    this.email = input.email
+    this.phoneNumbers = input.phoneNumbers
+    this.createdAt = input.createdAt
+    this.lastActiveDate = input.lastActiveDate
+  }
+}
