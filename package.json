@@ -1,7 +1,7 @@
 {
   "name": "spezi-firebase-template",
   "version": "1.0.0",
-  "description": "A Firebase template for Spezi applications with FHIR support",
+  "description": "A Firebase template for Spezi-build applications w/ FHIR support",
   "scripts": {
     "install": "npm --prefix functions install",
     "build": "npm --prefix functions run build",

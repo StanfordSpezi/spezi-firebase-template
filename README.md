@@ -4,13 +4,13 @@ A Firebase template for healthcare applications using the Spezi framework with F
 
 ## Features
 
-- ✅ **User Management**: Patient, Clinician, and Owner user types
-- ✅ **FHIR Support**: Built-in FHIR R4B observation and questionnaire response handling
-- ✅ **Health Data**: Step count tracking as an example use case
-- ✅ **Messaging System**: User notifications and messaging functionality
-- ✅ **Firebase Integration**: Firestore, Authentication, Cloud Functions, and Storage
-- ✅ **TypeScript**: Fully typed with strict type checking
-- ✅ **Security Rules**: Proper Firestore and Storage security rules
+- **User Management**: Patient, Clinician, and Owner user types
+- **FHIR Support**: Built-in FHIR R4B observation and questionnaire response handling
+- **Health Data**: Step count tracking as an example use case
+- **Messaging System**: User notifications and messaging functionality
+- **Firebase Features used**: Firestore, Authentication, Cloud Functions, and Storage
+- **TypeScript**: Fully typed with strict type checking
+- **Security Rules**: Proper Firestore and Storage security rules
 
 ## Quick Start
 
@@ -263,11 +263,3 @@ This template is designed to be a starting point. Feel free to:
 ## License
 
 MIT License - see LICENSE file for details.
-
-## Support
-
-For issues and questions:
-1. Check the existing documentation
-2. Review the Firebase Functions logs
-3. Test with the Firebase emulator suite
-4. Create an issue with detailed reproduction steps
