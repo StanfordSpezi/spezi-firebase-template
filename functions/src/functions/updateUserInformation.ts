@@ -21,6 +21,8 @@ const updateUserInformationInputSchema = z.object({
       clinician: z.string().optional(),
       displayName: z.string().optional(),
       email: z.string().email().optional(),
+      language: z.string().optional(),
+      timeZone: z.string().optional(),
     }).optional(),
   }),
 })

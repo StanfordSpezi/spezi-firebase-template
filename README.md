@@ -8,9 +8,9 @@ A Firebase template for healthcare applications using the Spezi framework with F
 - **FHIR Support**: Built-in FHIR R4B observation and questionnaire response handling
 - **Health Data**: Step count tracking as an example use case
 - **Messaging System**: User notifications and messaging functionality
+- **Internationalisation**: Language and timezone support for international deployment
 - **Firebase Features used**: Firestore, Authentication, Cloud Functions, and Storage
 - **TypeScript**: Fully typed with strict type checking
-- **Security Rules**: Proper Firestore and Storage security rules
 
 ## Quick Start
 
@@ -187,10 +187,47 @@ Update user authentication and profile information. Users can update their own d
       clinician?: string;
       displayName?: string;
       email?: string;
+      language?: string;
+      timeZone?: string;
     };
   };
 }
 ```
+
+## Localization
+
+The template includes built-in support for internationalization:
+
+### Language and Timezone Support
+
+Users can set their preferred language and timezone:
+
+```typescript
+await updateUserInformation('userId', {
+  data: {
+    user: {
+      language: 'en-US',
+      timeZone: 'America/New_York'
+    }
+  }
+})
+```
+
+### Usage in Your Application
+
+```typescript
+// Get user data including localization preferences
+const userData = await getUserData()
+const userLanguage = userData.user.language || 'en-US'
+const userTimeZone = userData.user.timeZone || 'UTC'
+
+// Format dates according to user preferences
+const formatter = new Intl.DateTimeFormat(userLanguage, {
+  timeZone: userTimeZone,
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric'
+})
 
 ## Security
 

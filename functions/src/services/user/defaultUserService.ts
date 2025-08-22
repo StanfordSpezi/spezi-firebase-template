@@ -84,6 +84,8 @@ export class DefaultUserService implements UserService {
     if (data.email !== undefined) updateData.email = data.email
     if (data.organization !== undefined) updateData.organization = data.organization
     if (data.clinician !== undefined) updateData.clinician = data.clinician
+    if (data.language !== undefined) updateData.language = data.language
+    if (data.timeZone !== undefined) updateData.timeZone = data.timeZone
 
     if (Object.keys(updateData).length > 0) {
       await this.collections.users.doc(userId).update(updateData)
