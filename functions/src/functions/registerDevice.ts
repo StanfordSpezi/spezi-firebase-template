@@ -21,7 +21,7 @@ const registerDeviceHandler = createRegisterDeviceHandler(notificationService);
 
 export const registerDevice = onCall(
   { cors: true },
-  async (request: CallableRequest) => {
+  async (request: CallableRequest<unknown>) => {
     const { auth, data } = request;
 
     if (!auth) {
