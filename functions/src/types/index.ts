@@ -63,10 +63,12 @@ export class UserMessage {
 const userSchema = z.object({
   userType: z.enum(["patient", "clinician", "owner"]),
   dateOfBirth: z.string().optional(),
-  name: z.object({
-    given: z.array(z.string()).optional(),
-    family: z.string().optional(),
-  }).optional(),
+  name: z
+    .object({
+      given: z.array(z.string()).optional(),
+      family: z.string().optional(),
+    })
+    .optional(),
 });
 
 const userMessageSchema = z

@@ -1,20 +1,17 @@
 import {
-  type User,
-  type UserMessage,
-} from "../../types/index.js";
+  FirebaseNotificationService,
+  FirestoreDeviceStorage,
+  Message,
+} from "@stanfordspezi/spezi-firebase-cloud-messaging";
+import { getMessaging } from "firebase-admin/messaging";
 import { type MessageService } from "./messageService.js";
+import { type User, type UserMessage } from "../../types/index.js";
 import { CollectionsService } from "../database/collections.js";
 import {
   type Document,
   type DatabaseService,
   convertDocument,
 } from "../database/databaseService.js";
-import {
-  FirebaseNotificationService,
-  FirestoreDeviceStorage,
-  Message,
-} from "@stanfordspezi/spezi-firebase-cloud-messaging";
-import { getMessaging } from "firebase-admin/messaging";
 
 export class DefaultMessageService implements MessageService {
   private databaseService: DatabaseService;
@@ -26,7 +23,7 @@ export class DefaultMessageService implements MessageService {
     this.collections = new CollectionsService(databaseService.firestore());
     this.notificationService = new FirebaseNotificationService(
       getMessaging(),
-      new FirestoreDeviceStorage(databaseService.firestore())
+      new FirestoreDeviceStorage(databaseService.firestore()),
     );
   }
 
@@ -41,7 +38,7 @@ export class DefaultMessageService implements MessageService {
     const messagesCollection = this.collections.userMessages(userId);
     const docRef = await messagesCollection.add(message);
     const snapshot = await docRef.get();
-    
+
     // Send push notification if requested
     if (options.notify) {
       try {
@@ -63,7 +60,7 @@ export class DefaultMessageService implements MessageService {
         // Don't fail the entire operation if notification fails
       }
     }
-    
+
     return convertDocument(snapshot) as Document<UserMessage> | undefined;
   }
 

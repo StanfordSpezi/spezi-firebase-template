@@ -1,7 +1,4 @@
-import {
-  type User,
-  type UserMessage,
-} from "../../types/index.js";
+import { type User, type UserMessage } from "../../types/index.js";
 import { type Document } from "../database/databaseService.js";
 
 export interface MessageService {

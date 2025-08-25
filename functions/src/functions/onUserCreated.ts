@@ -1,12 +1,8 @@
-import {
-  UserMessage,
-  UserMessageType,
-  UserType,
-} from "../types/index.js";
 import { getFirestore } from "firebase-admin/firestore";
 import { onDocumentCreated } from "firebase-functions/v2/firestore";
 import { DefaultDatabaseService } from "../services/database/databaseService.js";
 import { DefaultMessageService } from "../services/message/defaultMessageService.js";
+import { UserMessage, UserMessageType, UserType } from "../types/index.js";
 
 export const onUserCreated = onDocumentCreated(
   "users/{userId}",
