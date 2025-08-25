@@ -23,7 +23,7 @@
   "author": "Stanford Biodesign Digital Health Group",
   "license": "MIT",
   "devDependencies": {
-    "@stanfordspezi/spezi-web-configurations": "^0.5.1",
+    "@stanfordspezi/spezi-web-configurations": "../spezi-web-configurations",
     "eslint": "^9.32.0",
     "prettier": "^3.6.2"
   },
