@@ -40,6 +40,6 @@
     "test:emulators": "echo \"No emulator tests specified\" && exit 0"
   },
   "engines": {
-    "node": "18"
+    "node": "22"
   }
 }
