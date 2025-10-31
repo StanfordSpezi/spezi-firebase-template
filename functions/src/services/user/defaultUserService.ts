@@ -1,7 +1,4 @@
-import {
-  UserAuth,
-  type User,
-} from "@stanfordbdhg/spezi-firebase-models";
+import { UserAuth, type User } from "@stanfordbdhg/spezi-firebase-models";
 import { getAuth } from "firebase-admin/auth";
 import { type UserService } from "./userService.js";
 import { CollectionsService } from "../database/collections.js";
