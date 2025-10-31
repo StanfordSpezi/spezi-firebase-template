@@ -1,7 +1,6 @@
 import {
-  type UserAuth,
+  UserAuth,
   type User,
-  UserType,
 } from "@stanfordbdhg/spezi-firebase-models";
 import { getAuth } from "firebase-admin/auth";
 import { type UserService } from "./userService.js";
@@ -9,7 +8,6 @@ import { CollectionsService } from "../database/collections.js";
 import {
   type DatabaseService,
   type Document,
-  convertDocument,
 } from "../database/databaseService.js";
 
 export class DefaultUserService implements UserService {
@@ -53,7 +51,8 @@ export class DefaultUserService implements UserService {
 
   async getUser(userId: string): Promise<Document<User> | undefined> {
     const userDoc = await this.collections.users.doc(userId).get();
-    return convertDocument(userDoc);
+    const data = userDoc.data() as User | undefined;
+    return data ? { id: userDoc.id, data } : undefined;
   }
 
   async deleteUser(userId: string): Promise<void> {
@@ -114,7 +113,10 @@ export class DefaultUserService implements UserService {
   async getAllUsers(): Promise<Array<Document<User>>> {
     const querySnapshot = await this.collections.users.get();
     return querySnapshot.docs
-      .map((doc) => convertDocument(doc))
+      .map((doc) => {
+        const data = doc.data() as User | undefined;
+        return data ? { id: doc.id, data } : undefined;
+      })
       .filter((doc): doc is Document<User> => doc !== undefined);
   }
 }

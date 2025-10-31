@@ -1,11 +1,11 @@
 import { UserType } from "@stanfordbdhg/spezi-firebase-models";
-import { HttpsError, type AuthData } from "firebase-functions/v2/https";
+import { HttpsError } from "firebase-functions/v2/https";
 
 export class Credential {
   readonly userId: string;
   private readonly claims: any;
 
-  constructor(authData: AuthData | undefined) {
+  constructor(authData: { uid: string; token: any } | undefined) {
     if (authData?.uid === undefined) {
       throw new HttpsError("unauthenticated", "User is not authenticated.");
     }
