@@ -29,7 +29,13 @@ export class DefaultUserService implements UserService {
   }
 
   async updateAuth(userId: string, auth: Partial<UserAuth>): Promise<void> {
-    const updateRequest: any = {};
+    const updateRequest: {
+      displayName?: string;
+      email?: string;
+      emailVerified?: boolean;
+      disabled?: boolean;
+      phoneNumber?: string;
+    } = {};
     if (auth.displayName !== undefined)
       updateRequest.displayName = auth.displayName;
     if (auth.email !== undefined) updateRequest.email = auth.email;
@@ -92,7 +98,14 @@ export class DefaultUserService implements UserService {
   }
 
   async updateUserInfo(userId: string, data: Partial<User>): Promise<void> {
-    const updateData: any = {};
+    const updateData: {
+      displayName?: string;
+      email?: string;
+      organization?: string;
+      clinician?: string;
+      language?: string;
+      timeZone?: string;
+    } = {};
     if (data.displayName !== undefined)
       updateData.displayName = data.displayName;
     if (data.email !== undefined) updateData.email = data.email;

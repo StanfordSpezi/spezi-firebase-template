@@ -1,16 +1,22 @@
 import { UserType } from "@stanfordbdhg/spezi-firebase-models";
 import { HttpsError } from "firebase-functions/v2/https";
 
+interface CustomClaims {
+  type?: UserType;
+  disabled?: boolean;
+  [key: string]: unknown;
+}
+
 export class Credential {
   readonly userId: string;
-  private readonly claims: any;
+  private readonly claims: CustomClaims;
 
-  constructor(authData: { uid: string; token: any } | undefined) {
+  constructor(authData: { uid: string; token?: CustomClaims } | undefined) {
     if (authData?.uid === undefined) {
       throw new HttpsError("unauthenticated", "User is not authenticated.");
     }
     this.userId = authData.uid;
-    this.claims = authData.token || {};
+    this.claims = authData.token ?? {};
   }
 
   checkOwnerOrClinician(): void {

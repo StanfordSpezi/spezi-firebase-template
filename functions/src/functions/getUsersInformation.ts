@@ -19,8 +19,8 @@ type GetUsersInformationOutput = Record<
   string,
   {
     data?: {
-      auth: any;
-      user?: any;
+      auth: Record<string, unknown>;
+      user?: Record<string, unknown>;
     };
     error?: {
       code: string;

@@ -19,8 +19,11 @@ export const validatedOnCall = <Schema extends ZodType, Return>(
     },
     async (request) => {
       try {
-        const validatedRequest = request as CallableRequest<z.output<Schema>>;
-        validatedRequest.data = schema.parse(request.data);
+        const validatedData = schema.parse(request.data);
+        const validatedRequest: CallableRequest<z.output<Schema>> = {
+          ...request,
+          data: validatedData,
+        };
         return await handler(validatedRequest);
       } catch (error) {
         logger.error("Function error:", error);

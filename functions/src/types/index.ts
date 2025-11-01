@@ -85,13 +85,13 @@ const userMessageSchema = z
   .transform((values) => new UserMessage(values));
 
 export const userConverter = new SchemaConverter({
-  schema: userSchema as any,
-  encode: (value: any) => value,
+  schema: userSchema,
+  encode: (value: User) => value,
 });
 
 export const userMessageConverter = new SchemaConverter({
-  schema: userMessageSchema as any,
-  encode: (object: any) => ({
+  schema: userMessageSchema,
+  encode: (object: UserMessage) => ({
     type: object.type,
     title: object.title,
     description: object.description,
@@ -104,6 +104,6 @@ export const userMessageConverter = new SchemaConverter({
 });
 
 export const fhirObservationConverter = new SchemaConverter({
-  schema: observationSchema as any,
-  encode: (value: any) => value,
+  schema: observationSchema,
+  encode: (value: fhir4b.Observation) => value,
 });

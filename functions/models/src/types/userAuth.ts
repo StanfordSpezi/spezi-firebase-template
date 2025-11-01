@@ -9,7 +9,7 @@ export const userAuthConverter = new SchemaConverter({
       emailVerified: z.boolean().default(false),
       disabled: z.boolean().default(false),
       phoneNumber: z.string().optional(),
-      customClaims: z.record(z.any()).optional(),
+      customClaims: z.record(z.unknown()).optional(),
     })
     .transform((values) => new UserAuth(values)),
   encode: (object) => ({
@@ -28,7 +28,7 @@ export class UserAuth {
   readonly emailVerified: boolean;
   readonly disabled: boolean;
   readonly phoneNumber?: string;
-  readonly customClaims?: Record<string, any>;
+  readonly customClaims?: Record<string, unknown>;
 
   constructor(input: {
     displayName?: string;
@@ -36,7 +36,7 @@ export class UserAuth {
     emailVerified: boolean;
     disabled: boolean;
     phoneNumber?: string;
-    customClaims?: Record<string, any>;
+    customClaims?: Record<string, unknown>;
   }) {
     this.displayName = input.displayName;
     this.email = input.email;

@@ -5,15 +5,19 @@ import { FHIRQuestionnaireResponse } from "./fhirQuestionnaireResponse.js";
 import { SchemaConverter } from "../helpers/schemaConverter.js";
 
 export const fhirObservationConverter = new SchemaConverter({
-  schema: z.any().transform((data: Observation) => new FHIRObservation(data)),
+  schema: z
+    .unknown()
+    .transform(
+      (data) => new FHIRObservation(data as Observation),
+    ) as z.ZodSchema<FHIRObservation>,
   encode: (observation: FHIRObservation) => observation.raw(),
 });
 
 export const fhirQuestionnaireResponseConverter = new SchemaConverter({
   schema: z
-    .any()
+    .unknown()
     .transform(
-      (data: QuestionnaireResponse) => new FHIRQuestionnaireResponse(data),
-    ),
+      (data) => new FHIRQuestionnaireResponse(data as QuestionnaireResponse),
+    ) as z.ZodSchema<FHIRQuestionnaireResponse>,
   encode: (response: FHIRQuestionnaireResponse) => response.raw(),
 });
