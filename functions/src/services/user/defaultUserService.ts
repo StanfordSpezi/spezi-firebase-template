@@ -124,7 +124,7 @@ export class DefaultUserService implements UserService {
     const querySnapshot = await this.collections.users.get();
     return querySnapshot.docs
       .map((doc) => {
-        const data = doc.data() as User | undefined;
+        const data = doc.data() as unknown as User | undefined;
         return data ? { id: doc.id, data } : undefined;
       })
       .filter((doc): doc is Document<User> => doc !== undefined);

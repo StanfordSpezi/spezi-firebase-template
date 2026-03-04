@@ -3,7 +3,6 @@ import {
   registerDeviceInputSchema,
   FirebaseNotificationService,
   FirestoreDeviceStorage,
-  type RegisterDeviceInput,
 } from "@stanfordspezi/spezi-firebase-cloud-messaging";
 import { getFirestore } from "firebase-admin/firestore";
 import { getMessaging } from "firebase-admin/messaging";
@@ -31,7 +30,9 @@ export const registerDevice = onCall(
     }
 
     // Validate input using the provided schema from the messaging package
-    const validationResult = (registerDeviceInputSchema as z.ZodSchema<RegisterDeviceInput>).safeParse(data);
+    const validationResult = (
+      registerDeviceInputSchema as z.ZodSchema
+    ).safeParse(data);
     if (!validationResult.success) {
       throw new HttpsError(
         "invalid-argument",
