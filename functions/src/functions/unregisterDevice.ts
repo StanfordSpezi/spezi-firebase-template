@@ -12,14 +12,6 @@ import {
   HttpsError,
 } from "firebase-functions/v2/https";
 
-const notificationService = new FirebaseNotificationService(
-  getMessaging(),
-  new FirestoreDeviceStorage(getFirestore()),
-);
-
-const unregisterDeviceHandler =
-  createUnregisterDeviceHandler(notificationService);
-
 export const unregisterDevice = onCall(
   { cors: true },
   async (request: CallableRequest<unknown>) => {
@@ -39,6 +31,12 @@ export const unregisterDevice = onCall(
     }
 
     try {
+      const notificationService = new FirebaseNotificationService(
+        getMessaging(),
+        new FirestoreDeviceStorage(getFirestore()),
+      );
+      const unregisterDeviceHandler =
+        createUnregisterDeviceHandler(notificationService);
       await unregisterDeviceHandler(auth.uid, validationResult.data);
       return;
     } catch (error) {

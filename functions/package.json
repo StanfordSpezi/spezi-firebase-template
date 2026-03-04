@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Firebase Functions for Spezi Template",
   "main": "lib/index.js",
+  "type": "module",
   "dependencies": {
     "@stanfordbdhg/spezi-firebase-models": "file:models",
     "@stanfordspezi/spezi-firebase-cloud-messaging": "^0.1.5",

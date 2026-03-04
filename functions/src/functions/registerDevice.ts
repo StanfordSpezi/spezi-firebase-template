@@ -13,13 +13,6 @@ import {
 } from "firebase-functions/v2/https";
 import { type z } from "zod";
 
-const notificationService = new FirebaseNotificationService(
-  getMessaging(),
-  new FirestoreDeviceStorage(getFirestore()),
-);
-
-const registerDeviceHandler = createRegisterDeviceHandler(notificationService);
-
 export const registerDevice = onCall(
   { cors: true },
   async (request: CallableRequest<unknown>) => {
@@ -41,6 +34,12 @@ export const registerDevice = onCall(
     }
 
     try {
+      const notificationService = new FirebaseNotificationService(
+        getMessaging(),
+        new FirestoreDeviceStorage(getFirestore()),
+      );
+      const registerDeviceHandler =
+        createRegisterDeviceHandler(notificationService);
       await registerDeviceHandler(auth.uid, validationResult.data);
       return;
     } catch (error) {
