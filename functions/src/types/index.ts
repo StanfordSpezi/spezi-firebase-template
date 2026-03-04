@@ -73,7 +73,11 @@ const userSchema = z.object({
 
 const userMessageSchema = z
   .object({
-    type: z.nativeEnum(UserMessageType),
+    type: z.enum([
+      UserMessageType.info,
+      UserMessageType.warning,
+      UserMessageType.reminder,
+    ]),
     title: z.string(),
     description: z.string(),
     action: z.string().optional(),

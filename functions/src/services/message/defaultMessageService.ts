@@ -61,7 +61,7 @@ export class DefaultMessageService implements MessageService {
       }
     }
 
-    return convertDocument(snapshot) as Document<UserMessage> | undefined;
+    return convertDocument(snapshot);
   }
 
   async dismissMessage(

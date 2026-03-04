@@ -30,9 +30,9 @@ export const registerDevice = onCall(
     }
 
     // Validate input using the provided schema from the messaging package
-    const validationResult = (
-      registerDeviceInputSchema as z.ZodSchema
-    ).safeParse(data);
+    const validationResult = (registerDeviceInputSchema as z.ZodType).safeParse(
+      data,
+    );
     if (!validationResult.success) {
       throw new HttpsError(
         "invalid-argument",

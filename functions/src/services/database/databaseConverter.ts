@@ -16,7 +16,7 @@ const isSerializableObject = (
   !(value instanceof Date) &&
   !(value instanceof Timestamp);
 
-export class DatabaseConverter<T extends z.ZodTypeAny, U>
+export class DatabaseConverter<T extends z.ZodType, U>
   implements FirestoreDataConverter<z.output<T>>
 {
   private converter: SchemaConverter<T, U>;
@@ -71,8 +71,6 @@ export class DatabaseConverter<T extends z.ZodTypeAny, U>
   }
 }
 
-export class FHIRDatabaseConverter<T extends z.ZodTypeAny> extends DatabaseConverter<T, unknown> {
-  constructor(converter: SchemaConverter<T, unknown>) {
-    super(converter);
-  }
-}
+export class FHIRDatabaseConverter<
+  T extends z.ZodType,
+> extends DatabaseConverter<T, unknown> {}

@@ -12,18 +12,18 @@ const updateUserInformationInputSchema = z.object({
     auth: z
       .object({
         displayName: z.string().optional(),
-        email: z.string().email().optional(),
+        email: z.email().optional(),
         disabled: z.boolean().optional(),
         phoneNumber: z.string().optional(),
       })
       .optional(),
     user: z
       .object({
-        type: z.nativeEnum(UserType).optional(),
+        type: z.enum(UserType).optional(),
         organization: z.string().optional(),
         clinician: z.string().optional(),
         displayName: z.string().optional(),
-        email: z.string().email().optional(),
+        email: z.email().optional(),
         language: z.string().optional(),
         timeZone: z.string().optional(),
       })

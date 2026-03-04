@@ -11,7 +11,7 @@ import { z } from "zod";
 import { CollectionsService } from "../services/database/collections.js";
 
 const addStepCountDataSchema = z.object({
-  date: z.string().datetime(),
+  date: z.iso.datetime(),
   steps: z.number().int().min(0).max(100000),
 });
 
