@@ -1,3 +1,9 @@
+import {
+  createRegisterDeviceHandler,
+  registerDeviceInputSchema,
+  FirebaseNotificationService,
+  FirestoreDeviceStorage,
+} from "@stanfordspezi/spezi-firebase-cloud-messaging";
 import { getFirestore } from "firebase-admin/firestore";
 import { getMessaging } from "firebase-admin/messaging";
 import {
@@ -5,23 +11,11 @@ import {
   type CallableRequest,
   HttpsError,
 } from "firebase-functions/v2/https";
-import {
-  createRegisterDeviceHandler,
-  registerDeviceInputSchema,
-  FirebaseNotificationService,
-  FirestoreDeviceStorage,
-} from "@stanfordspezi/spezi-firebase-cloud-messaging";
-
-const notificationService = new FirebaseNotificationService(
-  getMessaging(),
-  new FirestoreDeviceStorage(getFirestore())
-);
-
-const registerDeviceHandler = createRegisterDeviceHandler(notificationService);
+import { type z } from "zod";
 
 export const registerDevice = onCall(
   { cors: true },
-  async (request: CallableRequest) => {
+  async (request: CallableRequest<unknown>) => {
     const { auth, data } = request;
 
     if (!auth) {
@@ -29,16 +23,25 @@ export const registerDevice = onCall(
     }
 
     // Validate input using the provided schema from the messaging package
-    const validationResult = registerDeviceInputSchema.safeParse(data);
+    const validationResult = (registerDeviceInputSchema as z.ZodType).safeParse(
+      data,
+    );
     if (!validationResult.success) {
       throw new HttpsError(
         "invalid-argument",
-        `Invalid device registration data: ${validationResult.error.message}`
+        `Invalid device registration data: ${validationResult.error.message}`,
       );
     }
 
     try {
-      return await registerDeviceHandler(auth.uid, validationResult.data);
+      const notificationService = new FirebaseNotificationService(
+        getMessaging(),
+        new FirestoreDeviceStorage(getFirestore()),
+      );
+      const registerDeviceHandler =
+        createRegisterDeviceHandler(notificationService);
+      await registerDeviceHandler(auth.uid, validationResult.data);
+      return;
     } catch (error) {
       console.error("Error registering device:", error);
       throw new HttpsError("internal", "Failed to register device");

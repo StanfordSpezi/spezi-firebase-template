@@ -5,6 +5,7 @@ import {
   type QueryDocumentSnapshot,
   Timestamp,
 } from "firebase-admin/firestore";
+import { type z } from "zod";
 
 const isSerializableObject = (
   value: unknown,
@@ -15,22 +16,24 @@ const isSerializableObject = (
   !(value instanceof Date) &&
   !(value instanceof Timestamp);
 
-export class DatabaseConverter<T, U> implements FirestoreDataConverter<T> {
-  private converter: SchemaConverter<any, U>;
+export class DatabaseConverter<T extends z.ZodType, U>
+  implements FirestoreDataConverter<z.output<T>>
+{
+  private converter: SchemaConverter<T, U>;
 
-  constructor(converter: SchemaConverter<any, U>) {
+  constructor(converter: SchemaConverter<T, U>) {
     this.converter = converter;
   }
 
-  toFirestore(modelObject: T): DocumentData {
-    const data = this.converter.encode(modelObject as any);
+  toFirestore(modelObject: z.output<T>): DocumentData {
+    const data = this.converter.encode(modelObject);
     return this.convertDatesToTimestamps(data) as DocumentData;
   }
 
-  fromFirestore(snapshot: QueryDocumentSnapshot): T {
+  fromFirestore(snapshot: QueryDocumentSnapshot): z.output<T> {
     const data: unknown = snapshot.data();
     const convertedData = this.convertTimestampsToDates(data);
-    return this.converter.schema.parse(convertedData);
+    return this.converter.schema.parse(convertedData) as z.output<T>;
   }
 
   private convertDatesToTimestamps(obj: unknown): unknown {
@@ -68,8 +71,6 @@ export class DatabaseConverter<T, U> implements FirestoreDataConverter<T> {
   }
 }
 
-export class FHIRDatabaseConverter<T> extends DatabaseConverter<T, unknown> {
-  constructor(converter: SchemaConverter<any, unknown>) {
-    super(converter);
-  }
-}
+export class FHIRDatabaseConverter<
+  T extends z.ZodType,
+> extends DatabaseConverter<T, unknown> {}

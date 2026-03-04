@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "Firebase Functions for Spezi Template",
   "main": "lib/index.js",
+  "type": "module",
   "dependencies": {
+    "@stanfordbdhg/spezi-firebase-models": "file:models",
     "@stanfordspezi/spezi-firebase-cloud-messaging": "^0.1.5",
     "@stanfordspezi/spezi-firebase-fhir": "^0.1.5",
     "@stanfordspezi/spezi-firebase-utils": "^0.1.5",
@@ -11,7 +13,7 @@
     "fhir": "^4.11.1",
     "firebase-admin": "^12.0.0",
     "firebase-functions": "^4.5.0",
-    "zod": "^3.22.4"
+    "zod": "^4.0.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.32.0",
@@ -39,6 +41,6 @@
     "test:emulators": "echo \"No emulator tests specified\" && exit 0"
   },
   "engines": {
-    "node": "18"
+    "node": "22"
   }
 }

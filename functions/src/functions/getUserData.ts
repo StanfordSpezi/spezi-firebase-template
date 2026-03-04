@@ -1,5 +1,6 @@
 /// <reference types="fhir" />
 
+import { observationSchema } from "@stanfordspezi/spezi-firebase-fhir";
 import { getFirestore } from "firebase-admin/firestore";
 import {
   onCall,
@@ -7,7 +8,6 @@ import {
   HttpsError,
 } from "firebase-functions/v2/https";
 import { CollectionsService } from "../services/database/collections.js";
-import { observationSchema } from "@stanfordspezi/spezi-firebase-fhir";
 
 export const getUserData = onCall(
   { cors: true },
@@ -42,10 +42,10 @@ export const getUserData = onCall(
       const stepCountSnapshot = await stepCountQuery.get();
       const stepCountData = stepCountSnapshot.docs.map((doc) => {
         const rawObservation = doc.data();
-        
+
         // Validate the observation using the FHIR schema
         const observation = observationSchema.parse(rawObservation);
-        
+
         return {
           id: doc.id,
           date: observation.effectiveDateTime,
@@ -54,7 +54,7 @@ export const getUserData = onCall(
       });
 
       return {
-        user: user ?? {},  
+        user: user ?? {},
         stepCountData,
       };
     } catch (error) {

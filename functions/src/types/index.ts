@@ -63,15 +63,21 @@ export class UserMessage {
 const userSchema = z.object({
   userType: z.enum(["patient", "clinician", "owner"]),
   dateOfBirth: z.string().optional(),
-  name: z.object({
-    given: z.array(z.string()).optional(),
-    family: z.string().optional(),
-  }).optional(),
+  name: z
+    .object({
+      given: z.array(z.string()).optional(),
+      family: z.string().optional(),
+    })
+    .optional(),
 });
 
 const userMessageSchema = z
   .object({
-    type: z.nativeEnum(UserMessageType),
+    type: z.enum([
+      UserMessageType.info,
+      UserMessageType.warning,
+      UserMessageType.reminder,
+    ]),
     title: z.string(),
     description: z.string(),
     action: z.string().optional(),
@@ -83,13 +89,13 @@ const userMessageSchema = z
   .transform((values) => new UserMessage(values));
 
 export const userConverter = new SchemaConverter({
-  schema: userSchema as any,
-  encode: (value: any) => value,
+  schema: userSchema,
+  encode: (value) => value,
 });
 
 export const userMessageConverter = new SchemaConverter({
-  schema: userMessageSchema as any,
-  encode: (object: any) => ({
+  schema: userMessageSchema,
+  encode: (object) => ({
     type: object.type,
     title: object.title,
     description: object.description,
@@ -102,6 +108,6 @@ export const userMessageConverter = new SchemaConverter({
 });
 
 export const fhirObservationConverter = new SchemaConverter({
-  schema: observationSchema as any,
-  encode: (value: any) => value,
+  schema: observationSchema,
+  encode: (value) => value,
 });
