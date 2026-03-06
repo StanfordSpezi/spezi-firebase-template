@@ -4,16 +4,12 @@
 // SPDX-License-Identifier: MIT
 
 import { z } from 'zod'
-import { type UserType } from './userType.js'
+import { UserType } from './userType.js'
 import { SchemaConverter } from '../helpers/schemaConverter.js'
 
 export const userConverter = new SchemaConverter({
   schema: z.object({
-    type: z.nativeEnum({
-      owner: 'owner' as const,
-      clinician: 'clinician' as const, 
-      patient: 'patient' as const,
-    }),
+    type: z.nativeEnum(UserType),
     disabled: z.boolean().default(false),
     organization: z.string().optional(),
     clinician: z.string().optional(),

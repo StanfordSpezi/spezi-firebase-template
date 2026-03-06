@@ -4,7 +4,6 @@
 // SPDX-License-Identifier: MIT
 
 import { type Quantity } from 'fhir/r4b.js'
-import { type ObservationQuantity } from '../types/observationQuantity.js'
 
 export class QuantityUnit {
   static readonly steps = new QuantityUnit('{steps}', 'steps')

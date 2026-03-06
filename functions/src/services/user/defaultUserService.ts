@@ -4,7 +4,7 @@
 // SPDX-License-Identifier: MIT
 
 import { getAuth } from 'firebase-admin/auth'
-import { type UserAuth, type User, UserType } from '@stanfordbdhg/spezi-firebase-models'
+import { UserAuth, type User } from '@stanfordbdhg/spezi-firebase-models'
 import { type DatabaseService, type Document, convertDocument } from '../database/databaseService.js'
 import { CollectionsService } from '../database/collections.js'
 import { type UserService } from './userService.js'
@@ -47,7 +47,7 @@ export class DefaultUserService implements UserService {
 
   async getUser(userId: string): Promise<Document<User> | undefined> {
     const userDoc = await this.collections.users.doc(userId).get()
-    return convertDocument(userDoc)
+    return convertDocument(userDoc) as Document<User> | undefined
   }
 
   async deleteUser(userId: string): Promise<void> {

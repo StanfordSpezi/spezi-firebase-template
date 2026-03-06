@@ -5,7 +5,7 @@
 
 import { UserType } from '@stanfordbdhg/spezi-firebase-models'
 import { HttpsError } from 'firebase-functions/v2/https'
-import { type AuthData } from 'firebase-functions/v2/https'
+import { type AuthData } from 'firebase-functions/lib/common/providers/https'
 
 export class Credential {
   readonly userId: string
