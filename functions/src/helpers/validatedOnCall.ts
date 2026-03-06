@@ -1,3 +1,8 @@
+// This source file is part of the Stanford Spezi Firebase Template project
+//
+// SPDX-FileCopyrightText: 2026 Stanford University and the project authors (see CONTRIBUTORS.md)
+// SPDX-License-Identifier: MIT
+
 import { logger } from 'firebase-functions/v2'
 import { onCall, type CallableRequest, HttpsError, type CallableOptions } from 'firebase-functions/v2/https'
 import { z, type ZodType } from 'zod'

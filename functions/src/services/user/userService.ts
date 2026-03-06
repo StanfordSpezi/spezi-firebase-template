@@ -1,3 +1,8 @@
+// This source file is part of the Stanford Spezi Firebase Template project
+//
+// SPDX-FileCopyrightText: 2026 Stanford University and the project authors (see CONTRIBUTORS.md)
+// SPDX-License-Identifier: MIT
+
 import { type UserAuth, type User } from '@stanfordbdhg/spezi-firebase-models'
 import { type Document } from '../database/databaseService.js'
 

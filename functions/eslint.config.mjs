@@ -1,10 +1,7 @@
+// This source file is part of the Stanford Spezi Firebase Template project
 //
-// Based on Stanford Biodesign Digital Health Spezi Web Configurations
-// Adapted for Firebase Functions
-//
-// SPDX-FileCopyrightText: 2024 Stanford University and the project authors (see CONTRIBUTORS.md)
+// SPDX-FileCopyrightText: 2024, 2026 Stanford University and the project authors (see CONTRIBUTORS.md)
 // SPDX-License-Identifier: MIT
-//
 
 import eslint from "@eslint/js";
 import globals from "globals";

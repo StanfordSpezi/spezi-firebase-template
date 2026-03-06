@@ -1,3 +1,8 @@
+// This source file is part of the Stanford Spezi Firebase Template project
+//
+// SPDX-FileCopyrightText: 2026 Stanford University and the project authors (see CONTRIBUTORS.md)
+// SPDX-License-Identifier: MIT
+
 import { type Observation } from 'fhir/r4b.js'
 import { FHIRResource } from './fhirResource.js'
 import { CodingSystem, LoincCode } from '../codes/codes.js'
