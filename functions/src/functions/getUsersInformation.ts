@@ -3,7 +3,7 @@
 // SPDX-FileCopyrightText: 2026 Stanford University and the project authors (see CONTRIBUTORS.md)
 // SPDX-License-Identifier: MIT
 
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import { userAuthConverter, userConverter } from '@stanfordbdhg/spezi-firebase-models'
 import { validatedOnCall } from '../helpers/validatedOnCall.js'
 import { Credential } from '../services/auth/credential.js'

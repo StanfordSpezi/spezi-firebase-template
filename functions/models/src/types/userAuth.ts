@@ -3,7 +3,7 @@
 // SPDX-FileCopyrightText: 2026 Stanford University and the project authors (see CONTRIBUTORS.md)
 // SPDX-License-Identifier: MIT
 
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import { SchemaConverter } from '../helpers/schemaConverter.js'
 
 export const userAuthConverter = new SchemaConverter({
@@ -14,7 +14,7 @@ export const userAuthConverter = new SchemaConverter({
       emailVerified: z.boolean().default(false),
       disabled: z.boolean().default(false),
       phoneNumber: z.string().optional(),
-      customClaims: z.record(z.unknown()).optional(),
+      customClaims: z.record(z.string(), z.unknown()).optional(),
     })
     .transform((values) => new UserAuth(values)),
   encode: (object) => ({

@@ -3,6 +3,12 @@
 // SPDX-FileCopyrightText: 2026 Stanford University and the project authors (see CONTRIBUTORS.md)
 // SPDX-License-Identifier: MIT
 
+import {
+  createUnregisterDeviceHandler,
+  unregisterDeviceInputSchema,
+  FirebaseNotificationService,
+  FirestoreDeviceStorage,
+} from "@stanfordspezi/spezi-firebase-cloud-messaging";
 import { getFirestore } from "firebase-admin/firestore";
 import { getMessaging } from "firebase-admin/messaging";
 import {

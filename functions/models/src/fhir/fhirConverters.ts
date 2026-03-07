@@ -3,7 +3,7 @@
 // SPDX-FileCopyrightText: 2026 Stanford University and the project authors (see CONTRIBUTORS.md)
 // SPDX-License-Identifier: MIT
 
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import { type Observation, type QuestionnaireResponse } from 'fhir/r4b.js'
 import { FHIRObservation } from './fhirObservation.js'
 import { FHIRQuestionnaireResponse } from './fhirQuestionnaireResponse.js'

@@ -3,6 +3,12 @@
 // SPDX-FileCopyrightText: 2026 Stanford University and the project authors (see CONTRIBUTORS.md)
 // SPDX-License-Identifier: MIT
 
+import {
+  createRegisterDeviceHandler,
+  registerDeviceInputSchema,
+  FirebaseNotificationService,
+  FirestoreDeviceStorage,
+} from "@stanfordspezi/spezi-firebase-cloud-messaging";
 import { getFirestore } from "firebase-admin/firestore";
 import { getMessaging } from "firebase-admin/messaging";
 import {
@@ -10,7 +16,7 @@ import {
   type CallableRequest,
   HttpsError,
 } from "firebase-functions/v2/https";
-import { type z } from "zod";
+import { type z } from "zod/v4";
 
 export const registerDevice = onCall(
   { cors: true },

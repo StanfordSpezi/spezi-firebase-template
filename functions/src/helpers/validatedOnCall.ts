@@ -5,7 +5,7 @@
 
 import { logger } from 'firebase-functions/v2'
 import { onCall, type CallableRequest, HttpsError, type CallableOptions } from 'firebase-functions/v2/https'
-import { z, type ZodType } from 'zod'
+import { z, type ZodType } from 'zod/v4'
 
 export const validatedOnCall = <Schema extends ZodType, Return>(
   schema: Schema,

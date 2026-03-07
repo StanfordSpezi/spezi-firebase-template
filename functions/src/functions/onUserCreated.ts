@@ -3,11 +3,6 @@
 // SPDX-FileCopyrightText: 2026 Stanford University and the project authors (see CONTRIBUTORS.md)
 // SPDX-License-Identifier: MIT
 
-import {
-  UserMessage,
-  UserMessageType,
-  UserType,
-} from "../types/index.js";
 import { getFirestore } from "firebase-admin/firestore";
 import { onDocumentCreated } from "firebase-functions/v2/firestore";
 import { DefaultDatabaseService } from "../services/database/databaseService.js";

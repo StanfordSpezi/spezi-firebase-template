@@ -12,7 +12,7 @@ import {
   type CallableRequest,
   HttpsError,
 } from "firebase-functions/v2/https";
-import { z } from "zod";
+import { z } from "zod/v4";
 import { CollectionsService } from "../services/database/collections.js";
 
 const addStepCountDataSchema = z.object({
