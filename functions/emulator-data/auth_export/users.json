@@ -1,0 +1,276 @@
+[
+  {
+    "auth": {
+      "uid": "spezifirebasetemplate-admin0-stanford.edu",
+      "displayName": "Template Admin0",
+      "email": "spezifirebasetemplate-admin0@stanford.edu",
+      "password": "password"
+    },
+    "user": {
+      "type": "admin",
+      "dateOfEnrollment": "1970-01-01T00:00:00.000Z",
+      "lastActiveDate": "1970-01-01T00:00:00.000Z",
+      "invitationCode": "spezifirebasetemplate-admin0@stanford.edu"
+    }
+  },
+  {
+    "auth": {
+      "uid": "spezifirebasetemplate-admin1-stanford.edu",
+      "displayName": "Template Admin1",
+      "email": "spezifirebasetemplate-admin1@stanford.edu",
+      "password": "password"
+    },
+    "user": {
+      "type": "admin",
+      "dateOfEnrollment": "1970-01-01T00:00:00.000Z",
+      "lastActiveDate": "1970-01-01T00:00:00.000Z",
+      "invitationCode": "spezifirebasetemplate-admin1@stanford.edu"
+    }
+  },
+  {
+    "auth": {
+      "uid": "spezifirebasetemplate-owner0-stanford.edu",
+      "displayName": "Stanford Owner0",
+      "email": "spezifirebasetemplate-owner0@stanford.edu",
+      "password": "password"
+    },
+    "user": {
+      "type": "owner",
+      "organization": "stanford",
+      "dateOfEnrollment": "1970-01-01T00:00:00.000Z",
+      "lastActiveDate": "1970-01-01T00:00:00.000Z",
+      "invitationCode": "spezifirebasetemplate-owner0@stanford.edu"
+    }
+  },
+  {
+    "auth": {
+      "uid": "spezifirebasetemplate-owner1-stanford.edu",
+      "displayName": "Stanford Owner1",
+      "email": "spezifirebasetemplate-owner1@stanford.edu",
+      "password": "password"
+    },
+    "user": {
+      "type": "owner",
+      "organization": "stanford",
+      "dateOfEnrollment": "1970-01-01T00:00:00.000Z",
+      "lastActiveDate": "1970-01-01T00:00:00.000Z",
+      "invitationCode": "spezifirebasetemplate-owner1@stanford.edu"
+    }
+  },
+  {
+    "auth": {
+      "uid": "spezifirebasetemplate-owner0-jhu.edu",
+      "displayName": "JHU Owner",
+      "email": "spezifirebasetemplate-owner0@jhu.edu",
+      "password": "password"
+    },
+    "user": {
+      "type": "owner",
+      "organization": "jhu",
+      "dateOfEnrollment": "1970-01-01T00:00:00.000Z",
+      "lastActiveDate": "1970-01-01T00:00:00.000Z",
+      "invitationCode": "spezifirebasetemplate-owner0@jhu.edu"
+    }
+  },
+  {
+    "auth": {
+      "uid": "spezifirebasetemplate-owner0-umich.edu",
+      "displayName": "UMich Owner",
+      "email": "spezifirebasetemplate-owner0@umich.edu",
+      "password": "password"
+    },
+    "user": {
+      "type": "owner",
+      "organization": "umich",
+      "dateOfEnrollment": "1970-01-01T00:00:00.000Z",
+      "lastActiveDate": "1970-01-01T00:00:00.000Z",
+      "invitationCode": "spezifirebasetemplate-owner0@umich.edu"
+    }
+  },
+  {
+    "auth": {
+      "uid": "spezifirebasetemplate-admin0-uw.edu",
+      "displayName": "UW Owner",
+      "email": "spezifirebasetemplate-admin0@uw.edu",
+      "password": "password"
+    },
+    "user": {
+      "type": "owner",
+      "organization": "uw",
+      "dateOfEnrollment": "1970-01-01T00:00:00.000Z",
+      "lastActiveDate": "1970-01-01T00:00:00.000Z",
+      "invitationCode": "spezifirebasetemplate-admin0@uw.edu"
+    }
+  },
+  {
+    "auth": {
+      "uid": "spezifirebasetemplate-clinician0-stanford.edu",
+      "displayName": "Stanford Clinician0",
+      "email": "spezifirebasetemplate-clinician0@stanford.edu",
+      "password": "password"
+    },
+    "user": {
+      "type": "clinician",
+      "organization": "stanford",
+      "dateOfEnrollment": "1970-01-01T00:00:00.000Z",
+      "lastActiveDate": "1970-01-01T00:00:00.000Z",
+      "invitationCode": "spezifirebasetemplate-clinician0@stanford.edu"
+    }
+  },
+  {
+    "auth": {
+      "uid": "spezifirebasetemplate-clinician1-stanford.edu",
+      "displayName": "Stanford Clinician1",
+      "email": "spezifirebasetemplate-clinician1@stanford.edu",
+      "password": "password"
+    },
+    "user": {
+      "type": "clinician",
+      "organization": "stanford",
+      "dateOfEnrollment": "1970-01-01T00:00:00.000Z",
+      "lastActiveDate": "1970-01-01T00:00:00.000Z",
+      "invitationCode": "spezifirebasetemplate-clinician1@stanford.edu"
+    }
+  },
+  {
+    "auth": {
+      "uid": "spezifirebasetemplate-clinician0-jhu.edu",
+      "displayName": "JHU Clinician",
+      "email": "spezifirebasetemplate-clinician0@jhu.edu",
+      "password": "password"
+    },
+    "user": {
+      "type": "clinician",
+      "organization": "jhu",
+      "dateOfEnrollment": "1970-01-01T00:00:00.000Z",
+      "lastActiveDate": "1970-01-01T00:00:00.000Z",
+      "invitationCode": "spezifirebasetemplate-clinician0@jhu.edu"
+    }
+  },
+  {
+    "auth": {
+      "uid": "spezifirebasetemplate-clinician0-umich.edu",
+      "displayName": "UMich Clinician",
+      "email": "spezifirebasetemplate-clinician0@umich.edu",
+      "password": "password"
+    },
+    "user": {
+      "type": "clinician",
+      "organization": "umich",
+      "dateOfEnrollment": "1970-01-01T00:00:00.000Z",
+      "lastActiveDate": "1970-01-01T00:00:00.000Z",
+      "invitationCode": "spezifirebasetemplate-clinician0@umich.edu"
+    }
+  },
+  {
+    "auth": {
+      "uid": "spezifirebasetemplate-clinician0-uw.edu",
+      "displayName": "UW Clinician",
+      "email": "spezifirebasetemplate-clinician0@uw.edu",
+      "password": "password"
+    },
+    "user": {
+      "type": "clinician",
+      "organization": "uw",
+      "dateOfEnrollment": "1970-01-01T00:00:00.000Z",
+      "lastActiveDate": "1970-01-01T00:00:00.000Z",
+      "invitationCode": "spezifirebasetemplate-clinician0@uw.edu"
+    }
+  },
+  {
+    "auth": {
+      "uid": "spezifirebasetemplate-patient0-stanford.edu",
+      "displayName": "Stanford Patient0",
+      "email": "spezifirebasetemplate-patient0@stanford.edu",
+      "password": "password"
+    },
+    "user": {
+      "type": "patient",
+      "organization": "stanford",
+      "clinician": "spezifirebasetemplate-clinician0-stanford.edu",
+      "dateOfEnrollment": "1970-01-01T00:00:00.000Z",
+      "lastActiveDate": "1970-01-01T00:00:00.000Z",
+      "invitationCode": "SEEDING0"
+    }
+  },
+  {
+    "auth": {
+      "uid": "spezifirebasetemplate-patient1-stanford.edu",
+      "displayName": "Stanford Patient1",
+      "email": "spezifirebasetemplate-patient1@stanford.edu",
+      "password": "password"
+    },
+    "user": {
+      "type": "patient",
+      "organization": "stanford",
+      "clinician": "spezifirebasetemplate-clinician1-stanford.edu",
+      "dateOfEnrollment": "1970-01-01T00:00:00.000Z",
+      "lastActiveDate": "1970-01-01T00:00:00.000Z",
+      "invitationCode": "SEEDING1"
+    }
+  },
+  {
+    "auth": {
+      "uid": "spezifirebasetemplate-patient2-stanford.edu",
+      "displayName": "Stanford Patient2",
+      "email": "spezifirebasetemplate-patient2@stanford.edu",
+      "password": "password"
+    },
+    "user": {
+      "type": "patient",
+      "organization": "stanford",
+      "selfManaged": true,
+      "dateOfEnrollment": "1970-01-01T00:00:00.000Z",
+      "lastActiveDate": "1970-01-01T00:00:00.000Z",
+      "invitationCode": "SEEDING2"
+    }
+  },
+  {
+    "auth": {
+      "uid": "spezifirebasetemplate-patient0-jhu.edu",
+      "displayName": "JHU Patient0",
+      "email": "spezifirebasetemplate-patient0@jhu.edu",
+      "password": "password"
+    },
+    "user": {
+      "type": "patient",
+      "organization": "jhu",
+      "clinician": "spezifirebasetemplate-clinician0-jhu.edu",
+      "dateOfEnrollment": "1970-01-01T00:00:00.000Z",
+      "lastActiveDate": "1970-01-01T00:00:00.000Z",
+      "invitationCode": "SEEDING3"
+    }
+  },
+  {
+    "auth": {
+      "uid": "spezifirebasetemplate-patient1-jhu.edu",
+      "displayName": "JHU Patient1",
+      "email": "spezifirebasetemplate-patient1@jhu.edu",
+      "password": "password"
+    },
+    "user": {
+      "type": "patient",
+      "organization": "jhu",
+      "clinician": "spezifirebasetemplate-clinician0-jhu.edu",
+      "dateOfEnrollment": "1970-01-01T00:00:00.000Z",
+      "lastActiveDate": "1970-01-01T00:00:00.000Z",
+      "invitationCode": "SEEDING4"
+    }
+  },
+  {
+    "auth": {
+      "uid": "spezifirebasetemplate-patient2-jhu.edu",
+      "displayName": "JHU Patient2",
+      "email": "spezifirebasetemplate-patient2@jhu.edu",
+      "password": "password"
+    },
+    "user": {
+      "type": "patient",
+      "organization": "jhu",
+      "clinician": "spezifirebasetemplate-clinician0-jhu.edu",
+      "dateOfEnrollment": "1970-01-01T00:00:00.000Z",
+      "lastActiveDate": "1970-01-01T00:00:00.000Z",
+      "invitationCode": "SEEDING5"
+    }
+  }
+]
