@@ -9,9 +9,9 @@ import {
   type CallableRequest,
   HttpsError,
 } from "firebase-functions/v2/https";
+import { z } from "zod";
 import { DefaultDatabaseService } from "../services/database/databaseService.js";
 import { DefaultMessageService } from "../services/message/defaultMessageService.js";
-import { z } from "zod";
 
 const dismissMessageDataSchema = z.object({
   messageId: z.string().min(1, "Message ID cannot be empty"),
@@ -34,7 +34,7 @@ export const dismissMessage = onCall(
     if (!validationResult.success) {
       throw new HttpsError(
         "invalid-argument",
-        `Invalid dismiss message data: ${validationResult.error.message}`
+        `Invalid dismiss message data: ${validationResult.error.message}`,
       );
     }
 

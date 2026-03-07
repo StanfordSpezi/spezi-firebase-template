@@ -34,44 +34,44 @@ export const userConverter = new SchemaConverter({
     createdAt: object.createdAt,
     lastActiveDate: object.lastActiveDate,
   }),
-})
+});
 
 export class User {
-  readonly type: UserType
-  readonly disabled: boolean
-  readonly organization?: string
-  readonly clinician?: string
-  readonly displayName?: string
-  readonly email?: string
-  readonly phoneNumbers: string[]
-  readonly language?: string
-  readonly timeZone?: string
-  readonly createdAt: Date
-  readonly lastActiveDate: Date
+  readonly type: UserType;
+  readonly disabled: boolean;
+  readonly organization?: string;
+  readonly clinician?: string;
+  readonly displayName?: string;
+  readonly email?: string;
+  readonly phoneNumbers: string[];
+  readonly language?: string;
+  readonly timeZone?: string;
+  readonly createdAt: Date;
+  readonly lastActiveDate: Date;
 
   constructor(input: {
-    type: UserType
-    disabled: boolean
-    organization?: string
-    clinician?: string
-    displayName?: string
-    email?: string
-    phoneNumbers: string[]
-    language?: string
-    timeZone?: string
-    createdAt: Date
-    lastActiveDate: Date
+    type: UserType;
+    disabled: boolean;
+    organization?: string;
+    clinician?: string;
+    displayName?: string;
+    email?: string;
+    phoneNumbers: string[];
+    language?: string;
+    timeZone?: string;
+    createdAt: Date;
+    lastActiveDate: Date;
   }) {
-    this.type = input.type
-    this.disabled = input.disabled
-    this.organization = input.organization
-    this.clinician = input.clinician
-    this.displayName = input.displayName
-    this.email = input.email
-    this.phoneNumbers = input.phoneNumbers
-    this.language = input.language
-    this.timeZone = input.timeZone
-    this.createdAt = input.createdAt
-    this.lastActiveDate = input.lastActiveDate
+    this.type = input.type;
+    this.disabled = input.disabled;
+    this.organization = input.organization;
+    this.clinician = input.clinician;
+    this.displayName = input.displayName;
+    this.email = input.email;
+    this.phoneNumbers = input.phoneNumbers;
+    this.language = input.language;
+    this.timeZone = input.timeZone;
+    this.createdAt = input.createdAt;
+    this.lastActiveDate = input.lastActiveDate;
   }
 }

@@ -15,4 +15,7 @@ export * from './types/userAuth.js'
 export * from './types/userType.js'
 export * from './types/userMessage.js'
 
-export type UserObservationCollection = 'stepCount' | 'bodyWeight' | 'heartRate'
+export type UserObservationCollection =
+  | "stepCount"
+  | "bodyWeight"
+  | "heartRate";

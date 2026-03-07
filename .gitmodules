@@ -1,0 +1,3 @@
+[submodule "spezi-firebase-template-shared"]
+	path = spezi-firebase-template-shared
+	url = https://github.com/StanfordSpezi/spezi-firebase-template-shared

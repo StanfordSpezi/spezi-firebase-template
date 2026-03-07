@@ -8,50 +8,59 @@ import { HttpsError } from 'firebase-functions/v2/https'
 import { type AuthData } from 'firebase-functions/lib/common/providers/https'
 
 export class Credential {
-  readonly userId: string
-  private readonly claims: any
+  readonly userId: string;
+  private readonly claims: CustomClaims;
 
-  constructor(authData: AuthData | undefined) {
+  constructor(authData: { uid: string; token?: CustomClaims } | undefined) {
     if (authData?.uid === undefined) {
-      throw new HttpsError('unauthenticated', 'User is not authenticated.')
+      throw new HttpsError("unauthenticated", "User is not authenticated.");
     }
-    this.userId = authData.uid
-    this.claims = authData.token || {}
+    this.userId = authData.uid;
+    this.claims = authData.token ?? {};
   }
 
   checkOwnerOrClinician(): void {
     if (this.claims.disabled === true) {
-      throw new HttpsError('permission-denied', 'User is disabled.')
+      throw new HttpsError("permission-denied", "User is disabled.");
     }
-    
-    if (this.claims.type !== UserType.owner && this.claims.type !== UserType.clinician) {
-      throw new HttpsError('permission-denied', 'User does not have permission.')
+
+    if (
+      this.claims.type !== UserType.owner &&
+      this.claims.type !== UserType.clinician
+    ) {
+      throw new HttpsError(
+        "permission-denied",
+        "User does not have permission.",
+      );
     }
   }
 
   checkSelfOrOwnerOrClinician(targetUserId: string): void {
     if (this.claims.disabled === true) {
-      throw new HttpsError('permission-denied', 'User is disabled.')
+      throw new HttpsError("permission-denied", "User is disabled.");
     }
 
     // Users can access their own data
-    if (this.userId === targetUserId) return
+    if (this.userId === targetUserId) return;
 
     // Owners and clinicians can access patient data
-    if (this.claims.type === UserType.owner || this.claims.type === UserType.clinician) {
-      return
+    if (
+      this.claims.type === UserType.owner ||
+      this.claims.type === UserType.clinician
+    ) {
+      return;
     }
 
-    throw new HttpsError('permission-denied', 'User does not have permission.')
+    throw new HttpsError("permission-denied", "User does not have permission.");
   }
 
   checkAuthenticated(): void {
     if (!this.userId) {
-      throw new HttpsError('unauthenticated', 'User is not authenticated.')
+      throw new HttpsError("unauthenticated", "User is not authenticated.");
     }
-    
+
     if (this.claims.disabled === true) {
-      throw new HttpsError('permission-denied', 'User is disabled.')
+      throw new HttpsError("permission-denied", "User is disabled.");
     }
   }
 }

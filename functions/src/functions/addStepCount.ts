@@ -5,18 +5,18 @@
 
 /// <reference types="fhir" />
 
+import { observationSchema } from "@stanfordspezi/spezi-firebase-fhir";
 import { getFirestore } from "firebase-admin/firestore";
 import {
   onCall,
   type CallableRequest,
   HttpsError,
 } from "firebase-functions/v2/https";
-import { CollectionsService } from "../services/database/collections.js";
-import { observationSchema } from "@stanfordspezi/spezi-firebase-fhir";
 import { z } from "zod";
+import { CollectionsService } from "../services/database/collections.js";
 
 const addStepCountDataSchema = z.object({
-  date: z.string().datetime(),
+  date: z.iso.datetime(),
   steps: z.number().int().min(0).max(100000),
 });
 
@@ -35,8 +35,8 @@ export const addStepCount = onCall(
     const validationResult = addStepCountDataSchema.safeParse(data);
     if (!validationResult.success) {
       throw new HttpsError(
-        "invalid-argument", 
-        `Invalid step count data: ${validationResult.error.message}`
+        "invalid-argument",
+        `Invalid step count data: ${validationResult.error.message}`,
       );
     }
 

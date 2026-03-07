@@ -12,19 +12,19 @@ import { getFirestore } from 'firebase-admin/firestore'
 
 const deleteUserInputSchema = z.object({
   userId: z.string(),
-})
+});
 
 export const deleteUser = validatedOnCall(
   deleteUserInputSchema,
   async (request): Promise<{ success: boolean }> => {
-    const credential = new Credential(request.auth)
-    credential.checkOwnerOrClinician()
+    const credential = new Credential(request.auth);
+    credential.checkOwnerOrClinician();
 
-    const databaseService = new DefaultDatabaseService(getFirestore())
-    const userService = new DefaultUserService(databaseService)
+    const databaseService = new DefaultDatabaseService(getFirestore());
+    const userService = new DefaultUserService(databaseService);
 
-    await userService.deleteUser(request.data.userId)
+    await userService.deleteUser(request.data.userId);
 
-    return { success: true }
+    return { success: true };
   },
-)
+);

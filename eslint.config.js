@@ -3,6 +3,11 @@
 // SPDX-FileCopyrightText: 2025, 2026 Stanford University and the project authors (see CONTRIBUTORS.md)
 // SPDX-License-Identifier: MIT
 
-const { getEslintConfig } = require("@stanfordspezi/spezi-web-configurations");
+const {
+  getEslintNodeConfig,
+} = require("@stanfordspezi/spezi-web-configurations");
 
-module.exports = getEslintConfig({ tsconfigRootDir: __dirname });
+module.exports = [
+  ...getEslintNodeConfig({ tsconfigRootDir: __dirname }),
+  { ignores: ["functions/lib/", "functions/models/lib/"] },
+];

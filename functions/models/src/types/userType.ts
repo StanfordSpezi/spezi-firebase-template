@@ -4,7 +4,7 @@
 // SPDX-License-Identifier: MIT
 
 export enum UserType {
-  owner = 'owner',
-  clinician = 'clinician', 
-  patient = 'patient',
+  owner = "owner",
+  clinician = "clinician",
+  patient = "patient",
 }

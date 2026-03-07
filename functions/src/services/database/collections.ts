@@ -49,8 +49,6 @@ export class CollectionsService {
       .collection("users")
       .doc(userId)
       .collection("questionnaireResponses")
-      .withConverter(
-        new FHIRDatabaseConverter(fhirObservationConverter),
-      );
+      .withConverter(new FHIRDatabaseConverter(fhirObservationConverter));
   }
 }
