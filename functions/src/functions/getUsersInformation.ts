@@ -3,14 +3,17 @@
 // SPDX-FileCopyrightText: 2026 Stanford University and the project authors (see CONTRIBUTORS.md)
 // SPDX-License-Identifier: MIT
 
-import { z } from 'zod/v4'
-import { userAuthConverter, userConverter } from '@stanfordbdhg/spezi-firebase-models'
-import { validatedOnCall } from '../helpers/validatedOnCall.js'
-import { Credential } from '../services/auth/credential.js'
-import { DefaultUserService } from '../services/user/defaultUserService.js'
-import { DefaultDatabaseService } from '../services/database/databaseService.js'
-import { getFirestore } from 'firebase-admin/firestore'
-import { HttpsError } from 'firebase-functions/v2/https'
+import {
+  userAuthConverter,
+  userConverter,
+} from "@stanfordbdhg/spezi-firebase-models";
+import { getFirestore } from "firebase-admin/firestore";
+import { HttpsError } from "firebase-functions/v2/https";
+import { z } from "zod/v4";
+import { validatedOnCall } from "../helpers/validatedOnCall.js";
+import { Credential } from "../services/auth/credential.js";
+import { DefaultDatabaseService } from "../services/database/databaseService.js";
+import { DefaultUserService } from "../services/user/defaultUserService.js";
 
 const getUsersInformationInputSchema = z.object({
   userIds: z.array(z.string()),

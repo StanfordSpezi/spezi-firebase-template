@@ -3,11 +3,11 @@
 // SPDX-FileCopyrightText: 2026 Stanford University and the project authors (see CONTRIBUTORS.md)
 // SPDX-License-Identifier: MIT
 
-import { type Observation } from 'fhir/r4b.js'
-import { FHIRResource } from './fhirResource.js'
-import { CodingSystem, LoincCode } from '../codes/codes.js'
-import { QuantityUnit } from '../codes/quantityUnit.js'
-import { type ObservationQuantity } from '../types/observationQuantity.js'
+import { type Observation } from "fhir/r4b.js";
+import { FHIRResource } from "./fhirResource.js";
+import { CodingSystem, LoincCode } from "../codes/codes.js";
+import { QuantityUnit } from "../codes/quantityUnit.js";
+import { type ObservationQuantity } from "../types/observationQuantity.js";
 
 export class FHIRObservation extends FHIRResource<Observation> {
   private static readonly loincDisplay = new Map<LoincCode, string>([

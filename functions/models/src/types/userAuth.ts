@@ -3,8 +3,8 @@
 // SPDX-FileCopyrightText: 2026 Stanford University and the project authors (see CONTRIBUTORS.md)
 // SPDX-License-Identifier: MIT
 
-import { z } from 'zod/v4'
-import { SchemaConverter } from '../helpers/schemaConverter.js'
+import { z } from "zod/v4";
+import { SchemaConverter } from "../helpers/schemaConverter.js";
 
 export const userAuthConverter = new SchemaConverter({
   schema: z

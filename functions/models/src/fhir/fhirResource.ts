@@ -3,7 +3,7 @@
 // SPDX-FileCopyrightText: 2026 Stanford University and the project authors (see CONTRIBUTORS.md)
 // SPDX-License-Identifier: MIT
 
-import { type Resource, type Coding, type CodeableConcept } from 'fhir/r4b.js'
+import { type Resource, type Coding, type CodeableConcept } from "fhir/r4b.js";
 
 export abstract class FHIRResource<T extends Resource> {
   protected data: T;

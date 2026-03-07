@@ -3,7 +3,7 @@
 // SPDX-FileCopyrightText: 2026 Stanford University and the project authors (see CONTRIBUTORS.md)
 // SPDX-License-Identifier: MIT
 
-import { QuantityUnit } from '../codes/quantityUnit.js'
+import { type QuantityUnit } from "../codes/quantityUnit.js";
 
 export interface ObservationQuantity {
   date: Date;

@@ -3,7 +3,7 @@
 // SPDX-FileCopyrightText: 2026 Stanford University and the project authors (see CONTRIBUTORS.md)
 // SPDX-License-Identifier: MIT
 
-import { type Quantity } from 'fhir/r4b.js'
+import { type Quantity } from "fhir/r4b.js";
 
 export class QuantityUnit {
   static readonly steps = new QuantityUnit("{steps}", "steps");

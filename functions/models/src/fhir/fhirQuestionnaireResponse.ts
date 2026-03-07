@@ -3,8 +3,11 @@
 // SPDX-FileCopyrightText: 2026 Stanford University and the project authors (see CONTRIBUTORS.md)
 // SPDX-License-Identifier: MIT
 
-import { type QuestionnaireResponse, type QuestionnaireResponseItem } from 'fhir/r4b.js'
-import { FHIRResource } from './fhirResource.js'
+import {
+  type QuestionnaireResponse,
+  type QuestionnaireResponseItem,
+} from "fhir/r4b.js";
+import { FHIRResource } from "./fhirResource.js";
 
 export class FHIRQuestionnaireResponse extends FHIRResource<QuestionnaireResponse> {
   get authoredDate(): Date | undefined {
