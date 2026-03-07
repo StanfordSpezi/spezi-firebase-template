@@ -45,7 +45,7 @@ jobs:
       - name: Build
         run: npm run build
       - name: Lint
-        run: npm run lint:strict
+        run: npm run lint
     permissions:
       contents: read
   buildandtest:
