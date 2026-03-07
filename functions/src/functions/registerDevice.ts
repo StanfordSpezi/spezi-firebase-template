@@ -1,3 +1,8 @@
+// This source file is part of the Stanford Spezi Firebase Template project
+//
+// SPDX-FileCopyrightText: 2026 Stanford University and the project authors (see CONTRIBUTORS.md)
+// SPDX-License-Identifier: MIT
+
 import {
   createRegisterDeviceHandler,
   registerDeviceInputSchema,
@@ -11,7 +16,7 @@ import {
   type CallableRequest,
   HttpsError,
 } from "firebase-functions/v2/https";
-import { type z } from "zod";
+import { type z } from "zod/v4";
 
 export const registerDevice = onCall(
   { cors: true },

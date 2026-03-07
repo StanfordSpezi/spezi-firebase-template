@@ -1,3 +1,8 @@
+// This source file is part of the Stanford Spezi Firebase Template project
+//
+// SPDX-FileCopyrightText: 2026 Stanford University and the project authors (see CONTRIBUTORS.md)
+// SPDX-License-Identifier: MIT
+
 import { type SchemaConverter } from "@stanfordspezi/spezi-firebase-utils";
 import {
   type DocumentData,
@@ -5,7 +10,7 @@ import {
   type QueryDocumentSnapshot,
   Timestamp,
 } from "firebase-admin/firestore";
-import { type z } from "zod";
+import { type z } from "zod/v4";
 
 const isSerializableObject = (
   value: unknown,

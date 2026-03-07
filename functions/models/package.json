@@ -6,7 +6,7 @@
   "types": "./lib/index.d.ts",
   "dependencies": {
     "fhir": "^4.11.1",
-    "zod": "^3.22.4"
+    "zod": "^4.0.5"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^6.12.0",

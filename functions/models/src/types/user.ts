@@ -1,16 +1,21 @@
-import { z } from "zod";
+// This source file is part of the Stanford Spezi Firebase Template project
+//
+// SPDX-FileCopyrightText: 2026 Stanford University and the project authors (see CONTRIBUTORS.md)
+// SPDX-License-Identifier: MIT
+
+import { z } from "zod/v4";
 import { UserType } from "./userType.js";
 import { SchemaConverter } from "../helpers/schemaConverter.js";
 
 export const userConverter = new SchemaConverter({
   schema: z
     .object({
-      type: z.nativeEnum(UserType),
+      type: z.enum(UserType),
       disabled: z.boolean().default(false),
       organization: z.string().optional(),
       clinician: z.string().optional(),
       displayName: z.string().optional(),
-      email: z.string().email().optional(),
+      email: z.email().optional(),
       phoneNumbers: z.array(z.string()).default([]),
       language: z.string().optional(),
       timeZone: z.string().optional(),

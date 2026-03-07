@@ -1,10 +1,15 @@
+// This source file is part of the Stanford Spezi Firebase Template project
+//
+// SPDX-FileCopyrightText: 2026 Stanford University and the project authors (see CONTRIBUTORS.md)
+// SPDX-License-Identifier: MIT
+
 import { getFirestore } from "firebase-admin/firestore";
 import {
   onCall,
   type CallableRequest,
   HttpsError,
 } from "firebase-functions/v2/https";
-import { z } from "zod";
+import { z } from "zod/v4";
 import { DefaultDatabaseService } from "../services/database/databaseService.js";
 import { DefaultMessageService } from "../services/message/defaultMessageService.js";
 

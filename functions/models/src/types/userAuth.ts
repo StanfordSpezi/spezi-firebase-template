@@ -1,15 +1,20 @@
-import { z } from "zod";
+// This source file is part of the Stanford Spezi Firebase Template project
+//
+// SPDX-FileCopyrightText: 2026 Stanford University and the project authors (see CONTRIBUTORS.md)
+// SPDX-License-Identifier: MIT
+
+import { z } from "zod/v4";
 import { SchemaConverter } from "../helpers/schemaConverter.js";
 
 export const userAuthConverter = new SchemaConverter({
   schema: z
     .object({
       displayName: z.string().optional(),
-      email: z.string().email().optional(),
+      email: z.email().optional(),
       emailVerified: z.boolean().default(false),
       disabled: z.boolean().default(false),
       phoneNumber: z.string().optional(),
-      customClaims: z.record(z.unknown()).optional(),
+      customClaims: z.record(z.string(), z.unknown()).optional(),
     })
     .transform((values) => new UserAuth(values)),
   encode: (object) => ({

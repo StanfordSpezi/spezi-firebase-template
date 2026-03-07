@@ -1,3 +1,8 @@
+// This source file is part of the Stanford Spezi Firebase Template project
+//
+// SPDX-FileCopyrightText: 2026 Stanford University and the project authors (see CONTRIBUTORS.md)
+// SPDX-License-Identifier: MIT
+
 import { UserAuth, type User } from "@stanfordbdhg/spezi-firebase-models";
 import { getAuth } from "firebase-admin/auth";
 import { type UserService } from "./userService.js";
@@ -5,6 +10,7 @@ import { CollectionsService } from "../database/collections.js";
 import {
   type DatabaseService,
   type Document,
+  convertDocument,
 } from "../database/databaseService.js";
 
 export class DefaultUserService implements UserService {
@@ -54,8 +60,7 @@ export class DefaultUserService implements UserService {
 
   async getUser(userId: string): Promise<Document<User> | undefined> {
     const userDoc = await this.collections.users.doc(userId).get();
-    const data = userDoc.data() as User | undefined;
-    return data ? { id: userDoc.id, data } : undefined;
+    return convertDocument(userDoc) as Document<User> | undefined;
   }
 
   async deleteUser(userId: string): Promise<void> {
