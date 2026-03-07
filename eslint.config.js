@@ -9,5 +9,12 @@ const {
 
 module.exports = [
   ...getEslintNodeConfig({ tsconfigRootDir: __dirname }),
-  { ignores: ["functions/lib/", "functions/models/lib/"] },
+  {
+    ignores: [
+      "functions/lib/",
+      "functions/models/lib/",
+      "functions/eslint.config.mjs",
+      "functions/models/eslint.config.mjs",
+    ],
+  },
 ];

@@ -10,7 +10,7 @@ export const userAuthConverter = new SchemaConverter({
   schema: z
     .object({
       displayName: z.string().optional(),
-      email: z.string().email().optional(),
+      email: z.email().optional(),
       emailVerified: z.boolean().default(false),
       disabled: z.boolean().default(false),
       phoneNumber: z.string().optional(),

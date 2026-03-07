@@ -15,7 +15,7 @@ export enum UserMessageType {
 export const userMessageConverter = new SchemaConverter({
   schema: z
     .object({
-      type: z.nativeEnum(UserMessageType),
+      type: z.enum(UserMessageType),
       title: z.string(),
       description: z.string(),
       action: z.string().optional(),

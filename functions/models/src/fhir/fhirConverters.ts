@@ -14,7 +14,7 @@ export const fhirObservationConverter = new SchemaConverter({
     .unknown()
     .transform(
       (data) => new FHIRObservation(data as Observation),
-    ) as z.ZodSchema<FHIRObservation>,
+    ) as z.ZodType<FHIRObservation>,
   encode: (observation: FHIRObservation) => observation.raw(),
 });
 
@@ -23,6 +23,6 @@ export const fhirQuestionnaireResponseConverter = new SchemaConverter({
     .unknown()
     .transform(
       (data) => new FHIRQuestionnaireResponse(data as QuestionnaireResponse),
-    ) as z.ZodSchema<FHIRQuestionnaireResponse>,
+    ) as z.ZodType<FHIRQuestionnaireResponse>,
   encode: (response: FHIRQuestionnaireResponse) => response.raw(),
 });
