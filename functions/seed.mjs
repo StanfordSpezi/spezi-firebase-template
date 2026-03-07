@@ -11,7 +11,7 @@ import { getAuth } from "firebase-admin/auth";
 import { getFirestore } from "firebase-admin/firestore";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const usersPath = join(__dirname, "auth_export", "users.json");
+const usersPath = join(__dirname, "emulator-data", "auth_export", "users.json");
 const users = JSON.parse(readFileSync(usersPath, "utf-8"));
 
 const app = initializeApp({ projectId: "spezi-firebase-template" });

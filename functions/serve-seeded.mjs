@@ -9,8 +9,8 @@ import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const functionsDir = join(__dirname, "..");
-const accountsPath = join(__dirname, "auth_export", "accounts.json");
+const cachePath = join(__dirname, ".emulator-cache");
+const accountsPath = join(cachePath, "auth_export", "accounts.json");
 
 let needsSeed = true;
 if (existsSync(accountsPath)) {
@@ -25,15 +25,15 @@ if (existsSync(accountsPath)) {
 }
 
 if (needsSeed) {
-  console.log("No seeded auth users found. Running initial seed...");
+  console.log("No seeded data found. Running initial seed...");
   execSync(
-    'firebase emulators:exec --only auth,firestore,storage --import=./emulator-data --export-on-exit=./emulator-data "node emulator-data/seed.mjs"',
-    { stdio: "inherit", cwd: functionsDir },
+    'firebase emulators:exec --only auth,firestore,storage --import=./emulator-data --export-on-exit=./.emulator-cache "node seed.mjs"',
+    { stdio: "inherit", cwd: __dirname },
   );
   console.log("Seed complete. Starting emulators with seeded data...\n");
 }
 
 execSync(
-  "firebase emulators:start --import=./emulator-data --export-on-exit=./emulator-data",
-  { stdio: "inherit", cwd: functionsDir },
+  "firebase emulators:start --import=./.emulator-cache --export-on-exit=./.emulator-cache",
+  { stdio: "inherit", cwd: __dirname },
 );
