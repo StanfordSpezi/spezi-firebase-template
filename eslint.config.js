@@ -15,6 +15,9 @@ module.exports = [
       "functions/models/lib/",
       "functions/eslint.config.mjs",
       "functions/models/eslint.config.mjs",
+      "functions/seed.mjs",
+      "functions/serve-seeded.mjs",
+      "spezi-firebase-template-shared/",
     ],
   },
 ];
