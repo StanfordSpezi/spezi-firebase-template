@@ -15,6 +15,7 @@ functions/models/lib/
 
 # Firebase
 .firebase/
+functions/.emulator-cache/
 *-debug.log
 firebase-debug*.log
 
