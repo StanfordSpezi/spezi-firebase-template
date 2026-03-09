@@ -3,14 +3,14 @@
   "version": "1.0.0",
   "description": "A Firebase template for Spezi-build applications w/ FHIR support",
   "scripts": {
-    "install": "npm --prefix functions/models install && npm --prefix functions install",
-    "build": "npm --prefix functions/models run build && npm --prefix functions run build",
-    "clean": "npm --prefix functions/models run clean && npm --prefix functions run clean",
+    "install": "npm --prefix functions install",
+    "build": "npm --prefix functions run build",
+    "clean": "npm --prefix functions run clean",
     "prepare": "npm run clean && npm run install && npm run build",
     "lint": "eslint .",
     "lint:ci": "eslint --output-file eslint_report.json --format json .",
     "lint:fix": "eslint . --fix",
-    "lint:strict": "npm --prefix functions/models run lint:strict && npm --prefix functions run lint:strict",
+    "lint:strict": "npm --prefix functions run lint:strict",
     "test:ci": "firebase emulators:exec --only auth,firestore,storage 'npm --prefix functions run test:emulators'",
     "serve:seeded": "npm --prefix functions run serve:seeded"
   },
