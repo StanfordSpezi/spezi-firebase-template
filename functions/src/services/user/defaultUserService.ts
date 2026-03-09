@@ -64,32 +64,14 @@ export class DefaultUserService implements UserService {
   }
 
   async deleteUser(userId: string): Promise<void> {
+    const userRef = this.collections.users.doc(userId);
+
+    // Delete user document and all subcollections recursively first
+    // to avoid orphaned Firestore data if Auth deletion succeeds but Firestore fails
+    await this.databaseService.firestore().recursiveDelete(userRef);
+
     // Delete from Firebase Auth
     await getAuth().deleteUser(userId);
-
-    // Delete user document and subcollections
-    const batch = this.databaseService.firestore().batch();
-
-    // Delete user document
-    const userRef = this.collections.users.doc(userId);
-    batch.delete(userRef);
-
-    // Delete all subcollections
-    const subcollections = [
-      "stepCount",
-      "bodyWeight",
-      "heartRate",
-      "questionnaireResponses",
-      "messages",
-    ];
-
-    for (const collection of subcollections) {
-      const collectionRef = userRef.collection(collection);
-      const docs = await collectionRef.get();
-      docs.docs.forEach((doc) => batch.delete(doc.ref));
-    }
-
-    await batch.commit();
   }
 
   async disableUser(userId: string): Promise<void> {
