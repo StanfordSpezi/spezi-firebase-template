@@ -5,7 +5,12 @@
 
 import { getAuth } from "firebase-admin/auth";
 import { type UserService } from "./userService.js";
-import { UserAuth, type User } from "../../types/index.js";
+import {
+  UserAuth,
+  type UpdatableUserInfo,
+  type User,
+  type UserType,
+} from "../../types/index.js";
 import { CollectionsService } from "../database/collections.js";
 import {
   type DatabaseService,
@@ -84,8 +89,12 @@ export class DefaultUserService implements UserService {
     await this.collections.users.doc(userId).update({ disabled: false });
   }
 
-  async updateUserInfo(userId: string, data: Partial<User>): Promise<void> {
+  async updateUserInfo(
+    userId: string,
+    data: Partial<UpdatableUserInfo>,
+  ): Promise<void> {
     const updateData: {
+      type?: UserType;
       displayName?: string;
       email?: string;
       organization?: string;
@@ -93,6 +102,7 @@ export class DefaultUserService implements UserService {
       language?: string;
       timeZone?: string;
     } = {};
+    if (data.type !== undefined) updateData.type = data.type;
     if (data.displayName !== undefined)
       updateData.displayName = data.displayName;
     if (data.email !== undefined) updateData.email = data.email;

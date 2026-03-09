@@ -3,7 +3,11 @@
 // SPDX-FileCopyrightText: 2026 Stanford University and the project authors (see CONTRIBUTORS.md)
 // SPDX-License-Identifier: MIT
 
-import { type UserAuth, type User } from "../../types/index.js";
+import {
+  type UserAuth,
+  type User,
+  type UpdatableUserInfo,
+} from "../../types/index.js";
 import { type Document } from "../database/databaseService.js";
 
 export interface UserService {
@@ -13,6 +17,9 @@ export interface UserService {
   deleteUser(userId: string): Promise<void>;
   disableUser(userId: string): Promise<void>;
   enableUser(userId: string): Promise<void>;
-  updateUserInfo(userId: string, data: Partial<User>): Promise<void>;
+  updateUserInfo(
+    userId: string,
+    data: Partial<UpdatableUserInfo>,
+  ): Promise<void>;
   getAllUsers(): Promise<Array<Document<User>>>;
 }

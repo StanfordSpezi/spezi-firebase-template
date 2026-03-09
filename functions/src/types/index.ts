@@ -65,6 +65,17 @@ export class User {
   }
 }
 
+export type UpdatableUserInfo = Pick<
+  User,
+  | "type"
+  | "displayName"
+  | "email"
+  | "organization"
+  | "clinician"
+  | "language"
+  | "timeZone"
+>;
+
 export class UserAuth {
   readonly displayName?: string;
   readonly email?: string;
