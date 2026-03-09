@@ -1,3 +1,8 @@
+// This source file is part of the Stanford Spezi Firebase Template project
+//
+// SPDX-FileCopyrightText: 2026 Stanford University and the project authors (see CONTRIBUTORS.md)
+// SPDX-License-Identifier: MIT
+
 const FUNCTIONS_URL =
   "http://127.0.0.1:5001/spezi-firebase-template/us-central1";
 

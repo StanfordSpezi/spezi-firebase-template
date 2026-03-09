@@ -1,3 +1,8 @@
+// This source file is part of the Stanford Spezi Firebase Template project
+//
+// SPDX-FileCopyrightText: 2026 Stanford University and the project authors (see CONTRIBUTORS.md)
+// SPDX-License-Identifier: MIT
+
 import admin from "firebase-admin";
 
 const FIRESTORE_EMULATOR_HOST = "127.0.0.1:8080";
