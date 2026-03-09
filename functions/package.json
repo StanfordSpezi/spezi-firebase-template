@@ -16,7 +16,8 @@
   },
   "devDependencies": {
     "eslint": "^9.0.0",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "vitest": "^3.0.0"
   },
   "private": true,
   "scripts": {
@@ -31,8 +32,8 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "clean": "rm -rf lib",
-    "test": "echo \"No tests specified\" && exit 0",
-    "test:emulators": "echo \"No emulator tests specified\" && exit 0"
+    "test": "vitest run",
+    "test:emulators": "vitest run"
   },
   "engines": {
     "node": "22"
