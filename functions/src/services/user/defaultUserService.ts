@@ -3,9 +3,9 @@
 // SPDX-FileCopyrightText: 2026 Stanford University and the project authors (see CONTRIBUTORS.md)
 // SPDX-License-Identifier: MIT
 
-import { UserAuth, type User } from "@stanfordbdhg/spezi-firebase-models";
 import { getAuth } from "firebase-admin/auth";
 import { type UserService } from "./userService.js";
+import { UserAuth, type User } from "../../types/index.js";
 import { CollectionsService } from "../database/collections.js";
 import {
   type DatabaseService,
@@ -60,7 +60,7 @@ export class DefaultUserService implements UserService {
 
   async getUser(userId: string): Promise<Document<User> | undefined> {
     const userDoc = await this.collections.users.doc(userId).get();
-    return convertDocument(userDoc) as Document<User> | undefined;
+    return convertDocument(userDoc);
   }
 
   async deleteUser(userId: string): Promise<void> {

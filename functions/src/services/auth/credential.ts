@@ -3,8 +3,8 @@
 // SPDX-FileCopyrightText: 2026 Stanford University and the project authors (see CONTRIBUTORS.md)
 // SPDX-License-Identifier: MIT
 
-import { UserType } from "@stanfordbdhg/spezi-firebase-models";
 import { HttpsError } from "firebase-functions/v2/https";
+import { UserType } from "../../types/index.js";
 
 interface CustomClaims {
   type?: string;
