@@ -5,7 +5,6 @@
   "main": "lib/index.js",
   "type": "module",
   "dependencies": {
-    "@stanfordbdhg/spezi-firebase-models": "file:models",
     "@stanfordspezi/spezi-firebase-cloud-messaging": "^0.1.5",
     "@stanfordspezi/spezi-firebase-fhir": "^0.1.5",
     "@stanfordspezi/spezi-firebase-utils": "^0.1.5",
