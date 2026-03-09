@@ -11,7 +11,7 @@
     "lint:ci": "eslint --output-file eslint_report.json --format json .",
     "lint:fix": "eslint . --fix",
     "lint:strict": "npm --prefix functions run lint:strict",
-    "test:ci": "firebase emulators:exec --only auth,firestore,storage 'npm --prefix functions run test:emulators'",
+    "test:ci": "npm run build && firebase emulators:exec --only auth,firestore,storage,functions 'npm --prefix functions run test:emulators'",
     "serve:seeded": "npm --prefix functions run serve:seeded"
   },
   "keywords": [
