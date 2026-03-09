@@ -25,13 +25,69 @@ export enum UserMessageType {
   reminder = "reminder",
 }
 
-export interface User {
-  userType: "patient" | "clinician" | "owner";
-  dateOfBirth?: string;
-  name?: {
-    given?: string[];
-    family?: string;
-  };
+export class User {
+  readonly type: UserType;
+  readonly disabled: boolean;
+  readonly organization?: string;
+  readonly clinician?: string;
+  readonly displayName?: string;
+  readonly email?: string;
+  readonly phoneNumbers: string[];
+  readonly language?: string;
+  readonly timeZone?: string;
+  readonly createdAt: Date;
+  readonly lastActiveDate: Date;
+
+  constructor(input: {
+    type: UserType;
+    disabled: boolean;
+    organization?: string;
+    clinician?: string;
+    displayName?: string;
+    email?: string;
+    phoneNumbers: string[];
+    language?: string;
+    timeZone?: string;
+    createdAt: Date;
+    lastActiveDate: Date;
+  }) {
+    this.type = input.type;
+    this.disabled = input.disabled;
+    this.organization = input.organization;
+    this.clinician = input.clinician;
+    this.displayName = input.displayName;
+    this.email = input.email;
+    this.phoneNumbers = input.phoneNumbers;
+    this.language = input.language;
+    this.timeZone = input.timeZone;
+    this.createdAt = input.createdAt;
+    this.lastActiveDate = input.lastActiveDate;
+  }
+}
+
+export class UserAuth {
+  readonly displayName?: string;
+  readonly email?: string;
+  readonly emailVerified: boolean;
+  readonly disabled: boolean;
+  readonly phoneNumber?: string;
+  readonly customClaims?: Record<string, unknown>;
+
+  constructor(input: {
+    displayName?: string;
+    email?: string;
+    emailVerified: boolean;
+    disabled: boolean;
+    phoneNumber?: string;
+    customClaims?: Record<string, unknown>;
+  }) {
+    this.displayName = input.displayName;
+    this.email = input.email;
+    this.emailVerified = input.emailVerified;
+    this.disabled = input.disabled;
+    this.phoneNumber = input.phoneNumber;
+    this.customClaims = input.customClaims;
+  }
 }
 
 export class UserMessage {
@@ -65,41 +121,75 @@ export class UserMessage {
   }
 }
 
-const userSchema = z.object({
-  userType: z.enum(["patient", "clinician", "owner"]),
-  dateOfBirth: z.string().optional(),
-  name: z
+export const userConverter = new SchemaConverter({
+  schema: z
     .object({
-      given: z.array(z.string()).optional(),
-      family: z.string().optional(),
+      type: z.enum(UserType),
+      disabled: z.boolean().default(false),
+      organization: z.string().optional(),
+      clinician: z.string().optional(),
+      displayName: z.string().optional(),
+      email: z.email().optional(),
+      phoneNumbers: z.array(z.string()).default([]),
+      language: z.string().optional(),
+      timeZone: z.string().optional(),
+      createdAt: z.date(),
+      lastActiveDate: z.date(),
     })
-    .optional(),
+    .transform((values) => new User(values)),
+  encode: (object) => ({
+    type: object.type,
+    disabled: object.disabled,
+    organization: object.organization,
+    clinician: object.clinician,
+    displayName: object.displayName,
+    email: object.email,
+    phoneNumbers: object.phoneNumbers,
+    language: object.language,
+    timeZone: object.timeZone,
+    createdAt: object.createdAt,
+    lastActiveDate: object.lastActiveDate,
+  }),
 });
 
-const userMessageSchema = z
-  .object({
-    type: z.enum([
-      UserMessageType.info,
-      UserMessageType.warning,
-      UserMessageType.reminder,
-    ]),
-    title: z.string(),
-    description: z.string(),
-    action: z.string().optional(),
-    isDismissed: z.boolean().optional().default(false),
-    didPerformAction: z.boolean().optional().default(false),
-    createdAt: z.date(),
-    completedAt: z.date().optional(),
-  })
-  .transform((values) => new UserMessage(values));
-
-export const userConverter = new SchemaConverter({
-  schema: userSchema,
-  encode: (value) => value,
+export const userAuthConverter = new SchemaConverter({
+  schema: z
+    .object({
+      displayName: z.string().optional(),
+      email: z.email().optional(),
+      emailVerified: z.boolean().default(false),
+      disabled: z.boolean().default(false),
+      phoneNumber: z.string().optional(),
+      customClaims: z.record(z.string(), z.unknown()).optional(),
+    })
+    .transform((values) => new UserAuth(values)),
+  encode: (object) => ({
+    displayName: object.displayName,
+    email: object.email,
+    emailVerified: object.emailVerified,
+    disabled: object.disabled,
+    phoneNumber: object.phoneNumber,
+    customClaims: object.customClaims,
+  }),
 });
 
 export const userMessageConverter = new SchemaConverter({
-  schema: userMessageSchema,
+  schema: z
+    .object({
+      type: z.enum([
+        UserMessageType.info,
+        UserMessageType.warning,
+        UserMessageType.reminder,
+      ]),
+      title: z.string(),
+      description: z.string(),
+      action: z.string().optional(),
+      isDismissed: z.boolean().optional().default(false),
+      didPerformAction: z.boolean().optional().default(false),
+      createdAt: z.date(),
+      completedAt: z.date().optional(),
+    })
+    .transform((values) => new UserMessage(values)),
   encode: (object) => ({
     type: object.type,
     title: object.title,

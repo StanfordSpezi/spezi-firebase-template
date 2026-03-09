@@ -85,13 +85,30 @@ The template uses FHIR R4B resources for health data:
 
 Example step count observation:
 ```typescript
-import { FHIRObservation } from '@stanfordbdhg/spezi-firebase-models'
+import { observationSchema } from '@stanfordspezi/spezi-firebase-fhir'
 
-const observation = FHIRObservation.createStepCount({
+const observation: fhir4b.Observation = {
+  resourceType: 'Observation',
   id: 'unique-id',
-  date: new Date(),
-  steps: 10000
-})
+  status: 'final',
+  code: {
+    text: 'Number of steps in 24 hour Measured',
+    coding: [{
+      system: 'http://loinc.org',
+      code: '55423-8',
+      display: 'Number of steps in 24 hour Measured'
+    }]
+  },
+  valueQuantity: {
+    value: 10000,
+    unit: 'steps',
+    system: 'http://unitsofmeasure.org',
+    code: '{steps}'
+  },
+  effectiveDateTime: new Date().toISOString()
+}
+
+const validatedObservation = observationSchema.parse(observation)
 ```
 
 ## Available Functions
@@ -249,22 +266,23 @@ The template includes comprehensive security rules:
 
 ### Adding New Observation Types
 
-1. Add LOINC code to `functions/models/src/codes/codes.ts`
-2. Add quantity unit to `functions/models/src/codes/quantityUnit.ts`
-3. Add collection type to `functions/models/src/index.ts`
-4. Create helper method in `FHIRObservation` class
+1. Add collection type to `UserObservationCollection` in `functions/src/types/index.ts`
+2. Create a new Firebase Function following the pattern in `addStepCount.ts`:
+   - Use Zod schema for input validation
+   - Create a FHIR R4B Observation with appropriate LOINC codes and units
+   - Validate with `observationSchema.parse()` from `@stanfordspezi/spezi-firebase-fhir`
+3. Update Firestore security rules if needed
 
 ### Adding New User Message Types
 
-1. Extend `UserMessageType` enum in `functions/models/src/types/userMessage.ts`
+1. Extend `UserMessageType` enum in `functions/src/types/index.ts`
 2. Create functions to send new message types
 3. Update client-side message handling
 
 ### Extending User Model
 
-1. Modify the `User` class in `functions/models/src/types/user.ts`
-2. Update the Zod schema and converter
-3. Update security rules if needed
+1. Modify the `User` class and `userConverter` in `functions/src/types/index.ts`
+2. Update security rules if needed
 
 ## Development
 
@@ -281,15 +299,10 @@ The template includes comprehensive security rules:
 ```
 spezi-firebase-template/
 ├── functions/
-│   ├── src/                    # Firebase Functions source
-│   │   ├── functions/          # Cloud Functions
-│   │   └── services/           # Business logic services
-│   └── models/                 # Shared TypeScript models
-│       └── src/
-│           ├── fhir/           # FHIR resource classes
-│           ├── types/          # TypeScript types
-│           ├── codes/          # Medical coding systems
-│           └── helpers/        # Utility functions
+│   └── src/                    # Firebase Functions source
+│       ├── functions/          # Cloud Functions
+│       ├── services/           # Business logic services
+│       └── types/              # TypeScript types and converters
 ├── firebase.json               # Firebase configuration
 ├── firestore.rules            # Firestore security rules
 └── firebasestorage.rules      # Storage security rules
