@@ -10,6 +10,18 @@ import { initializeApp } from "firebase-admin/app";
 import { getAuth } from "firebase-admin/auth";
 import { getFirestore } from "firebase-admin/firestore";
 
+if (
+  !process.env.FIREBASE_AUTH_EMULATOR_HOST ||
+  !process.env.FIRESTORE_EMULATOR_HOST
+) {
+  console.error(
+    "ERROR: Emulator environment variables not set. " +
+      "This script must only run against Firebase emulators. " +
+      "Set FIREBASE_AUTH_EMULATOR_HOST and FIRESTORE_EMULATOR_HOST or use 'firebase emulators:exec'.",
+  );
+  process.exit(1);
+}
+
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const usersPath = join(__dirname, "emulator-data", "auth_export", "users.json");
 const users = JSON.parse(readFileSync(usersPath, "utf-8"));
