@@ -109,11 +109,6 @@ export class DefaultUserService implements UserService {
 
   async getAllUsers(): Promise<Array<Document<User>>> {
     const querySnapshot = await this.collections.users.get();
-    return querySnapshot.docs
-      .map((doc) => {
-        const data = doc.data() as unknown as User | undefined;
-        return data ? { id: doc.id, data } : undefined;
-      })
-      .filter((doc): doc is Document<User> => doc !== undefined);
+    return querySnapshot.docs.map((doc) => ({ id: doc.id, data: doc.data() }));
   }
 }
