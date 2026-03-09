@@ -12,12 +12,12 @@ interface TestUser {
   token: string;
 }
 
-export async function createTestUser(options: {
+export const createTestUser = async (options: {
   email?: string;
   password?: string;
   uid?: string;
   customClaims?: Record<string, unknown>;
-}): Promise<TestUser> {
+}): Promise<TestUser> => {
   const email = options.email ?? `test-${Date.now()}@example.com`;
   const password = options.password ?? "testpassword123";
 
@@ -28,7 +28,9 @@ export async function createTestUser(options: {
   });
 
   if (options.customClaims) {
-    await admin.auth().setCustomUserClaims(userRecord.uid, options.customClaims);
+    await admin
+      .auth()
+      .setCustomUserClaims(userRecord.uid, options.customClaims);
   }
 
   // Sign in via Auth emulator REST API to get an ID token
@@ -43,4 +45,4 @@ export async function createTestUser(options: {
 
   const signInData = (await signInResponse.json()) as { idToken: string };
   return { uid: userRecord.uid, token: signInData.idToken };
-}
+};

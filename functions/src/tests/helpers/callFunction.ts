@@ -11,16 +11,16 @@ interface CallFunctionResult {
   error?: { message: string; status: string };
 }
 
-export async function callFunction(
+export const callFunction = async (
   name: string,
   data: unknown,
   authToken?: string,
-): Promise<CallFunctionResult> {
+): Promise<CallFunctionResult> => {
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
   };
   if (authToken) {
-    headers["Authorization"] = `Bearer ${authToken}`;
+    headers.Authorization = `Bearer ${authToken}`;
   }
 
   const response = await fetch(`${FUNCTIONS_URL}/${name}`, {
@@ -31,4 +31,4 @@ export async function callFunction(
 
   const body = (await response.json()) as CallFunctionResult;
   return body;
-}
+};

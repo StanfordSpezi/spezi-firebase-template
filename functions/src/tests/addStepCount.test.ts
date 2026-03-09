@@ -33,9 +33,7 @@ describe("addStepCount", () => {
     expect(storedData.code.coding[0].code).toBe("55423-8");
     expect(storedData.valueQuantity.value).toBe(5000);
     expect(storedData.valueQuantity.unit).toBe("steps");
-    expect(storedData.effectiveDateTime).toBe(
-      new Date(date).toISOString(),
-    );
+    expect(storedData.effectiveDateTime).toBe(new Date(date).toISOString());
   });
 
   it("creates deterministic observation IDs based on user and date", async () => {

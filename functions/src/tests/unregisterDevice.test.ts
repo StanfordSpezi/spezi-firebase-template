@@ -57,11 +57,7 @@ describe("unregisterDevice", () => {
 
   it("rejects missing required fields", async () => {
     const user = await createTestUser({});
-    const { error } = await callFunction(
-      "unregisterDevice",
-      {},
-      user.token,
-    );
+    const { error } = await callFunction("unregisterDevice", {}, user.token);
     expect(error).toBeDefined();
     expect(error!.status).toBe("INVALID_ARGUMENT");
   });

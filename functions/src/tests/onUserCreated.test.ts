@@ -62,17 +62,13 @@ describe("onUserCreated", () => {
 
     // Write a raw doc with unknown type (bypass createUserDoc)
     const admin = await import("firebase-admin");
-    await admin.default
-      .firestore()
-      .collection("users")
-      .doc(userId)
-      .set({
-        type: "unknown",
-        disabled: false,
-        phoneNumbers: [],
-        createdAt: admin.default.firestore.Timestamp.now(),
-        lastActiveDate: admin.default.firestore.Timestamp.now(),
-      });
+    await admin.default.firestore().collection("users").doc(userId).set({
+      type: "unknown",
+      disabled: false,
+      phoneNumbers: [],
+      createdAt: admin.default.firestore.Timestamp.now(),
+      lastActiveDate: admin.default.firestore.Timestamp.now(),
+    });
 
     // Wait a reasonable time and verify no messages were created
     await new Promise((resolve) => setTimeout(resolve, 3000));

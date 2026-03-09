@@ -9,21 +9,21 @@ const FIRESTORE_EMULATOR_HOST = "127.0.0.1:8080";
 const AUTH_EMULATOR_HOST = "127.0.0.1:9099";
 const PROJECT_ID = "spezi-firebase-template";
 
-export async function clearFirestore(): Promise<void> {
+export const clearFirestore = async (): Promise<void> => {
   await fetch(
     `http://${FIRESTORE_EMULATOR_HOST}/emulator/v1/projects/${PROJECT_ID}/databases/(default)/documents`,
     { method: "DELETE" },
   );
-}
+};
 
-export async function deleteAllAuthUsers(): Promise<void> {
+export const deleteAllAuthUsers = async (): Promise<void> => {
   await fetch(
     `http://${AUTH_EMULATOR_HOST}/emulator/v1/projects/${PROJECT_ID}/accounts`,
     { method: "DELETE" },
   );
-}
+};
 
-export async function createUserDoc(
+export const createUserDoc = async (
   userId: string,
   data: {
     type: "patient" | "clinician" | "owner";
@@ -31,7 +31,7 @@ export async function createUserDoc(
     displayName?: string;
     email?: string;
   },
-): Promise<void> {
+): Promise<void> => {
   const doc: Record<string, unknown> = {
     type: data.type,
     disabled: data.disabled ?? false,
@@ -43,14 +43,14 @@ export async function createUserDoc(
   if (data.email !== undefined) doc.email = data.email;
 
   await admin.firestore().collection("users").doc(userId).set(doc);
-}
+};
 
-export async function createObservationDoc(
+export const createObservationDoc = async (
   userId: string,
   collection: string,
   observationId: string,
   data: { steps: number; effectiveDateTime: string },
-): Promise<void> {
+): Promise<void> => {
   await admin
     .firestore()
     .collection("users")
@@ -79,9 +79,9 @@ export async function createObservationDoc(
       },
       effectiveDateTime: data.effectiveDateTime,
     });
-}
+};
 
-export async function createMessageDoc(
+export const createMessageDoc = async (
   userId: string,
   data: {
     type?: string;
@@ -90,7 +90,7 @@ export async function createMessageDoc(
     isDismissed?: boolean;
     didPerformAction?: boolean;
   },
-): Promise<string> {
+): Promise<string> => {
   const ref = await admin
     .firestore()
     .collection("users")
@@ -105,11 +105,11 @@ export async function createMessageDoc(
       createdAt: admin.firestore.Timestamp.now(),
     });
   return ref.id;
-}
+};
 
-export async function getUserMessages(
+export const getUserMessages = async (
   userId: string,
-): Promise<FirebaseFirestore.QueryDocumentSnapshot[]> {
+): Promise<FirebaseFirestore.QueryDocumentSnapshot[]> => {
   const snapshot = await admin
     .firestore()
     .collection("users")
@@ -117,12 +117,12 @@ export async function getUserMessages(
     .collection("messages")
     .get();
   return snapshot.docs;
-}
+};
 
-export async function getUserObservations(
+export const getUserObservations = async (
   userId: string,
   collection: string,
-): Promise<FirebaseFirestore.QueryDocumentSnapshot[]> {
+): Promise<FirebaseFirestore.QueryDocumentSnapshot[]> => {
   const snapshot = await admin
     .firestore()
     .collection("users")
@@ -130,11 +130,11 @@ export async function getUserObservations(
     .collection(collection)
     .get();
   return snapshot.docs;
-}
+};
 
-export async function getUserDevices(
+export const getUserDevices = async (
   userId: string,
-): Promise<FirebaseFirestore.QueryDocumentSnapshot[]> {
+): Promise<FirebaseFirestore.QueryDocumentSnapshot[]> => {
   const snapshot = await admin
     .firestore()
     .collection("users")
@@ -142,17 +142,17 @@ export async function getUserDevices(
     .collection("devices")
     .get();
   return snapshot.docs;
-}
+};
 
-export async function waitForCondition(
+export const waitForCondition = async (
   condition: () => Promise<boolean>,
   timeoutMs = 10000,
   intervalMs = 500,
-): Promise<void> {
+): Promise<void> => {
   const start = Date.now();
   while (Date.now() - start < timeoutMs) {
     if (await condition()) return;
     await new Promise((resolve) => setTimeout(resolve, intervalMs));
   }
   throw new Error("waitForCondition timed out");
-}
+};

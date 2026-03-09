@@ -7,14 +7,14 @@ import { describe, it, expect } from "vitest";
 import { Credential } from "../services/auth/credential.js";
 import { UserType } from "../types/index.js";
 
-function expectHttpsError(fn: () => void, code: string): void {
+const expectHttpsError = (fn: () => void, code: string): void => {
   try {
     fn();
     expect.fail("Expected function to throw");
   } catch (error: unknown) {
     expect((error as { code: string }).code).toBe(code);
   }
-}
+};
 
 describe("Credential", () => {
   it("throws unauthenticated when auth is undefined", () => {
@@ -23,8 +23,7 @@ describe("Credential", () => {
 
   it("throws unauthenticated when uid is undefined", () => {
     expectHttpsError(
-      () =>
-        new Credential({ uid: undefined as unknown as string, token: {} }),
+      () => new Credential({ uid: undefined as unknown as string, token: {} }),
       "unauthenticated",
     );
   });
@@ -66,10 +65,7 @@ describe("Credential", () => {
         uid: "user1",
         token: { type: UserType.patient },
       });
-      expectHttpsError(
-        () => cred.checkOwnerOrClinician(),
-        "permission-denied",
-      );
+      expectHttpsError(() => cred.checkOwnerOrClinician(), "permission-denied");
     });
 
     it("throws permission-denied for disabled owner", () => {
@@ -77,10 +73,7 @@ describe("Credential", () => {
         uid: "user1",
         token: { type: UserType.owner, disabled: true },
       });
-      expectHttpsError(
-        () => cred.checkOwnerOrClinician(),
-        "permission-denied",
-      );
+      expectHttpsError(() => cred.checkOwnerOrClinician(), "permission-denied");
     });
   });
 
@@ -98,9 +91,7 @@ describe("Credential", () => {
         uid: "clinician1",
         token: { type: UserType.clinician },
       });
-      expect(() =>
-        cred.checkSelfOrOwnerOrClinician("patient1"),
-      ).not.toThrow();
+      expect(() => cred.checkSelfOrOwnerOrClinician("patient1")).not.toThrow();
     });
 
     it("passes for owner accessing other user", () => {
@@ -108,9 +99,7 @@ describe("Credential", () => {
         uid: "owner1",
         token: { type: UserType.owner },
       });
-      expect(() =>
-        cred.checkSelfOrOwnerOrClinician("patient1"),
-      ).not.toThrow();
+      expect(() => cred.checkSelfOrOwnerOrClinician("patient1")).not.toThrow();
     });
 
     it("throws permission-denied for patient accessing other user", () => {

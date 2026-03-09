@@ -6,10 +6,7 @@
 import { describe, it, expect } from "vitest";
 import { createTestUser } from "./helpers/auth.js";
 import { callFunction } from "./helpers/callFunction.js";
-import {
-  createUserDoc,
-  createObservationDoc,
-} from "./helpers/firestore.js";
+import { createUserDoc, createObservationDoc } from "./helpers/firestore.js";
 
 describe("getUserData", () => {
   it("returns user data with recent step counts", async () => {
@@ -34,11 +31,7 @@ describe("getUserData", () => {
       effectiveDateTime: oldDate.toISOString(),
     });
 
-    const { result, error } = await callFunction(
-      "getUserData",
-      {},
-      user.token,
-    );
+    const { result, error } = await callFunction("getUserData", {}, user.token);
 
     expect(error).toBeUndefined();
     const res = result as {
