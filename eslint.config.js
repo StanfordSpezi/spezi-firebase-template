@@ -19,7 +19,6 @@ module.exports = [
       "functions/serve-seeded.mjs",
       "functions/vitest.config.ts",
       "functions/src/tests/",
-      "spezi-firebase-template-shared/",
     ],
   },
 ];
