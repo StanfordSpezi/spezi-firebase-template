@@ -6,19 +6,14 @@
 /// <reference types="fhir" />
 
 import { observationSchema } from "@stanfordspezi/spezi-firebase-fhir";
+import { addStepCountInputSchema } from "@stanfordspezi/spezi-firebase-template-models";
 import { getFirestore } from "firebase-admin/firestore";
 import { HttpsError } from "firebase-functions/v2/https";
-import { z } from "zod/v4";
 import { validatedOnCall } from "../helpers/validatedOnCall.js";
 import { CollectionsService } from "../services/database/collections.js";
 
-const addStepCountDataSchema = z.object({
-  date: z.iso.datetime(),
-  steps: z.number().int().min(0).max(100000),
-});
-
 export const addStepCount = validatedOnCall(
-  addStepCountDataSchema,
+  addStepCountInputSchema,
   async (request) => {
     const { auth, data } = request;
 

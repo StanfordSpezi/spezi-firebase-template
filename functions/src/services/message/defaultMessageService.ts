@@ -8,9 +8,12 @@ import {
   FirestoreDeviceStorage,
   Message,
 } from "@stanfordspezi/spezi-firebase-cloud-messaging";
+import {
+  type User,
+  type UserMessage,
+} from "@stanfordspezi/spezi-firebase-template-models";
 import { getMessaging } from "firebase-admin/messaging";
 import { type MessageService } from "./messageService.js";
-import { type User, type UserMessage } from "../../types/index.js";
 import { CollectionsService } from "../database/collections.js";
 import {
   type Document,

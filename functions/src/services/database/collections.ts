@@ -3,17 +3,17 @@
 // SPDX-FileCopyrightText: 2026 Stanford University and the project authors (see CONTRIBUTORS.md)
 // SPDX-License-Identifier: MIT
 
-import { type Firestore } from "firebase-admin/firestore";
-import {
-  DatabaseConverter,
-  FHIRDatabaseConverter,
-} from "./databaseConverter.js";
 import {
   fhirObservationConverter,
   userConverter,
   userMessageConverter,
   type UserObservationCollection,
-} from "../../types/index.js";
+} from "@stanfordspezi/spezi-firebase-template-models";
+import { type Firestore } from "firebase-admin/firestore";
+import {
+  DatabaseConverter,
+  FHIRDatabaseConverter,
+} from "./databaseConverter.js";
 
 export class CollectionsService {
   readonly firestore: Firestore;

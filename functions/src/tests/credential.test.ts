@@ -5,7 +5,7 @@
 
 import { describe, it, expect } from "vitest";
 import { Credential } from "../services/auth/credential.js";
-import { UserType } from "../types/index.js";
+import { UserType } from "@stanfordspezi/spezi-firebase-template-models";
 
 const expectHttpsError = (fn: () => void, code: string): void => {
   try {

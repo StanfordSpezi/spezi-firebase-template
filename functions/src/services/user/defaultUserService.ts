@@ -3,14 +3,14 @@
 // SPDX-FileCopyrightText: 2026 Stanford University and the project authors (see CONTRIBUTORS.md)
 // SPDX-License-Identifier: MIT
 
-import { getAuth } from "firebase-admin/auth";
-import { type UserService } from "./userService.js";
 import {
   UserAuth,
   type UpdatableUserInfo,
   type User,
   type UserType,
-} from "../../types/index.js";
+} from "@stanfordspezi/spezi-firebase-template-models";
+import { getAuth } from "firebase-admin/auth";
+import { type UserService } from "./userService.js";
 import { CollectionsService } from "../database/collections.js";
 import {
   type DatabaseService,

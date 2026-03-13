@@ -3,11 +3,15 @@
 // SPDX-FileCopyrightText: 2026 Stanford University and the project authors (see CONTRIBUTORS.md)
 // SPDX-License-Identifier: MIT
 
+import {
+  UserMessage,
+  UserMessageType,
+  UserType,
+} from "@stanfordspezi/spezi-firebase-template-models";
 import { getFirestore } from "firebase-admin/firestore";
 import { onDocumentCreated } from "firebase-functions/v2/firestore";
 import { DefaultDatabaseService } from "../services/database/databaseService.js";
 import { DefaultMessageService } from "../services/message/defaultMessageService.js";
-import { UserMessage, UserMessageType, UserType } from "../types/index.js";
 
 export const onUserCreated = onDocumentCreated(
   "users/{userId}",

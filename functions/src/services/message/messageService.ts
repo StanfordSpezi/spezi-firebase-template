@@ -3,7 +3,10 @@
 // SPDX-FileCopyrightText: 2026 Stanford University and the project authors (see CONTRIBUTORS.md)
 // SPDX-License-Identifier: MIT
 
-import { type User, type UserMessage } from "../../types/index.js";
+import {
+  type User,
+  type UserMessage,
+} from "@stanfordspezi/spezi-firebase-template-models";
 import { type Document } from "../database/databaseService.js";
 
 export interface MessageService {

@@ -7,7 +7,7 @@ import {
   type UserAuth,
   type User,
   type UpdatableUserInfo,
-} from "../../types/index.js";
+} from "@stanfordspezi/spezi-firebase-template-models";
 import { type Document } from "../database/databaseService.js";
 
 export interface UserService {

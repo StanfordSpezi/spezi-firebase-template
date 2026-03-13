@@ -11,6 +11,8 @@ module.exports = [
   ...getEslintNodeConfig({ tsconfigRootDir: __dirname }),
   {
     ignores: [
+      "spezi-firebase-template-shared/lib/",
+      "spezi-firebase-template-shared/eslint.config.cjs",
       "functions/lib/",
       "functions/models/lib/",
       "functions/eslint.config.mjs",

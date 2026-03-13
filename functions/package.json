@@ -7,6 +7,7 @@
   "dependencies": {
     "@stanfordspezi/spezi-firebase-cloud-messaging": "^0.1.5",
     "@stanfordspezi/spezi-firebase-fhir": "^0.1.5",
+    "@stanfordspezi/spezi-firebase-template-models": "file:../spezi-firebase-template-shared",
     "@stanfordspezi/spezi-firebase-utils": "^0.1.5",
     "@types/fhir": "^0.0.41",
     "fhir": "^4.11.1",

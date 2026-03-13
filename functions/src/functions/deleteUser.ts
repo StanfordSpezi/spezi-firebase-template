@@ -3,16 +3,12 @@
 // SPDX-FileCopyrightText: 2026 Stanford University and the project authors (see CONTRIBUTORS.md)
 // SPDX-License-Identifier: MIT
 
+import { deleteUserInputSchema } from "@stanfordspezi/spezi-firebase-template-models";
 import { getFirestore } from "firebase-admin/firestore";
-import { z } from "zod/v4";
 import { validatedOnCall } from "../helpers/validatedOnCall.js";
 import { Credential } from "../services/auth/credential.js";
 import { DefaultDatabaseService } from "../services/database/databaseService.js";
 import { DefaultUserService } from "../services/user/defaultUserService.js";
-
-const deleteUserInputSchema = z.object({
-  userId: z.string(),
-});
 
 export const deleteUser = validatedOnCall(
   deleteUserInputSchema,

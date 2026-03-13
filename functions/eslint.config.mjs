@@ -25,12 +25,4 @@ export default [
       "vitest.config.ts",
     ],
   },
-  // Firebase-specific overrides
-  {
-    files: ["**/*.{ts,tsx}"],
-    rules: {
-      "@typescript-eslint/no-explicit-any": "warn",
-      "@typescript-eslint/no-non-null-assertion": "warn",
-    },
-  },
 ];
