@@ -6,6 +6,7 @@
 import {
   dismissMessageInputSchema,
   type DismissMessageInput,
+  type DismissMessageOutput,
 } from "@stanfordspezi/spezi-firebase-template-models";
 import { getFirestore } from "firebase-admin/firestore";
 import {
@@ -18,7 +19,9 @@ import { DefaultMessageService } from "../services/message/defaultMessageService
 
 export const dismissMessage = onCall(
   { cors: true },
-  async (request: CallableRequest<DismissMessageInput>) => {
+  async (
+    request: CallableRequest<DismissMessageInput>,
+  ): Promise<DismissMessageOutput> => {
     const { auth, data } = request;
 
     if (!auth) {

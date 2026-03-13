@@ -19,7 +19,7 @@ import {
 
 export const unregisterDevice = onCall(
   { cors: true },
-  async (request: CallableRequest<unknown>) => {
+  async (request: CallableRequest<unknown>): Promise<void> => {
     const { auth, data } = request;
 
     if (!auth) {
@@ -43,7 +43,6 @@ export const unregisterDevice = onCall(
       const unregisterDeviceHandler =
         createUnregisterDeviceHandler(notificationService);
       await unregisterDeviceHandler(auth.uid, validationResult.data);
-      return;
     } catch (error) {
       console.error("Error unregistering device:", error);
       throw new HttpsError("internal", "Failed to unregister device");

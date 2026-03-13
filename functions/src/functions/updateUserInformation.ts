@@ -3,7 +3,10 @@
 // SPDX-FileCopyrightText: 2026 Stanford University and the project authors (see CONTRIBUTORS.md)
 // SPDX-License-Identifier: MIT
 
-import { updateUserInformationInputSchema } from "@stanfordspezi/spezi-firebase-template-models";
+import {
+  updateUserInformationInputSchema,
+  type UpdateUserInformationOutput,
+} from "@stanfordspezi/spezi-firebase-template-models";
 import { getFirestore } from "firebase-admin/firestore";
 import { validatedOnCall } from "../helpers/validatedOnCall.js";
 import { Credential } from "../services/auth/credential.js";
@@ -12,7 +15,7 @@ import { DefaultUserService } from "../services/user/defaultUserService.js";
 
 export const updateUserInformation = validatedOnCall(
   updateUserInformationInputSchema,
-  async (request): Promise<{ success: boolean }> => {
+  async (request): Promise<UpdateUserInformationOutput> => {
     const credential = new Credential(request.auth);
     credential.checkSelfOrOwnerOrClinician(request.data.userId);
 

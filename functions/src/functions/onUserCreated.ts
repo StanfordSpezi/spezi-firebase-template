@@ -15,7 +15,7 @@ import { DefaultMessageService } from "../services/message/defaultMessageService
 
 export const onUserCreated = onDocumentCreated(
   "users/{userId}",
-  async (event) => {
+  async (event): Promise<void> => {
     const userId = event.params.userId;
     const userData = event.data?.data();
 

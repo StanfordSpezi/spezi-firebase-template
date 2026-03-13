@@ -20,7 +20,7 @@ import { type z } from "zod/v4";
 
 export const registerDevice = onCall(
   { cors: true },
-  async (request: CallableRequest<unknown>) => {
+  async (request: CallableRequest<unknown>): Promise<void> => {
     const { auth, data } = request;
 
     if (!auth) {
@@ -46,7 +46,6 @@ export const registerDevice = onCall(
       const registerDeviceHandler =
         createRegisterDeviceHandler(notificationService);
       await registerDeviceHandler(auth.uid, validationResult.data);
-      return;
     } catch (error) {
       console.error("Error registering device:", error);
       throw new HttpsError("internal", "Failed to register device");

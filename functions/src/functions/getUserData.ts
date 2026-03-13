@@ -6,6 +6,7 @@
 /// <reference types="fhir" />
 
 import { observationSchema } from "@stanfordspezi/spezi-firebase-fhir";
+import { type GetUserDataOutput } from "@stanfordspezi/spezi-firebase-template-models";
 import { getFirestore } from "firebase-admin/firestore";
 import {
   onCall,
@@ -16,7 +17,7 @@ import { CollectionsService } from "../services/database/collections.js";
 
 export const getUserData = onCall(
   { cors: true },
-  async (request: CallableRequest) => {
+  async (request: CallableRequest): Promise<GetUserDataOutput> => {
     const { auth } = request;
 
     if (!auth) {

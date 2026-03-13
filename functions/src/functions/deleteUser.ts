@@ -3,7 +3,10 @@
 // SPDX-FileCopyrightText: 2026 Stanford University and the project authors (see CONTRIBUTORS.md)
 // SPDX-License-Identifier: MIT
 
-import { deleteUserInputSchema } from "@stanfordspezi/spezi-firebase-template-models";
+import {
+  deleteUserInputSchema,
+  type DeleteUserOutput,
+} from "@stanfordspezi/spezi-firebase-template-models";
 import { getFirestore } from "firebase-admin/firestore";
 import { validatedOnCall } from "../helpers/validatedOnCall.js";
 import { Credential } from "../services/auth/credential.js";
@@ -12,7 +15,7 @@ import { DefaultUserService } from "../services/user/defaultUserService.js";
 
 export const deleteUser = validatedOnCall(
   deleteUserInputSchema,
-  async (request): Promise<{ success: boolean }> => {
+  async (request): Promise<DeleteUserOutput> => {
     const credential = new Credential(request.auth);
     credential.checkOwnerOrClinician();
 

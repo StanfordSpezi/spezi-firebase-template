@@ -6,7 +6,10 @@
 /// <reference types="fhir" />
 
 import { observationSchema } from "@stanfordspezi/spezi-firebase-fhir";
-import { addStepCountInputSchema } from "@stanfordspezi/spezi-firebase-template-models";
+import {
+  addStepCountInputSchema,
+  type AddStepCountOutput,
+} from "@stanfordspezi/spezi-firebase-template-models";
 import { getFirestore } from "firebase-admin/firestore";
 import { HttpsError } from "firebase-functions/v2/https";
 import { validatedOnCall } from "../helpers/validatedOnCall.js";
@@ -14,7 +17,7 @@ import { CollectionsService } from "../services/database/collections.js";
 
 export const addStepCount = validatedOnCall(
   addStepCountInputSchema,
-  async (request) => {
+  async (request): Promise<AddStepCountOutput> => {
     const { auth, data } = request;
 
     if (!auth) {
