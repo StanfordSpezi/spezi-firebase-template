@@ -252,6 +252,7 @@ const formatter = new Intl.DateTimeFormat(userLanguage, {
   month: 'long',
   day: 'numeric'
 })
+```
 
 ## Security
 
