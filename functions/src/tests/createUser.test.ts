@@ -11,7 +11,7 @@ import { createUserDoc } from "./helpers/firestore.js";
 
 describe("createUser", () => {
   it("creates a user successfully", async () => {
-    const caller = await createTestUser({});
+    const caller = await createTestUser({ customClaims: {type: "owner"}});
     await createUserDoc(caller.uid, { type: "owner" });
 
     const { result, error } = await callFunction(
@@ -44,7 +44,7 @@ describe("createUser", () => {
   });
 
   it("creates a user with organization and clinician", async () => {
-    const caller = await createTestUser({});
+    const caller = await createTestUser({ customClaims: { type: "owner" } });
     await createUserDoc(caller.uid, { type: "owner" });
 
     const { result, error } = await callFunction(
@@ -82,7 +82,7 @@ describe("createUser", () => {
   });
 
   it("rejects invalid email", async () => {
-    const caller = await createTestUser({});
+    const caller = await createTestUser({ customClaims: { type: "owner" } });
     await createUserDoc(caller.uid, { type: "owner" });
 
     const { error } = await callFunction(
@@ -96,4 +96,21 @@ describe("createUser", () => {
     expect(error).toBeDefined();
     expect(error!.status).toBe("INVALID_ARGUMENT");
   });
+
+  it("rejects patient claims", async () => {
+    const caller = await createTestUser({ customClaims: { type: "patient" } });
+    await createUserDoc(caller.uid, { type: "patient" });
+
+    const { error } = await callFunction(
+      "createUser",
+      {
+        auth: { email: "newuser@example.com", displayName: "New User" },
+        user: { type: "patient" },
+      },
+      caller.token,
+    );
+    expect(error).toBeDefined();
+    expect(error!.status).toBe("PERMISSION_DENIED");
+  });
+
 });

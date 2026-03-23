@@ -5,14 +5,14 @@
 
 import { getFirestore } from "firebase-admin/firestore";
 import { HttpsError } from "firebase-functions/v2/https";
-import { validatedOnCall } from "../../helpers/validatedOnCall.js";
-import { Credential } from "../../services/auth/credential.js";
-import { DefaultDatabaseService } from "../../services/database/databaseService.js";
-import { DefaultUserService } from "../../services/user/defaultUserService.js";
 import {
   getUsersInformationInputSchema,
   type GetUsersInformationOutput,
 } from "./schema.js";
+import { validatedOnCall } from "../../helpers/validatedOnCall.js";
+import { Credential } from "../../services/auth/credential.js";
+import { DefaultDatabaseService } from "../../services/database/databaseService.js";
+import { DefaultUserService } from "../../services/user/defaultUserService.js";
 import { userAuthConverter, userConverter } from "../../types/index.js";
 
 export const getUsersInformation = validatedOnCall(

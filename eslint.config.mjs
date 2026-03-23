@@ -4,18 +4,24 @@
 // SPDX-License-Identifier: MIT
 
 import { createRequire } from "module";
+import { dirname } from "path";
+import { fileURLToPath } from "url";
 
 const require = createRequire(import.meta.url);
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
 const {
   getEslintNodeConfig,
 } = require("@stanfordspezi/spezi-web-configurations");
 
-module.exports = [
+export default [
   ...getEslintNodeConfig({ tsconfigRootDir: __dirname }),
   {
     ignores: [
       "functions/lib/",
-      "models/lib/",
+      "models/",
+      "eslint.config.mjs",
+      ".prettierrc.js",
       "functions/eslint.config.mjs",
       "functions/seed.mjs",
       "functions/serve-seeded.mjs",

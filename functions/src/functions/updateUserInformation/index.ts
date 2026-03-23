@@ -4,11 +4,14 @@
 // SPDX-License-Identifier: MIT
 
 import { getFirestore } from "firebase-admin/firestore";
+import {
+  updateUserInformationInputSchema,
+  type UpdateUserInformationOutput,
+} from "./schema.js";
 import { validatedOnCall } from "../../helpers/validatedOnCall.js";
 import { Credential } from "../../services/auth/credential.js";
 import { DefaultDatabaseService } from "../../services/database/databaseService.js";
 import { DefaultUserService } from "../../services/user/defaultUserService.js";
-import { updateUserInformationInputSchema, UpdateUserInformationOutput } from "./schema.js";
 
 export const updateUserInformation = validatedOnCall(
   updateUserInformationInputSchema,

@@ -4,8 +4,10 @@
 // SPDX-License-Identifier: MIT
 
 import { getFirestore } from "firebase-admin/firestore";
-import { type DismissMessagesOutput } from "./schema.js";
-import { dismissMessagesInputSchema } from "./schema.js";
+import {
+  type DismissMessagesOutput,
+  dismissMessagesInputSchema,
+} from "./schema.js";
 import { validatedOnCall } from "../../helpers/validatedOnCall.js";
 import { Credential } from "../../services/auth/credential.js";
 import { DefaultDatabaseService } from "../../services/database/databaseService.js";

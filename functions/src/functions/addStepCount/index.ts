@@ -12,11 +12,8 @@ import {
   type CallableRequest,
   HttpsError,
 } from "firebase-functions/v2/https";
+import { addStepCountInputSchema, type AddStepCountInput } from "./schema.js";
 import { CollectionsService } from "../../services/database/collections.js";
-import {
-  addStepCountInputSchema,
-  type AddStepCountInput,
-} from "./schema.js";
 
 export const addStepCount = onCall(
   { cors: true },

@@ -29,9 +29,12 @@ export class DefaultUserService implements UserService {
 
   async createUser(data: {
     auth: Partial<UserAuth>;
-    user: Partial<User> & Pick<User, 'type'>;
+    user: Partial<User> & Pick<User, "type">;
   }): Promise<string> {
     const userRecord = await getAuth().createUser(data.auth);
+    if (data.auth.customClaims) {
+      await getAuth().setCustomUserClaims(userRecord.uid, data.auth.customClaims)
+    }
 
     await this.collections.users.doc(userRecord.uid).set({
       type: data.user.type,

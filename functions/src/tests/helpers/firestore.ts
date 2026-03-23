@@ -26,7 +26,7 @@ export const deleteAllAuthUsers = async (): Promise<void> => {
 export const createUserDoc = async (
   userId: string,
   data: {
-    type: "patient" | "clinician" | "owner";
+    type: "patient" | "clinician" | "owner" | "admin";
     disabled?: boolean;
     displayName?: string;
     email?: string;

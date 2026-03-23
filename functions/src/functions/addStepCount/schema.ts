@@ -12,7 +12,6 @@ export const addStepCountInputSchema = z.object({
 
 export type AddStepCountInput = z.input<typeof addStepCountInputSchema>;
 
-
 // TODO: Use validatedOnCall and bind this to the callable output
 export interface AddStepCountOutput {
   success: boolean;

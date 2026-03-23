@@ -4,11 +4,11 @@
 // SPDX-License-Identifier: MIT
 
 import { getFirestore } from "firebase-admin/firestore";
+import { deleteUserInputSchema, type DeleteUserOutput } from "./schema.js";
 import { validatedOnCall } from "../../helpers/validatedOnCall.js";
 import { Credential } from "../../services/auth/credential.js";
 import { DefaultDatabaseService } from "../../services/database/databaseService.js";
 import { DefaultUserService } from "../../services/user/defaultUserService.js";
-import { deleteUserInputSchema, DeleteUserOutput } from "./schema.js";
 
 export const deleteUser = validatedOnCall(
   deleteUserInputSchema,
