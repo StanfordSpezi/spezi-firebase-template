@@ -15,6 +15,7 @@ export type UserObservationCollection =
   | "heartRate";
 
 export enum UserType {
+  admin = "admin",
   owner = "owner",
   clinician = "clinician",
   patient = "patient",
