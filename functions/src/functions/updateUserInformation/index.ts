@@ -4,37 +4,11 @@
 // SPDX-License-Identifier: MIT
 
 import { getFirestore } from "firebase-admin/firestore";
-import { z } from "zod/v4";
-import { validatedOnCall } from "../helpers/validatedOnCall.js";
-import { Credential } from "../services/auth/credential.js";
-import { DefaultDatabaseService } from "../services/database/databaseService.js";
-import { DefaultUserService } from "../services/user/defaultUserService.js";
-import { UserType } from "../types/index.js";
-
-const updateUserInformationInputSchema = z.object({
-  userId: z.string(),
-  data: z.object({
-    auth: z
-      .object({
-        displayName: z.string().optional(),
-        email: z.email().optional(),
-        disabled: z.boolean().optional(),
-        phoneNumber: z.string().optional(),
-      })
-      .optional(),
-    user: z
-      .object({
-        type: z.enum(UserType).optional(),
-        organization: z.string().optional(),
-        clinician: z.string().optional(),
-        displayName: z.string().optional(),
-        email: z.email().optional(),
-        language: z.string().optional(),
-        timeZone: z.string().optional(),
-      })
-      .optional(),
-  }),
-});
+import { validatedOnCall } from "../../helpers/validatedOnCall.js";
+import { Credential } from "../../services/auth/credential.js";
+import { DefaultDatabaseService } from "../../services/database/databaseService.js";
+import { DefaultUserService } from "../../services/user/defaultUserService.js";
+import { updateUserInformationInputSchema } from "./schema.js";
 
 export const updateUserInformation = validatedOnCall(
   updateUserInformationInputSchema,

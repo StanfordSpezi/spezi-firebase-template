@@ -12,19 +12,15 @@ import {
   type CallableRequest,
   HttpsError,
 } from "firebase-functions/v2/https";
-import { z } from "zod/v4";
-import { CollectionsService } from "../services/database/collections.js";
-
-const addStepCountDataSchema = z.object({
-  date: z.iso.datetime(),
-  steps: z.number().int().min(0).max(100000),
-});
-
-type AddStepCountData = z.infer<typeof addStepCountDataSchema>;
+import { CollectionsService } from "../../services/database/collections.js";
+import {
+  addStepCountInputSchema,
+  type AddStepCountInput,
+} from "./schema.js";
 
 export const addStepCount = onCall(
   { cors: true },
-  async (request: CallableRequest<AddStepCountData>) => {
+  async (request: CallableRequest<AddStepCountInput>) => {
     const { auth, data } = request;
 
     if (!auth) {
@@ -32,7 +28,7 @@ export const addStepCount = onCall(
     }
 
     // Validate input using Zod schema
-    const validationResult = addStepCountDataSchema.safeParse(data);
+    const validationResult = addStepCountInputSchema.safeParse(data);
     if (!validationResult.success) {
       throw new HttpsError(
         "invalid-argument",

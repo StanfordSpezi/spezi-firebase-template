@@ -9,20 +9,16 @@ import {
   type CallableRequest,
   HttpsError,
 } from "firebase-functions/v2/https";
-import { z } from "zod/v4";
-import { DefaultDatabaseService } from "../services/database/databaseService.js";
-import { DefaultMessageService } from "../services/message/defaultMessageService.js";
-
-const dismissMessageDataSchema = z.object({
-  messageId: z.string().min(1, "Message ID cannot be empty"),
-  didPerformAction: z.boolean().optional().default(false),
-});
-
-type DismissMessageData = z.infer<typeof dismissMessageDataSchema>;
+import { DefaultDatabaseService } from "../../services/database/databaseService.js";
+import { DefaultMessageService } from "../../services/message/defaultMessageService.js";
+import {
+  dismissMessageInputSchema,
+  type DismissMessageInput,
+} from "./schema.js";
 
 export const dismissMessage = onCall(
   { cors: true },
-  async (request: CallableRequest<DismissMessageData>) => {
+  async (request: CallableRequest<DismissMessageInput>) => {
     const { auth, data } = request;
 
     if (!auth) {
@@ -30,7 +26,7 @@ export const dismissMessage = onCall(
     }
 
     // Validate input using Zod schema
-    const validationResult = dismissMessageDataSchema.safeParse(data);
+    const validationResult = dismissMessageInputSchema.safeParse(data);
     if (!validationResult.success) {
       throw new HttpsError(
         "invalid-argument",

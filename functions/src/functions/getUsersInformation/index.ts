@@ -5,31 +5,15 @@
 
 import { getFirestore } from "firebase-admin/firestore";
 import { HttpsError } from "firebase-functions/v2/https";
-import { z } from "zod/v4";
-import { validatedOnCall } from "../helpers/validatedOnCall.js";
-import { Credential } from "../services/auth/credential.js";
-import { DefaultDatabaseService } from "../services/database/databaseService.js";
-import { DefaultUserService } from "../services/user/defaultUserService.js";
-import { userAuthConverter, userConverter } from "../types/index.js";
-
-const getUsersInformationInputSchema = z.object({
-  userIds: z.array(z.string()),
-  includeUserData: z.boolean().optional().default(true),
-});
-
-type GetUsersInformationOutput = Record<
-  string,
-  {
-    data?: {
-      auth: Record<string, unknown>;
-      user?: Record<string, unknown>;
-    };
-    error?: {
-      code: string;
-      message: string;
-    };
-  }
->;
+import { validatedOnCall } from "../../helpers/validatedOnCall.js";
+import { Credential } from "../../services/auth/credential.js";
+import { DefaultDatabaseService } from "../../services/database/databaseService.js";
+import { DefaultUserService } from "../../services/user/defaultUserService.js";
+import {
+  getUsersInformationInputSchema,
+  type GetUsersInformationOutput,
+} from "./schema.js";
+import { userAuthConverter, userConverter } from "../../types/index.js";
 
 export const getUsersInformation = validatedOnCall(
   getUsersInformationInputSchema,

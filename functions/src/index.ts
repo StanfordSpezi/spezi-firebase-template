@@ -8,9 +8,9 @@ import admin from "firebase-admin";
 admin.initializeApp();
 admin.firestore().settings({ ignoreUndefinedProperties: true });
 
-export { addStepCount } from "./functions/addStepCount.js";
-export { getUserData } from "./functions/getUserData.js";
+export { addStepCount } from "./functions/addStepCount/index.js";
+export { getUserData } from "./functions/getUserData/index.js";
 export { onUserCreated } from "./functions/onUserCreated.js";
-export { dismissMessage } from "./functions/dismissMessage.js";
+export { dismissMessage } from "./functions/dismissMessage/index.js";
 export { registerDevice } from "./functions/registerDevice.js";
 export { unregisterDevice } from "./functions/unregisterDevice.js";

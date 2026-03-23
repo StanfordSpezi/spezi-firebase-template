@@ -1,12 +1,20 @@
 {
   "name": "spezi-firebase-template",
   "version": "1.0.0",
+  "type": "module",
   "description": "A Firebase template for Spezi-build applications w/ FHIR support",
+  "exports": {
+    "./models": {
+      "types": "./models/lib/index.d.ts",
+      "import": "./models/lib/index.js"
+    }
+  },
   "scripts": {
     "install": "npm --prefix functions install",
     "build": "npm --prefix functions run build",
+    "build:models": "tsc --project models/tsconfig.json",
     "clean": "npm --prefix functions run clean",
-    "prepare": "npm run clean && npm run install && npm run build",
+    "prepare": "npm run clean && npm run install && npm run build && npm run build:models",
     "lint": "eslint .",
     "lint:ci": "eslint --output-file eslint_report.json --format json .",
     "lint:fix": "eslint . --fix",
@@ -26,11 +34,14 @@
   "devDependencies": {
     "eslint": "^9.32.0",
     "prettier": "^3.6.2",
+    "typescript": "^5.2.2",
     "@stanfordspezi/spezi-web-configurations": "^0.6.0"
   },
   "dependencies": {
     "@stanfordspezi/spezi-firebase-cloud-messaging": "^0.1.5",
     "@stanfordspezi/spezi-firebase-fhir": "^0.1.5",
-    "@stanfordspezi/spezi-firebase-utils": "^0.1.5"
+    "@stanfordspezi/spezi-firebase-utils": "^0.1.5",
+    "@types/fhir": "^0.0.41",
+    "zod": "^4.0.5"
   }
 }

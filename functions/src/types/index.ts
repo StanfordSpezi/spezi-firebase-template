@@ -6,6 +6,7 @@
 /// <reference types="fhir" />
 import { observationSchema } from "@stanfordspezi/spezi-firebase-fhir";
 import { SchemaConverter } from "@stanfordspezi/spezi-firebase-utils";
+export { LocalizedText, localizedTextConverter } from "@stanfordspezi/spezi-firebase-utils";
 import { z } from "zod/v4";
 
 export type UserObservationCollection =
