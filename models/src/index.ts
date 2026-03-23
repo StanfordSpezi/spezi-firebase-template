@@ -11,6 +11,7 @@ export {
   userConverter,
   userAuthConverter,
   userMessageConverter,
+  organizationConverter,
   fhirObservationConverter,
   localizedTextConverter,
 } from "../../functions/lib/types/index.js";
@@ -27,12 +28,6 @@ export {
   type DeleteUserOutput,
 } from "../../functions/lib/functions/deleteUser/schema.js";
 
-export {
-  dismissMessageInputSchema,
-  type DismissMessageInput,
-  type DismissMessageOutput,
-} from "../../functions/lib/functions/dismissMessage/schema.js";
-
 export { type GetUserDataOutput } from "../../functions/lib/functions/getUserData/schema.js";
 
 export {
@@ -46,3 +41,9 @@ export {
   type UpdateUserInformationInput,
   type UpdateUserInformationOutput,
 } from "../../functions/lib/functions/updateUserInformation/schema.js";
+
+export {
+  dismissMessagesInputSchema,
+  type DismissMessagesInput,
+  type DismissMessagesOutput,
+} from "../../functions/lib/functions/dismissMessages/schema.js";

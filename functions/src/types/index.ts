@@ -215,6 +215,25 @@ export const userMessageConverter = new SchemaConverter({
   }),
 });
 
+export class Organization {
+  readonly name: string;
+
+  constructor(input: { name: string }) {
+    this.name = input.name;
+  }
+}
+
+export const organizationConverter = new SchemaConverter({
+  schema: z
+    .object({
+      name: z.string(),
+    })
+    .transform((values) => new Organization(values)),
+  encode: (object) => ({
+    name: object.name,
+  }),
+});
+
 export const fhirObservationConverter = new SchemaConverter({
   schema: observationSchema,
   encode: (value) => value,

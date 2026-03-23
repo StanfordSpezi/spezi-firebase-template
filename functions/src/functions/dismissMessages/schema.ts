@@ -5,13 +5,14 @@
 
 import { z } from "zod/v4";
 
-export const dismissMessageInputSchema = z.object({
-  messageId: z.string().min(1, "Message ID cannot be empty"),
+export const dismissMessagesInputSchema = z.object({
+  userId: z.string().optional(),
+  messageIds: z.array(z.string().min(1)),
   didPerformAction: z.boolean().optional().default(false),
 });
 
-export type DismissMessageInput = z.infer<typeof dismissMessageInputSchema>;
+export type DismissMessagesInput = z.infer<typeof dismissMessagesInputSchema>;
 
-export interface DismissMessageOutput {
-  success: boolean;
+export interface DismissMessagesOutput {
+  dismissedCount: number;
 }
