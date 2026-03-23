@@ -9,6 +9,7 @@ admin.initializeApp();
 admin.firestore().settings({ ignoreUndefinedProperties: true });
 
 export { addStepCount } from "./functions/addStepCount/index.js";
+export { createUser } from "./functions/createUser/index.js";
 export { getUserData } from "./functions/getUserData/index.js";
 export { onUserCreated } from "./functions/onUserCreated.js";
 export { dismissMessages } from "./functions/dismissMessages/index.js";

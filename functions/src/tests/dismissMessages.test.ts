@@ -61,7 +61,12 @@ describe("dismissMessages", () => {
     expect((result as { dismissedCount: number }).dismissedCount).toBe(2);
 
     const messages = await getUserMessages(user.uid);
-    expect(messages.every((m) => m.data().isDismissed === true)).toBe(true);
+    const dismissed1 = messages.find((message) => message.id === messageId1);
+    const dismissed2 = messages.find((message) => message.id === messageId2);
+    expect(dismissed1).toBeDefined();
+    expect(dismissed2).toBeDefined();
+    expect(dismissed1!.data().isDismissed).toBe(true);
+    expect(dismissed2!.data().isDismissed).toBe(true);
   });
 
   it("dismisses with didPerformAction: true", async () => {

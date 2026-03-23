@@ -23,6 +23,12 @@ export {
 } from "../../functions/lib/functions/addStepCount/schema.js";
 
 export {
+  createUserInputSchema,
+  type CreateUserInput,
+  type CreateUserOutput,
+} from "../../functions/lib/functions/createUser/schema.js";
+
+export {
   deleteUserInputSchema,
   type DeleteUserInput,
   type DeleteUserOutput,

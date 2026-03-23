@@ -27,6 +27,25 @@ export class DefaultUserService implements UserService {
     this.collections = new CollectionsService(databaseService.firestore());
   }
 
+  async createUser(data: {
+    auth: Partial<UserAuth>;
+    user: Partial<User> & Pick<User, 'type'>;
+  }): Promise<string> {
+    const userRecord = await getAuth().createUser(data.auth);
+
+    await this.collections.users.doc(userRecord.uid).set({
+      type: data.user.type,
+      disabled: false,
+      phoneNumbers: [],
+      organization: data.user.organization,
+      clinician: data.user.clinician,
+      createdAt: new Date(),
+      lastActiveDate: new Date(),
+    });
+
+    return userRecord.uid;
+  }
+
   async getAuth(userId: string): Promise<UserAuth> {
     const userRecord = await getAuth().getUser(userId);
     return new UserAuth({
