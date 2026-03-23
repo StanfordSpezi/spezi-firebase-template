@@ -33,7 +33,10 @@ export class DefaultUserService implements UserService {
   }): Promise<string> {
     const userRecord = await getAuth().createUser(data.auth);
     if (data.auth.customClaims) {
-      await getAuth().setCustomUserClaims(userRecord.uid, data.auth.customClaims)
+      await getAuth().setCustomUserClaims(
+        userRecord.uid,
+        data.auth.customClaims,
+      );
     }
 
     await this.collections.users.doc(userRecord.uid).set({
