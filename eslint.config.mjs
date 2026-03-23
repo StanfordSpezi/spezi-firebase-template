@@ -3,6 +3,9 @@
 // SPDX-FileCopyrightText: 2025, 2026 Stanford University and the project authors (see CONTRIBUTORS.md)
 // SPDX-License-Identifier: MIT
 
+import { createRequire } from "module";
+
+const require = createRequire(import.meta.url);
 const {
   getEslintNodeConfig,
 } = require("@stanfordspezi/spezi-web-configurations");
@@ -12,9 +15,8 @@ module.exports = [
   {
     ignores: [
       "functions/lib/",
-      "functions/models/lib/",
+      "models/lib/",
       "functions/eslint.config.mjs",
-      "functions/models/eslint.config.mjs",
       "functions/seed.mjs",
       "functions/serve-seeded.mjs",
       "functions/vitest.config.ts",
