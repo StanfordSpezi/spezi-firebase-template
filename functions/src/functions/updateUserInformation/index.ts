@@ -8,11 +8,11 @@ import { validatedOnCall } from "../../helpers/validatedOnCall.js";
 import { Credential } from "../../services/auth/credential.js";
 import { DefaultDatabaseService } from "../../services/database/databaseService.js";
 import { DefaultUserService } from "../../services/user/defaultUserService.js";
-import { updateUserInformationInputSchema } from "./schema.js";
+import { updateUserInformationInputSchema, UpdateUserInformationOutput } from "./schema.js";
 
 export const updateUserInformation = validatedOnCall(
   updateUserInformationInputSchema,
-  async (request): Promise<{ success: boolean }> => {
+  async (request): Promise<UpdateUserInformationOutput> => {
     const credential = new Credential(request.auth);
     credential.checkSelfOrOwnerOrClinician(request.data.userId);
 

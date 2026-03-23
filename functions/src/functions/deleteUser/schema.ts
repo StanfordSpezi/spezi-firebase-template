@@ -9,7 +9,7 @@ export const deleteUserInputSchema = z.object({
   userId: z.string(),
 });
 
-export type DeleteUserInput = z.infer<typeof deleteUserInputSchema>;
+export type DeleteUserInput = z.input<typeof deleteUserInputSchema>;
 
 export interface DeleteUserOutput {
   success: boolean;

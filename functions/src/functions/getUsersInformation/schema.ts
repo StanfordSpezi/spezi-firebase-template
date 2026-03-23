@@ -10,7 +10,7 @@ export const getUsersInformationInputSchema = z.object({
   includeUserData: z.boolean().optional().default(true),
 });
 
-export type GetUsersInformationInput = z.infer<
+export type GetUsersInformationInput = z.input<
   typeof getUsersInformationInputSchema
 >;
 

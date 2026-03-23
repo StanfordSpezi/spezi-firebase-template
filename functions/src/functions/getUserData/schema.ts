@@ -5,6 +5,7 @@
 
 import { type User } from "../../types/index.js";
 
+// TODO: Use validatedOnCall and bind this to the callable output
 export interface GetUserDataOutput {
   user: User | Record<string, never>;
   stepCountData: Array<{

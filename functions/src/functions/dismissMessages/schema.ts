@@ -11,7 +11,7 @@ export const dismissMessagesInputSchema = z.object({
   didPerformAction: z.boolean().optional().default(false),
 });
 
-export type DismissMessagesInput = z.infer<typeof dismissMessagesInputSchema>;
+export type DismissMessagesInput = z.input<typeof dismissMessagesInputSchema>;
 
 export interface DismissMessagesOutput {
   dismissedCount: number;

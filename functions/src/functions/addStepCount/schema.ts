@@ -10,8 +10,10 @@ export const addStepCountInputSchema = z.object({
   steps: z.number().int().min(0).max(100000),
 });
 
-export type AddStepCountInput = z.infer<typeof addStepCountInputSchema>;
+export type AddStepCountInput = z.input<typeof addStepCountInputSchema>;
 
+
+// TODO: Use validatedOnCall and bind this to the callable output
 export interface AddStepCountOutput {
   success: boolean;
   observationId: string;

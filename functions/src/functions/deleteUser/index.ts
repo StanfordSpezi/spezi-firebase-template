@@ -8,11 +8,11 @@ import { validatedOnCall } from "../../helpers/validatedOnCall.js";
 import { Credential } from "../../services/auth/credential.js";
 import { DefaultDatabaseService } from "../../services/database/databaseService.js";
 import { DefaultUserService } from "../../services/user/defaultUserService.js";
-import { deleteUserInputSchema } from "./schema.js";
+import { deleteUserInputSchema, DeleteUserOutput } from "./schema.js";
 
 export const deleteUser = validatedOnCall(
   deleteUserInputSchema,
-  async (request): Promise<{ success: boolean }> => {
+  async (request): Promise<DeleteUserOutput> => {
     const credential = new Credential(request.auth);
     credential.checkOwnerOrClinician();
 
