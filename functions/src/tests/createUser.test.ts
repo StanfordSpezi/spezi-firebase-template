@@ -7,7 +7,7 @@ import admin from "firebase-admin";
 import { describe, it, expect } from "vitest";
 import { createTestUser } from "./helpers/auth.js";
 import { callFunction } from "./helpers/callFunction.js";
-import { createUserDoc } from "./helpers/firestore.js";
+import { createOrganizationDoc, createUserDoc } from "./helpers/firestore.js";
 
 describe("createUser", () => {
   it("admin creates a user of any type", async () => {
@@ -15,6 +15,7 @@ describe("createUser", () => {
       customClaims: { type: "admin" },
     });
     await createUserDoc(caller.uid, { type: "admin" });
+    await createOrganizationDoc("org-1");
 
     const { result, error } = await callFunction(
       "createUser",
@@ -50,6 +51,7 @@ describe("createUser", () => {
     const caller = await createTestUser({
       customClaims: { type: "owner", organization: "org-1" },
     });
+    await createOrganizationDoc("org-1");
     await createUserDoc(caller.uid, { type: "owner", organization: "org-1" });
 
     const { result, error } = await callFunction(
@@ -77,6 +79,7 @@ describe("createUser", () => {
     const caller = await createTestUser({
       customClaims: { type: "owner", organization: "org-1" },
     });
+    await createOrganizationDoc("org-1");
     await createUserDoc(caller.uid, { type: "owner", organization: "org-1" });
 
     const { result, error } = await callFunction(
@@ -102,6 +105,7 @@ describe("createUser", () => {
     const caller = await createTestUser({
       customClaims: { type: "owner", organization: "org-1" },
     });
+    await createOrganizationDoc("org-1");
     await createUserDoc(caller.uid, { type: "owner", organization: "org-1" });
 
     const { result, error } = await callFunction(
@@ -140,6 +144,7 @@ describe("createUser", () => {
     const caller = await createTestUser({
       customClaims: { type: "clinician", organization: "org-1" },
     });
+    await createOrganizationDoc("org-1");
     await createUserDoc(caller.uid, {
       type: "clinician",
       organization: "org-1",

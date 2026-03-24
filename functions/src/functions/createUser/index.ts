@@ -35,9 +35,9 @@ export const createUser = validatedOnCall(
       throw credential.permissionDeniedError();
     }
 
-
     if (targetOrg !== undefined) {
-      const organizationExists = await organizationService.organizationExists(targetOrg);
+      const organizationExists =
+        await organizationService.organizationExists(targetOrg);
       if (!organizationExists) {
         throw new HttpsError(
           "not-found",

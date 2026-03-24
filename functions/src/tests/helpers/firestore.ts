@@ -23,6 +23,17 @@ export const deleteAllAuthUsers = async (): Promise<void> => {
   );
 };
 
+export const createOrganizationDoc = async (
+  organizationId: string,
+  data: { name: string } = { name: organizationId },
+): Promise<void> => {
+  await admin
+    .firestore()
+    .collection("organizations")
+    .doc(organizationId)
+    .set(data);
+};
+
 export const createUserDoc = async (
   userId: string,
   data: {
