@@ -40,8 +40,8 @@ export const updateUserInformation = validatedOnCall(
 
     const isSelf = credential.userId === targetUserId;
     const securityFieldsModified =
-      !!request.data.data.user?.type ||
-      !!request.data.data.user?.organization ||
+      request.data.data.user?.type !== undefined ||
+      request.data.data.user?.organization !== undefined ||
       request.data.data.auth?.disabled !== undefined;
 
     if (isSelf && securityFieldsModified) {
