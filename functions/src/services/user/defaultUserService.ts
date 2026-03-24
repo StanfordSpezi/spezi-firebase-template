@@ -40,13 +40,11 @@ export class DefaultUserService implements UserService {
     }
 
     await this.collections.users.doc(userRecord.uid).set({
-      type: data.user.type,
       disabled: false,
       phoneNumbers: [],
-      organization: data.user.organization,
-      clinician: data.user.clinician,
       createdAt: new Date(),
       lastActiveDate: new Date(),
+      ...data.user,
     });
 
     return userRecord.uid;

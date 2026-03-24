@@ -6,15 +6,14 @@
 import {
   type UserAuth,
   type User,
-  type UserType,
   type UpdatableUserInfo,
 } from "../../types/index.js";
 import { type Document } from "../database/databaseService.js";
 
 export interface UserService {
   createUser(data: {
-    auth: { email: string; displayName?: string };
-    user: { type: UserType; organization?: string; clinician?: string };
+    auth: Partial<UserAuth>;
+    user: Partial<User> & Pick<User, "type">;
   }): Promise<string>;
   getAuth(userId: string): Promise<UserAuth>;
   updateAuth(userId: string, auth: Partial<UserAuth>): Promise<void>;
