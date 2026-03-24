@@ -1,40 +1,126 @@
 rules_version = '2';
 
 service cloud.firestore {
-  match /databases/{database}/documents {
-    // Users can read and write their own user document
-    // Writes must not change the 'type' field to prevent privilege escalation
-    match /users/{userId} {
-      allow read: if request.auth != null && request.auth.uid == userId;
-      allow create: if request.auth != null && request.auth.uid == userId;
-      allow update: if request.auth != null && request.auth.uid == userId
-        && request.resource.data.type == resource.data.type;
-      
-      // Users can read and write their own subcollections
-      match /{document=**} {
-        allow read, write: if request.auth != null && request.auth.uid == userId;
-      }
+  match /databases/{databaseId}/documents {
+    function valueExists(object, property) {
+      return (property in object) && object[property] != null;
     }
-    
-    // Organizations are readable by authenticated users
+
+    function isEqualOptional(object0, property0, object1, property1) {
+      return valueExists(object0, property0)
+        ? (valueExists(object1, property1) && object0[property0] == object1[property1])
+        : !valueExists(object1, property1);
+    }
+
+    function isAuthenticated() {
+      return request.auth != null
+        && ('type' in request.auth.token)
+        && (
+          !valueExists(request.auth.token, 'disabled')
+          || request.auth.token.disabled == false
+        );
+    }
+
+    function isAdmin() {
+      return isAuthenticated()
+        && request.auth.token.type == 'admin';
+    }
+
+    function isPartOf(organizationId) {
+      return ('organization' in request.auth.token)
+        && request.auth.token.organization == organizationId;
+    }
+
+    function isOwnerOf(organizationId) {
+      return organizationId != null
+        && isAuthenticated()
+        && request.auth.token.type == 'owner'
+        && isPartOf(organizationId);
+    }
+
+    function isOwnerOrClinicianOf(organizationId) {
+      return organizationId != null
+        && isAuthenticated()
+        && request.auth.token.type in ['owner', 'clinician']
+        && isPartOf(organizationId);
+    }
+
+    function isUser(userId) {
+      return isAuthenticated()
+        && request.auth.uid == userId;
+    }
+
+    function getUser(userId) {
+      return get(/databases/$(databaseId)/documents/users/$(userId));
+    }
+
     match /organizations/{organizationId} {
-      allow read: if request.auth != null;
+      allow read: if isAdmin() || isPartOf(organizationId);
+      allow update: if isAdmin() || isOwnerOf(organizationId);
+      allow create, delete: if isAdmin();
     }
-    
-    // Questionnaires are readable by authenticated users
+
     match /questionnaires/{questionnaireId} {
-      allow read: if request.auth != null;
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
     }
-    
-    // Allow clinicians and owners to read patient data
+
     match /users/{userId} {
-      allow read: if request.auth != null && 
-        (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.type in ['clinician', 'owner']);
-      
-      match /{document=**} {
-        allow read: if request.auth != null && 
-          (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.type in ['clinician', 'owner']);
+      function securityRelatedFieldsDidNotChange() {
+        return isEqualOptional(request.resource.data, 'type', resource.data, 'type')
+          && isEqualOptional(request.resource.data, 'disabled', resource.data, 'disabled')
+          && isEqualOptional(request.resource.data, 'organization', resource.data, 'organization')
+          && isEqualOptional(request.resource.data, 'phoneNumbers', resource.data, 'phoneNumbers');
       }
+
+      function isAllowedUpdateWithinOrganization() {
+        return valueExists(resource.data, 'type') ?
+          (
+            resource.data.type in ['patient']
+            ? isOwnerOrClinicianOf(resource.data.organization)
+            : isOwnerOf(resource.data.organization)
+          ) : false;
+      }
+
+      allow read: if isAdmin()
+        || (request.auth != null && request.auth.uid == userId)
+        || (resource == null && isAuthenticated())
+        || (resource != null && valueExists(resource.data, 'organization') && isOwnerOrClinicianOf(resource.data.organization));
+
+      allow create: if isAdmin()
+        || (isUser(userId) && !valueExists(request.resource.data, 'organization') && !valueExists(request.resource.data, 'type'));
+
+      allow update: if isAdmin()
+        || (securityRelatedFieldsDidNotChange() && (isUser(userId) || isAllowedUpdateWithinOrganization()));
+
+      allow delete: if isAdmin();
+    }
+
+    match /users/{userId}/{collectionName}/{documentId} {
+      function isOwnerOrClinicianOfSameOrganization() {
+        let userDoc = getUser(userId);
+        return (userDoc.data != null)
+          && ('organization' in userDoc.data)
+          && isOwnerOrClinicianOf(userDoc.data.organization);
+      }
+
+      function isPatientWritableCollectionName() {
+        return collectionName.matches('^[A-Za-z]+Observations$')
+          || collectionName in ['questionnaireResponses']
+      }
+
+      function isClinicianWritableCollectionName() {
+        return isPatientWritableCollectionName()
+          || collectionName in [];
+      }
+
+      allow read: if isAdmin()
+        || (request.auth != null && request.auth.uid == userId)
+        || isOwnerOrClinicianOfSameOrganization();
+
+      allow write: if isAdmin()
+        || (isUser(userId) && isPatientWritableCollectionName())
+        || (isOwnerOrClinicianOfSameOrganization() && isClinicianWritableCollectionName());
     }
   }
 }

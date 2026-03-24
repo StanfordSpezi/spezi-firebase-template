@@ -2,15 +2,24 @@ rules_version = '2';
 
 service firebase.storage {
   match /b/{bucket}/o {
-    // Users can read and write their own files
-    match /users/{userId}/{allPaths=**} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
+    function isAuthenticated() {
+      return request.auth != null
+        && ('type' in request.auth.token)
+        && (!('disabled' in request.auth.token) || request.auth.token.disabled == false);
     }
-    
-    // Allow clinicians and owners to read patient files
+
     match /users/{userId}/{allPaths=**} {
-      allow read: if request.auth != null && 
-        firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.type in ['clinician', 'owner'];
+      // Self-access
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+
+      // Admin access
+      allow read, write: if isAuthenticated() && request.auth.token.type == 'admin';
+
+      // Org-scoped: owner/clinician can read files of users in their org
+      allow read: if isAuthenticated()
+        && request.auth.token.type in ['owner', 'clinician']
+        && firestore.get(/databases/(default)/documents/users/$(userId)).data.organization != null
+        && request.auth.token.organization == firestore.get(/databases/(default)/documents/users/$(userId)).data.organization;
     }
   }
 }
