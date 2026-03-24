@@ -10,15 +10,17 @@ import { callFunction } from "./helpers/callFunction.js";
 import { createUserDoc } from "./helpers/firestore.js";
 
 describe("createUser", () => {
-  it("creates a user successfully", async () => {
-    const caller = await createTestUser({ customClaims: { type: "owner" } });
-    await createUserDoc(caller.uid, { type: "owner" });
+  it("admin creates a user of any type", async () => {
+    const caller = await createTestUser({
+      customClaims: { type: "admin" },
+    });
+    await createUserDoc(caller.uid, { type: "admin" });
 
     const { result, error } = await callFunction(
       "createUser",
       {
         auth: { email: "newuser@example.com", displayName: "New User" },
-        user: { type: "patient" },
+        user: { type: "owner", organization: "org-1" },
       },
       caller.token,
     );
@@ -27,35 +29,34 @@ describe("createUser", () => {
     const userId = (result as { userId: string }).userId;
     expect(userId).toBeDefined();
 
-    // Verify Firebase Auth user was created
     const authUser = await admin.auth().getUser(userId);
     expect(authUser.email).toBe("newuser@example.com");
-    expect(authUser.displayName).toBe("New User");
+    expect(authUser.customClaims).toEqual({
+      type: "owner",
+      organization: "org-1",
+    });
 
-    // Verify Firestore document was created
     const userDoc = await admin
       .firestore()
       .collection("users")
       .doc(userId)
       .get();
     expect(userDoc.exists).toBe(true);
-    expect(userDoc.data()?.type).toBe("patient");
-    expect(userDoc.data()?.disabled).toBe(false);
+    expect(userDoc.data()?.type).toBe("owner");
+    expect(userDoc.data()?.organization).toBe("org-1");
   });
 
-  it("creates a user with organization and clinician", async () => {
-    const caller = await createTestUser({ customClaims: { type: "owner" } });
-    await createUserDoc(caller.uid, { type: "owner" });
+  it("owner creates patient in own org", async () => {
+    const caller = await createTestUser({
+      customClaims: { type: "owner", organization: "org-1" },
+    });
+    await createUserDoc(caller.uid, { type: "owner", organization: "org-1" });
 
     const { result, error } = await callFunction(
       "createUser",
       {
         auth: { email: "patient@example.com" },
-        user: {
-          type: "patient",
-          organization: "org-123",
-          clinician: caller.uid,
-        },
+        user: { type: "patient", organization: "org-1" },
       },
       caller.token,
     );
@@ -68,8 +69,137 @@ describe("createUser", () => {
       .collection("users")
       .doc(userId)
       .get();
-    expect(userDoc.data()?.organization).toBe("org-123");
-    expect(userDoc.data()?.clinician).toBe(caller.uid);
+    expect(userDoc.data()?.type).toBe("patient");
+    expect(userDoc.data()?.organization).toBe("org-1");
+  });
+
+  it("owner creates clinician in own org", async () => {
+    const caller = await createTestUser({
+      customClaims: { type: "owner", organization: "org-1" },
+    });
+    await createUserDoc(caller.uid, { type: "owner", organization: "org-1" });
+
+    const { result, error } = await callFunction(
+      "createUser",
+      {
+        auth: { email: "clinician@example.com" },
+        user: { type: "clinician", organization: "org-1" },
+      },
+      caller.token,
+    );
+
+    expect(error).toBeUndefined();
+    const userId = (result as { userId: string }).userId;
+
+    const authUser = await admin.auth().getUser(userId);
+    expect(authUser.customClaims).toEqual({
+      type: "clinician",
+      organization: "org-1",
+    });
+  });
+
+  it("owner creates another owner in own org", async () => {
+    const caller = await createTestUser({
+      customClaims: { type: "owner", organization: "org-1" },
+    });
+    await createUserDoc(caller.uid, { type: "owner", organization: "org-1" });
+
+    const { result, error } = await callFunction(
+      "createUser",
+      {
+        auth: { email: "owner2@example.com" },
+        user: { type: "owner", organization: "org-1" },
+      },
+      caller.token,
+    );
+
+    expect(error).toBeUndefined();
+    expect((result as { userId: string }).userId).toBeDefined();
+  });
+
+  it("owner cannot create user in different org", async () => {
+    const caller = await createTestUser({
+      customClaims: { type: "owner", organization: "org-1" },
+    });
+    await createUserDoc(caller.uid, { type: "owner", organization: "org-1" });
+
+    const { error } = await callFunction(
+      "createUser",
+      {
+        auth: { email: "patient@example.com" },
+        user: { type: "patient", organization: "org-2" },
+      },
+      caller.token,
+    );
+
+    expect(error).toBeDefined();
+    expect(error!.status).toBe("PERMISSION_DENIED");
+  });
+
+  it("clinician creates patient in own org", async () => {
+    const caller = await createTestUser({
+      customClaims: { type: "clinician", organization: "org-1" },
+    });
+    await createUserDoc(caller.uid, {
+      type: "clinician",
+      organization: "org-1",
+    });
+
+    const { result, error } = await callFunction(
+      "createUser",
+      {
+        auth: { email: "patient@example.com" },
+        user: { type: "patient", organization: "org-1" },
+      },
+      caller.token,
+    );
+
+    expect(error).toBeUndefined();
+    expect((result as { userId: string }).userId).toBeDefined();
+  });
+
+  it("clinician cannot create clinician", async () => {
+    const caller = await createTestUser({
+      customClaims: { type: "clinician", organization: "org-1" },
+    });
+    await createUserDoc(caller.uid, {
+      type: "clinician",
+      organization: "org-1",
+    });
+
+    const { error } = await callFunction(
+      "createUser",
+      {
+        auth: { email: "clinician2@example.com" },
+        user: { type: "clinician", organization: "org-1" },
+      },
+      caller.token,
+    );
+
+    expect(error).toBeDefined();
+    expect(error!.status).toBe("PERMISSION_DENIED");
+  });
+
+  it("clinician cannot create user in different org", async () => {
+    const caller = await createTestUser({
+      customClaims: { type: "clinician", organization: "org-1" },
+    });
+    await createUserDoc(caller.uid, {
+      type: "clinician",
+      organization: "org-1",
+    });
+
+    const { error } = await callFunction(
+      "createUser",
+      {
+        auth: { email: "patient@example.com" },
+        user: { type: "patient", organization: "org-2" },
+      },
+      caller.token,
+    );
+
+    expect(error).toBeDefined();
+    expect(error!.status).toBe("PERMISSION_DENIED");
   });
 
   it("rejects unauthenticated requests", async () => {
@@ -82,8 +212,10 @@ describe("createUser", () => {
   });
 
   it("rejects invalid email", async () => {
-    const caller = await createTestUser({ customClaims: { type: "owner" } });
-    await createUserDoc(caller.uid, { type: "owner" });
+    const caller = await createTestUser({
+      customClaims: { type: "admin" },
+    });
+    await createUserDoc(caller.uid, { type: "admin" });
 
     const { error } = await callFunction(
       "createUser",
@@ -98,14 +230,19 @@ describe("createUser", () => {
   });
 
   it("rejects patient claims", async () => {
-    const caller = await createTestUser({ customClaims: { type: "patient" } });
-    await createUserDoc(caller.uid, { type: "patient" });
+    const caller = await createTestUser({
+      customClaims: { type: "patient", organization: "org-1" },
+    });
+    await createUserDoc(caller.uid, {
+      type: "patient",
+      organization: "org-1",
+    });
 
     const { error } = await callFunction(
       "createUser",
       {
         auth: { email: "newuser@example.com", displayName: "New User" },
-        user: { type: "patient" },
+        user: { type: "patient", organization: "org-1" },
       },
       caller.token,
     );
