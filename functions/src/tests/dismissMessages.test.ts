@@ -14,8 +14,10 @@ import {
 
 describe("dismissMessages", () => {
   it("dismisses a single message successfully", async () => {
-    const user = await createTestUser({});
-    await createUserDoc(user.uid, { type: "patient" });
+    const user = await createTestUser({
+      customClaims: { type: "patient", organization: "org-1" },
+    });
+    await createUserDoc(user.uid, { type: "patient", organization: "org-1" });
 
     const messageId = await createMessageDoc(user.uid, {
       title: "Test Message",
@@ -39,8 +41,10 @@ describe("dismissMessages", () => {
   });
 
   it("dismisses multiple messages at once", async () => {
-    const user = await createTestUser({});
-    await createUserDoc(user.uid, { type: "patient" });
+    const user = await createTestUser({
+      customClaims: { type: "patient", organization: "org-1" },
+    });
+    await createUserDoc(user.uid, { type: "patient", organization: "org-1" });
 
     const messageId1 = await createMessageDoc(user.uid, {
       title: "Message 1",
@@ -70,8 +74,10 @@ describe("dismissMessages", () => {
   });
 
   it("dismisses with didPerformAction: true", async () => {
-    const user = await createTestUser({});
-    await createUserDoc(user.uid, { type: "patient" });
+    const user = await createTestUser({
+      customClaims: { type: "patient", organization: "org-1" },
+    });
+    await createUserDoc(user.uid, { type: "patient", organization: "org-1" });
 
     const messageId = await createMessageDoc(user.uid, {
       title: "Action Message",
@@ -87,6 +93,102 @@ describe("dismissMessages", () => {
     const messages = await getUserMessages(user.uid);
     const dismissed = messages.find((m) => m.id === messageId);
     expect(dismissed!.data().didPerformAction).toBe(true);
+  });
+
+  it("clinician dismisses messages for patient in same org", async () => {
+    const clinician = await createTestUser({
+      customClaims: { type: "clinician", organization: "org-1" },
+    });
+    await createUserDoc(clinician.uid, {
+      type: "clinician",
+      organization: "org-1",
+    });
+
+    const patient = await createTestUser({
+      email: "patient@example.com",
+      customClaims: { type: "patient", organization: "org-1" },
+    });
+    await createUserDoc(patient.uid, {
+      type: "patient",
+      organization: "org-1",
+    });
+
+    const messageId = await createMessageDoc(patient.uid, {
+      title: "Patient Message",
+      description: "Test",
+    });
+
+    const { result, error } = await callFunction(
+      "dismissMessages",
+      { userId: patient.uid, messageIds: [messageId] },
+      clinician.token,
+    );
+
+    expect(error).toBeUndefined();
+    expect((result as { dismissedCount: number }).dismissedCount).toBe(1);
+  });
+
+  it("clinician cannot dismiss messages for patient in different org", async () => {
+    const clinician = await createTestUser({
+      customClaims: { type: "clinician", organization: "org-1" },
+    });
+    await createUserDoc(clinician.uid, {
+      type: "clinician",
+      organization: "org-1",
+    });
+
+    const patient = await createTestUser({
+      email: "patient@example.com",
+      customClaims: { type: "patient", organization: "org-2" },
+    });
+    await createUserDoc(patient.uid, {
+      type: "patient",
+      organization: "org-2",
+    });
+
+    const messageId = await createMessageDoc(patient.uid, {
+      title: "Patient Message",
+      description: "Test",
+    });
+
+    const { error } = await callFunction(
+      "dismissMessages",
+      { userId: patient.uid, messageIds: [messageId] },
+      clinician.token,
+    );
+
+    expect(error).toBeDefined();
+    expect(error!.status).toBe("PERMISSION_DENIED");
+  });
+
+  it("admin dismisses messages for any user", async () => {
+    const adminUser = await createTestUser({
+      customClaims: { type: "admin" },
+    });
+    await createUserDoc(adminUser.uid, { type: "admin" });
+
+    const patient = await createTestUser({
+      email: "patient@example.com",
+      customClaims: { type: "patient", organization: "org-1" },
+    });
+    await createUserDoc(patient.uid, {
+      type: "patient",
+      organization: "org-1",
+    });
+
+    const messageId = await createMessageDoc(patient.uid, {
+      title: "Patient Message",
+      description: "Test",
+    });
+
+    const { result, error } = await callFunction(
+      "dismissMessages",
+      { userId: patient.uid, messageIds: [messageId] },
+      adminUser.token,
+    );
+
+    expect(error).toBeUndefined();
+    expect((result as { dismissedCount: number }).dismissedCount).toBe(1);
   });
 
   it("rejects unauthenticated requests", async () => {

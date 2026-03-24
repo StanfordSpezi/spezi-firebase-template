@@ -11,6 +11,7 @@ import {
 } from "./schema.js";
 import { validatedOnCall } from "../../helpers/validatedOnCall.js";
 import { Credential } from "../../services/auth/credential.js";
+import { UserRole } from "../../services/auth/userRole.js";
 import { DefaultDatabaseService } from "../../services/database/databaseService.js";
 import { DefaultUserService } from "../../services/user/defaultUserService.js";
 import { userAuthConverter, userConverter } from "../../types/index.js";
@@ -19,8 +20,6 @@ export const getUsersInformation = validatedOnCall(
   getUsersInformationInputSchema,
   async (request): Promise<GetUsersInformationOutput> => {
     const credential = new Credential(request.auth);
-    credential.checkOwnerOrClinician();
-
     const databaseService = new DefaultDatabaseService(getFirestore());
     const userService = new DefaultUserService(databaseService);
 
@@ -28,16 +27,28 @@ export const getUsersInformation = validatedOnCall(
 
     for (const userId of request.data.userIds) {
       try {
+        const userData = await userService.getUser(userId);
+
+        credential.check(
+          UserRole.admin,
+          UserRole.user(userId),
+          ...(userData?.data.organization ?
+            [
+              UserRole.owner(userData.data.organization),
+              UserRole.clinician(userData.data.organization),
+            ]
+          : []),
+        );
+
         const authData = await userService.getAuth(userId);
-        const userData =
-          request.data.includeUserData ?
-            await userService.getUser(userId)
-          : undefined;
 
         result[userId] = {
           data: {
             auth: userAuthConverter.encode(authData),
-            user: userData ? userConverter.encode(userData.data) : undefined,
+            user:
+              request.data.includeUserData && userData !== undefined ?
+                userConverter.encode(userData.data)
+              : undefined,
           },
         };
       } catch (error) {

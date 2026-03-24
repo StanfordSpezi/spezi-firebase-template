@@ -7,6 +7,8 @@ import { HttpsError } from "firebase-functions/v2/https";
 import { type UserRole } from "./userRole.js";
 import { type CustomClaims } from "../../types/index.js";
 
+type UserRoleWithFalsy = UserRole | null | undefined;
+
 export class Credential {
   readonly userId: string;
   readonly claims: CustomClaims;
@@ -19,18 +21,18 @@ export class Credential {
     this.claims = authData.token ?? {};
   }
 
-  check(...roles: UserRole[]): UserRole {
+  check(...roles: UserRoleWithFalsy[]): UserRole {
     if (this.claims.disabled === true) {
       throw this.disabledError();
     }
 
-    const role = roles.find((role) => role.matches(this.claims, this.userId));
-    if (role !== undefined) return role;
+    const role = roles.find((role) => role?.matches(this.claims, this.userId));
+    if (role !== undefined && role !== null) return role;
     throw this.permissionDeniedError();
   }
 
   async checkAsync(
-    ...promises: Array<() => Promise<UserRole[]> | UserRole[]>
+    ...promises: Array<() => Promise<UserRoleWithFalsy[]> | UserRoleWithFalsy[]>
   ): Promise<UserRole> {
     if (this.claims.disabled === true) {
       throw this.disabledError();
@@ -38,8 +40,10 @@ export class Credential {
 
     for (const promise of promises) {
       const roles = await promise();
-      const role = roles.find((role) => role.matches(this.claims, this.userId));
-      if (role !== undefined) return role;
+      const role = roles.find((role) =>
+        role?.matches(this.claims, this.userId),
+      );
+      if (role !== undefined && role !== null) return role;
     }
     throw this.permissionDeniedError();
   }

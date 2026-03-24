@@ -24,11 +24,25 @@ if (
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const usersPath = join(__dirname, "emulator-data", "auth_export", "users.json");
+const organizationsPath = join(__dirname, "emulator-data", "auth_export", "organizations.json");
 const users = JSON.parse(readFileSync(usersPath, "utf-8"));
+const organizations = JSON.parse(readFileSync(organizationsPath, "utf-8"));
 
 const app = initializeApp({ projectId: "spezi-firebase-template" });
 const auth = getAuth(app);
 const firestore = getFirestore(app);
+
+for (const org of organizations) {
+  const orgDoc = firestore.collection("organizations").doc(org.id);
+  const existing = await orgDoc.get();
+  if (!existing.exists) {
+    await orgDoc.set(org.data);
+    console.log(`Created organization: ${org.id}`);
+  } else {
+    console.log(`Organization already exists: ${org.id}`);
+  }
+}
+
 
 for (const entry of users) {
   const { auth: authData, user: userData } = entry;
@@ -49,6 +63,13 @@ for (const entry of users) {
     }
   }
 
+  const claims = { type: userData.type };
+  if (userData.organization) {
+    claims.organization = userData.organization;
+  }
+  await auth.setCustomUserClaims(authData.uid, claims);
+  console.log(`Set custom claims for: ${authData.email}`);
+
   const userDoc = firestore.collection("users").doc(authData.uid);
   const existing = await userDoc.get();
   if (!existing.exists) {
@@ -59,5 +80,7 @@ for (const entry of users) {
   }
 }
 
-console.log(`Seeding complete: ${users.length} users processed.`);
+console.log(
+  `Seeding complete: ${organizations.length} organizations, ${users.length} users processed.`,
+);
 process.exit(0);

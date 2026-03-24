@@ -16,13 +16,16 @@ export const createUser = validatedOnCall(
   createUserInputSchema,
   async (request): Promise<CreateUserOutput> => {
     const credential = new Credential(request.auth);
-    if (request.data.user.type === UserType.admin) {
+    const targetType = request.data.user.type;
+    const targetOrg = request.data.user.organization;
+
+    if (targetType === UserType.admin) {
       credential.check(UserRole.admin);
-    } else if (request.data.user.organization !== undefined) {
+    } else if (targetOrg !== undefined) {
       credential.check(
         UserRole.admin,
-        UserRole.owner(request.data.user.organization),
-        UserRole.clinician(request.data.user.organization),
+        UserRole.owner(targetOrg),
+        targetType === UserType.patient ? UserRole.clinician(targetOrg) : null,
       );
     } else {
       throw credential.permissionDeniedError();

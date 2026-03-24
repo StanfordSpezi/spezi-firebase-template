@@ -28,6 +28,8 @@ export const createUserDoc = async (
   data: {
     type: "patient" | "clinician" | "owner" | "admin";
     disabled?: boolean;
+    organization?: string;
+    clinician?: string;
     displayName?: string;
     email?: string;
   },
@@ -39,6 +41,8 @@ export const createUserDoc = async (
     createdAt: admin.firestore.Timestamp.now(),
     lastActiveDate: admin.firestore.Timestamp.now(),
   };
+  if (data.organization !== undefined) doc.organization = data.organization;
+  if (data.clinician !== undefined) doc.clinician = data.clinician;
   if (data.displayName !== undefined) doc.displayName = data.displayName;
   if (data.email !== undefined) doc.email = data.email;
 
