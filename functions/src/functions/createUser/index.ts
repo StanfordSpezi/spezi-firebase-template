@@ -4,11 +4,13 @@
 // SPDX-License-Identifier: MIT
 
 import { getFirestore } from "firebase-admin/firestore";
+import { HttpsError } from "firebase-functions/v2/https";
 import { createUserInputSchema, type CreateUserOutput } from "./schema.js";
 import { validatedOnCall } from "../../helpers/validatedOnCall.js";
 import { Credential } from "../../services/auth/credential.js";
 import { UserRole } from "../../services/auth/userRole.js";
 import { DefaultDatabaseService } from "../../services/database/databaseService.js";
+import { DefaultOrganizationService } from "../../services/organization/defaultOrganizationService.js";
 import { DefaultUserService } from "../../services/user/defaultUserService.js";
 import { UserType } from "../../types/index.js";
 
@@ -16,6 +18,8 @@ export const createUser = validatedOnCall(
   createUserInputSchema,
   async (request): Promise<CreateUserOutput> => {
     const credential = new Credential(request.auth);
+    const databaseService = new DefaultDatabaseService(getFirestore());
+    const organizationService = new DefaultOrganizationService(databaseService);
     const targetType = request.data.user.type;
     const targetOrg = request.data.user.organization;
 
@@ -31,7 +35,17 @@ export const createUser = validatedOnCall(
       throw credential.permissionDeniedError();
     }
 
-    const databaseService = new DefaultDatabaseService(getFirestore());
+
+    if (targetOrg !== undefined) {
+      const organizationExists = await organizationService.organizationExists(targetOrg);
+      if (!organizationExists) {
+        throw new HttpsError(
+          "not-found",
+          `Organization '${targetOrg}' does not exist.`,
+        );
+      }
+    }
+
     const userService = new DefaultUserService(databaseService);
 
     const userId = await userService.createUser({

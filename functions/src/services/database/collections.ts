@@ -10,6 +10,7 @@ import {
 } from "./databaseConverter.js";
 import {
   fhirObservationConverter,
+  organizationConverter,
   userConverter,
   userMessageConverter,
   type UserObservationCollection,
@@ -20,6 +21,12 @@ export class CollectionsService {
 
   constructor(firestore: Firestore) {
     this.firestore = firestore;
+  }
+
+  get organizations() {
+    return this.firestore
+      .collection("organizations")
+      .withConverter(new DatabaseConverter(organizationConverter));
   }
 
   get users() {
