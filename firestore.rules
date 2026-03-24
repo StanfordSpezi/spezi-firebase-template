@@ -106,7 +106,7 @@ service cloud.firestore {
 
       function isPatientWritableCollectionName() {
         return collectionName.matches('^[A-Za-z]+Observations$')
-          || collectionName in ['questionnaireResponses']
+          || collectionName in ['questionnaireResponses'];
       }
 
       function isClinicianWritableCollectionName() {
