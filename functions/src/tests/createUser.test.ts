@@ -229,6 +229,25 @@ describe("createUser", () => {
     expect(error!.status).toBe("INVALID_ARGUMENT");
   });
 
+  it("rejects non-existent organization", async () => {
+    const caller = await createTestUser({
+      customClaims: { type: "admin" },
+    });
+    await createUserDoc(caller.uid, { type: "admin" });
+
+    const { error } = await callFunction(
+      "createUser",
+      {
+        auth: { email: "newuser@example.com" },
+        user: { type: "patient", organization: "non-existent-org" },
+      },
+      caller.token,
+    );
+
+    expect(error).toBeDefined();
+    expect(error!.status).toBe("NOT_FOUND");
+  });
+
   it("rejects patient claims", async () => {
     const caller = await createTestUser({
       customClaims: { type: "patient", organization: "org-1" },
