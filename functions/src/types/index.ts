@@ -19,6 +19,7 @@ export type UserObservationCollection =
   | "heartRate";
 
 export enum UserType {
+  // TODO: Add support for admin actions in Credential and firebase rules
   admin = "admin",
   owner = "owner",
   clinician = "clinician",
