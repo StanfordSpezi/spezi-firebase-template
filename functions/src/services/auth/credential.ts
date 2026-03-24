@@ -12,6 +12,7 @@ interface CustomClaims {
   [key: string]: unknown;
 }
 
+// TODO: Add support for organization permissions
 export class Credential {
   readonly userId: string;
   private readonly claims: CustomClaims;
@@ -24,10 +25,23 @@ export class Credential {
     this.claims = authData.token ?? {};
   }
 
-  checkOwnerOrClinician(): void {
+  checkDisabled(): void {
     if (this.claims.disabled === true) {
       throw new HttpsError("permission-denied", "User is disabled.");
     }
+  }
+
+  checkAdmin(): void {
+    if (this.claims.type !== UserType.admin) {
+      throw new HttpsError(
+        "permission-denied",
+        "User does not have permission.",
+      );
+    }
+  }
+
+  checkOwnerOrClinician(): void {
+    this.checkDisabled();
 
     if (
       this.claims.type !== UserType.owner &&
@@ -41,9 +55,7 @@ export class Credential {
   }
 
   checkSelfOrOwnerOrClinician(targetUserId: string): void {
-    if (this.claims.disabled === true) {
-      throw new HttpsError("permission-denied", "User is disabled.");
-    }
+    this.checkDisabled();
 
     // Users can access their own data
     if (this.userId === targetUserId) return;
@@ -64,8 +76,6 @@ export class Credential {
       throw new HttpsError("unauthenticated", "User is not authenticated.");
     }
 
-    if (this.claims.disabled === true) {
-      throw new HttpsError("permission-denied", "User is disabled.");
-    }
+    this.checkDisabled();
   }
 }
