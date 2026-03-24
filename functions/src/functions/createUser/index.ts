@@ -14,7 +14,7 @@ export const createUser = validatedOnCall(
   createUserInputSchema,
   async (request): Promise<CreateUserOutput> => {
     const credential = new Credential(request.auth);
-    // TODO: Clinician should be able to create patients, owner should be able to create patients and clinicians, admin should be able to create all?
+    // TODO: Clinician should be able to create patients, owner should be able to create patients and clinicians, admin should be able to create all
     credential.checkOwnerOrClinician();
 
     const databaseService = new DefaultDatabaseService(getFirestore());
