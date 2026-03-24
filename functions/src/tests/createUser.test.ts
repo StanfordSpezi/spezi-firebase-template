@@ -11,7 +11,7 @@ import { createUserDoc } from "./helpers/firestore.js";
 
 describe("createUser", () => {
   it("creates a user successfully", async () => {
-    const caller = await createTestUser({ customClaims: {type: "owner"}});
+    const caller = await createTestUser({ customClaims: { type: "owner" } });
     await createUserDoc(caller.uid, { type: "owner" });
 
     const { result, error } = await callFunction(
@@ -112,5 +112,4 @@ describe("createUser", () => {
     expect(error).toBeDefined();
     expect(error!.status).toBe("PERMISSION_DENIED");
   });
-
 });
