@@ -23,11 +23,24 @@ export const deleteAllAuthUsers = async (): Promise<void> => {
   );
 };
 
+export const createOrganizationDoc = async (
+  organizationId: string,
+  data: { name: string } = { name: organizationId },
+): Promise<void> => {
+  await admin
+    .firestore()
+    .collection("organizations")
+    .doc(organizationId)
+    .set(data);
+};
+
 export const createUserDoc = async (
   userId: string,
   data: {
-    type: "patient" | "clinician" | "owner";
+    type: "patient" | "clinician" | "owner" | "admin";
     disabled?: boolean;
+    organization?: string;
+    clinician?: string;
     displayName?: string;
     email?: string;
   },
@@ -39,6 +52,8 @@ export const createUserDoc = async (
     createdAt: admin.firestore.Timestamp.now(),
     lastActiveDate: admin.firestore.Timestamp.now(),
   };
+  if (data.organization !== undefined) doc.organization = data.organization;
+  if (data.clinician !== undefined) doc.clinician = data.clinician;
   if (data.displayName !== undefined) doc.displayName = data.displayName;
   if (data.email !== undefined) doc.email = data.email;
 
@@ -97,7 +112,7 @@ export const createMessageDoc = async (
     .doc(userId)
     .collection("messages")
     .add({
-      type: data.type ?? "info",
+      type: data.type ?? "welcome",
       title: data.title,
       description: data.description,
       isDismissed: data.isDismissed ?? false,

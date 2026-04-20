@@ -26,7 +26,7 @@ export const onUserCreated = onDocumentCreated(
     switch (userData.type) {
       case UserType.patient:
         welcomeMessage = new UserMessage({
-          type: UserMessageType.info,
+          type: UserMessageType.welcome,
           title: "Welcome to Your Health Journey!",
           description:
             "Start tracking your daily steps and health metrics to improve your wellbeing.",
@@ -37,7 +37,7 @@ export const onUserCreated = onDocumentCreated(
         break;
       case UserType.clinician:
         welcomeMessage = new UserMessage({
-          type: UserMessageType.info,
+          type: UserMessageType.welcome,
           title: "Welcome, Clinician!",
           description:
             "You can now monitor your patients' health data and provide better care.",
@@ -47,8 +47,9 @@ export const onUserCreated = onDocumentCreated(
         });
         break;
       case UserType.owner:
+      case UserType.admin:
         welcomeMessage = new UserMessage({
-          type: UserMessageType.info,
+          type: UserMessageType.welcome,
           title: "Welcome, Administrator!",
           description:
             "You have full access to manage users and monitor the system.",

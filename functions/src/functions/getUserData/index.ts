@@ -12,7 +12,7 @@ import {
   type CallableRequest,
   HttpsError,
 } from "firebase-functions/v2/https";
-import { CollectionsService } from "../services/database/collections.js";
+import { CollectionsService } from "../../services/database/collections.js";
 
 export const getUserData = onCall(
   { cors: true },

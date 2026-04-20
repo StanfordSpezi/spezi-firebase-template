@@ -4,9 +4,22 @@
 // SPDX-License-Identifier: MIT
 
 /// <reference types="fhir" />
-import { observationSchema } from "@stanfordspezi/spezi-firebase-fhir";
-import { SchemaConverter } from "@stanfordspezi/spezi-firebase-utils";
+import {
+  observationSchema,
+  questionnaireResponseSchema,
+} from "@stanfordspezi/spezi-firebase-fhir";
+import {
+  dateConverter,
+  SchemaConverter,
+  optionalish,
+  optionalishDefault,
+} from "@stanfordspezi/spezi-firebase-utils";
 import { z } from "zod/v4";
+
+export {
+  LocalizedText,
+  localizedTextConverter,
+} from "@stanfordspezi/spezi-firebase-utils";
 
 export type UserObservationCollection =
   | "stepCount"
@@ -14,15 +27,21 @@ export type UserObservationCollection =
   | "heartRate";
 
 export enum UserType {
+  admin = "admin",
   owner = "owner",
   clinician = "clinician",
   patient = "patient",
 }
 
+export interface CustomClaims {
+  type?: UserType;
+  organization?: string;
+  disabled?: boolean;
+  [key: string]: unknown;
+}
+
 export enum UserMessageType {
-  info = "info",
-  warning = "warning",
-  reminder = "reminder",
+  welcome = "welcome",
 }
 
 export class User {
@@ -137,83 +156,106 @@ export const userConverter = new SchemaConverter({
     .object({
       type: z.enum(UserType),
       disabled: z.boolean().default(false),
-      organization: z.string().optional(),
-      clinician: z.string().optional(),
-      displayName: z.string().optional(),
-      email: z.email().optional(),
+      organization: optionalish(z.string()),
+      clinician: optionalish(z.string()),
+      displayName: optionalish(z.string()),
+      email: optionalish(z.email()),
       phoneNumbers: z.array(z.string()).default([]),
-      language: z.string().optional(),
-      timeZone: z.string().optional(),
-      createdAt: z.date(),
-      lastActiveDate: z.date(),
+      language: optionalish(z.string()),
+      timeZone: optionalish(z.string()),
+      createdAt: dateConverter.schema,
+      lastActiveDate: dateConverter.schema,
     })
     .transform((values) => new User(values)),
   encode: (object) => ({
     type: object.type,
     disabled: object.disabled,
-    organization: object.organization,
-    clinician: object.clinician,
-    displayName: object.displayName,
-    email: object.email,
+    organization: object.organization ?? null,
+    clinician: object.clinician ?? null,
+    displayName: object.displayName ?? null,
+    email: object.email ?? null,
     phoneNumbers: object.phoneNumbers,
-    language: object.language,
-    timeZone: object.timeZone,
-    createdAt: object.createdAt,
-    lastActiveDate: object.lastActiveDate,
+    language: object.language ?? null,
+    timeZone: object.timeZone ?? null,
+    createdAt: dateConverter.encode(object.createdAt),
+    lastActiveDate: dateConverter.encode(object.lastActiveDate),
   }),
 });
 
 export const userAuthConverter = new SchemaConverter({
   schema: z
     .object({
-      displayName: z.string().optional(),
-      email: z.email().optional(),
+      displayName: optionalish(z.string()),
+      email: optionalish(z.email()),
       emailVerified: z.boolean().default(false),
       disabled: z.boolean().default(false),
-      phoneNumber: z.string().optional(),
-      customClaims: z.record(z.string(), z.unknown()).optional(),
+      phoneNumber: optionalish(z.string()),
+      customClaims: optionalish(z.record(z.string(), z.unknown())),
     })
     .transform((values) => new UserAuth(values)),
   encode: (object) => ({
-    displayName: object.displayName,
-    email: object.email,
+    displayName: object.displayName ?? null,
+    email: object.email ?? null,
     emailVerified: object.emailVerified,
     disabled: object.disabled,
-    phoneNumber: object.phoneNumber,
-    customClaims: object.customClaims,
+    phoneNumber: object.phoneNumber ?? null,
+    customClaims: object.customClaims ?? null,
   }),
 });
 
 export const userMessageConverter = new SchemaConverter({
   schema: z
     .object({
-      type: z.enum([
-        UserMessageType.info,
-        UserMessageType.warning,
-        UserMessageType.reminder,
-      ]),
+      type: z.enum(UserMessageType),
       title: z.string(),
       description: z.string(),
-      action: z.string().optional(),
-      isDismissed: z.boolean().optional().default(false),
-      didPerformAction: z.boolean().optional().default(false),
-      createdAt: z.date(),
-      completedAt: z.date().optional(),
+      action: optionalish(z.string()),
+      isDismissed: optionalishDefault(z.boolean(), false),
+      didPerformAction: optionalishDefault(z.boolean(), false),
+      createdAt: dateConverter.schema,
+      completedAt: optionalish(dateConverter.schema),
     })
     .transform((values) => new UserMessage(values)),
   encode: (object) => ({
     type: object.type,
     title: object.title,
     description: object.description,
-    action: object.action,
+    action: object.action ?? null,
     isDismissed: object.isDismissed,
     didPerformAction: object.didPerformAction,
-    createdAt: object.createdAt,
-    completedAt: object.completedAt,
+    createdAt: dateConverter.encode(object.createdAt),
+    completedAt:
+      object.completedAt !== undefined ?
+        dateConverter.encode(object.completedAt)
+      : null,
+  }),
+});
+
+export class Organization {
+  readonly name: string;
+
+  constructor(input: { name: string }) {
+    this.name = input.name;
+  }
+}
+
+export const organizationConverter = new SchemaConverter({
+  schema: z
+    .object({
+      name: z.string(),
+    })
+    .transform((values) => new Organization(values)),
+  encode: (object) => ({
+    name: object.name,
   }),
 });
 
 export const fhirObservationConverter = new SchemaConverter({
   schema: observationSchema,
+  encode: (value) => value,
+});
+
+export const fhirQuestionnaireResponseConverter = new SchemaConverter({
+  schema: questionnaireResponseSchema,
   encode: (value) => value,
 });

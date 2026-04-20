@@ -4,17 +4,14 @@
 // SPDX-License-Identifier: MIT
 
 import { HttpsError } from "firebase-functions/v2/https";
-import { UserType } from "../../types/index.js";
+import { type UserRole } from "./userRole.js";
+import { type CustomClaims } from "../../types/index.js";
 
-interface CustomClaims {
-  type?: string;
-  disabled?: boolean;
-  [key: string]: unknown;
-}
+type UserRoleWithFalsy = UserRole | null | undefined;
 
 export class Credential {
   readonly userId: string;
-  private readonly claims: CustomClaims;
+  readonly claims: CustomClaims;
 
   constructor(authData: { uid: string; token?: CustomClaims } | undefined) {
     if (authData?.uid === undefined) {
@@ -24,48 +21,41 @@ export class Credential {
     this.claims = authData.token ?? {};
   }
 
-  checkOwnerOrClinician(): void {
+  check(...roles: UserRoleWithFalsy[]): UserRole {
     if (this.claims.disabled === true) {
-      throw new HttpsError("permission-denied", "User is disabled.");
+      throw this.disabledError();
     }
 
-    if (
-      this.claims.type !== UserType.owner &&
-      this.claims.type !== UserType.clinician
-    ) {
-      throw new HttpsError(
-        "permission-denied",
-        "User does not have permission.",
+    const role = roles.find((role) => role?.matches(this.claims, this.userId));
+    if (role !== undefined && role !== null) return role;
+    throw this.permissionDeniedError();
+  }
+
+  async checkAsync(
+    ...promises: Array<() => Promise<UserRoleWithFalsy[]> | UserRoleWithFalsy[]>
+  ): Promise<UserRole> {
+    if (this.claims.disabled === true) {
+      throw this.disabledError();
+    }
+
+    for (const promise of promises) {
+      const roles = await promise();
+      const role = roles.find((role) =>
+        role?.matches(this.claims, this.userId),
       );
+      if (role !== undefined && role !== null) return role;
     }
+    throw this.permissionDeniedError();
   }
 
-  checkSelfOrOwnerOrClinician(targetUserId: string): void {
-    if (this.claims.disabled === true) {
-      throw new HttpsError("permission-denied", "User is disabled.");
-    }
-
-    // Users can access their own data
-    if (this.userId === targetUserId) return;
-
-    // Owners and clinicians can access patient data
-    if (
-      this.claims.type === UserType.owner ||
-      this.claims.type === UserType.clinician
-    ) {
-      return;
-    }
-
-    throw new HttpsError("permission-denied", "User does not have permission.");
+  permissionDeniedError() {
+    return new HttpsError(
+      "permission-denied",
+      "User does not have permission.",
+    );
   }
 
-  checkAuthenticated(): void {
-    if (!this.userId) {
-      throw new HttpsError("unauthenticated", "User is not authenticated.");
-    }
-
-    if (this.claims.disabled === true) {
-      throw new HttpsError("permission-denied", "User is disabled.");
-    }
+  disabledError() {
+    return new HttpsError("permission-denied", "User is disabled.");
   }
 }

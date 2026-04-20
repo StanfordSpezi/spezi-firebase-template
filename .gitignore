@@ -10,7 +10,7 @@ functions/models/node_modules/
 
 # Build outputs
 functions/lib/
-functions/models/lib/
+models/lib/
 *.tsbuildinfo
 
 # Firebase

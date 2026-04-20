@@ -11,6 +11,10 @@ import {
 import { type Document } from "../database/databaseService.js";
 
 export interface UserService {
+  createUser(data: {
+    auth: Partial<UserAuth>;
+    user: Partial<User> & Pick<User, "type">;
+  }): Promise<string>;
   getAuth(userId: string): Promise<UserAuth>;
   updateAuth(userId: string, auth: Partial<UserAuth>): Promise<void>;
   getUser(userId: string): Promise<Document<User> | undefined>;

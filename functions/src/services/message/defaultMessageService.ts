@@ -69,19 +69,6 @@ export class DefaultMessageService implements MessageService {
     return convertDocument(snapshot);
   }
 
-  async dismissMessage(
-    userId: string,
-    messageId: string,
-    didPerformAction: boolean,
-  ): Promise<void> {
-    const messageRef = this.collections.userMessages(userId).doc(messageId);
-    await messageRef.update({
-      isDismissed: true,
-      didPerformAction: didPerformAction,
-      completedAt: new Date(),
-    });
-  }
-
   async dismissMessages(
     userId: string,
     options: {

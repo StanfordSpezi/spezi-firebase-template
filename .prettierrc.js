@@ -3,6 +3,9 @@
 // SPDX-FileCopyrightText: 2025, 2026 Stanford University and the project authors (see CONTRIBUTORS.md)
 // SPDX-License-Identifier: MIT
 
+import { createRequire } from "module";
+
+const require = createRequire(import.meta.url);
 const { prettierConfig } = require("@stanfordspezi/spezi-web-configurations");
 
-module.exports = prettierConfig;
+export default prettierConfig;

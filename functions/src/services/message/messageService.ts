@@ -16,12 +16,6 @@ export interface MessageService {
     },
   ): Promise<Document<UserMessage> | undefined>;
 
-  dismissMessage(
-    userId: string,
-    messageId: string,
-    didPerformAction: boolean,
-  ): Promise<void>;
-
   dismissMessages(
     userId: string,
     options: {
