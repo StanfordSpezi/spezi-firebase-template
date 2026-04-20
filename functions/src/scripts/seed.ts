@@ -50,7 +50,7 @@ const organizations: SeedOrganization[] = [
   },
 ];
 
-const defaultPassword = 'test1234'
+const defaultPassword = "test1234";
 
 const users: SeedUser[] = [
   {
@@ -109,8 +109,7 @@ const users: SeedUser[] = [
         data: new UserMessage({
           type: UserMessageType.welcome,
           title: "Welcome, Owner!",
-          description:
-            "You have full access to manage users.",
+          description: "You have full access to manage users.",
           createdAt: new Date("2026-01-01T00:05:00.000Z"),
         }),
       },

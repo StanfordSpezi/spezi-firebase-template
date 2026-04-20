@@ -57,6 +57,8 @@ export class CollectionsService {
       .collection("users")
       .doc(userId)
       .collection("questionnaireResponses")
-      .withConverter(new FHIRDatabaseConverter(fhirQuestionnaireResponseConverter));
+      .withConverter(
+        new FHIRDatabaseConverter(fhirQuestionnaireResponseConverter),
+      );
   }
 }
