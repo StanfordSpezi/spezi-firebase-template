@@ -10,6 +10,7 @@ import {
 } from "./databaseConverter.js";
 import {
   fhirObservationConverter,
+  fhirQuestionnaireResponseConverter,
   organizationConverter,
   userConverter,
   userMessageConverter,
@@ -56,6 +57,6 @@ export class CollectionsService {
       .collection("users")
       .doc(userId)
       .collection("questionnaireResponses")
-      .withConverter(new FHIRDatabaseConverter(fhirObservationConverter));
+      .withConverter(new FHIRDatabaseConverter(fhirQuestionnaireResponseConverter));
   }
 }

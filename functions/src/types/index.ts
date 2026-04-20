@@ -4,7 +4,7 @@
 // SPDX-License-Identifier: MIT
 
 /// <reference types="fhir" />
-import { observationSchema } from "@stanfordspezi/spezi-firebase-fhir";
+import { observationSchema, questionnaireResponseSchema } from "@stanfordspezi/spezi-firebase-fhir";
 import {
   dateConverter,
   SchemaConverter,
@@ -249,5 +249,10 @@ export const organizationConverter = new SchemaConverter({
 
 export const fhirObservationConverter = new SchemaConverter({
   schema: observationSchema,
+  encode: (value) => value,
+});
+
+export const fhirQuestionnaireResponseConverter = new SchemaConverter({
+  schema: questionnaireResponseSchema,
   encode: (value) => value,
 });

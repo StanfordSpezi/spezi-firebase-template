@@ -13,6 +13,7 @@ export {
   userMessageConverter,
   organizationConverter,
   fhirObservationConverter,
+  fhirQuestionnaireResponseConverter,
   localizedTextConverter,
 } from "../../functions/lib/types/index.js";
 
