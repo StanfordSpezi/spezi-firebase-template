@@ -31,7 +31,7 @@
     "logs": "firebase functions:log",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "clean": "rm -rf lib",
+    "clean": "rm -rf lib .emulator-cache",
     "test": "vitest run",
     "test:emulators": "vitest run"
   },
