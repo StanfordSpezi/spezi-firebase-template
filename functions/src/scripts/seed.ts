@@ -108,10 +108,20 @@ const users: SeedUser[] = [
         id: "msg-welcome",
         data: new UserMessage({
           type: UserMessageType.welcome,
-          title: "Welcome, Administrator!",
+          title: "Welcome, Owner!",
           description:
-            "You have full access to manage users and monitor the system.",
+            "You have full access to manage users.",
           createdAt: new Date("2026-01-01T00:05:00.000Z"),
+        }),
+      },
+      {
+        id: "msg-patient-enrolled-carol",
+        data: new UserMessage({
+          type: UserMessageType.welcome,
+          title: "Patient enrolled",
+          description: "Carol Patient has joined your organization.",
+          action: "users/patient-user-1",
+          createdAt: new Date("2026-02-01T00:05:00.000Z"),
         }),
       },
     ],
@@ -144,6 +154,16 @@ const users: SeedUser[] = [
           description:
             "You can now monitor your patients' health data and provide better care.",
           createdAt: new Date("2026-01-15T00:05:00.000Z"),
+        }),
+      },
+      {
+        id: "msg-patient-assigned-carol",
+        data: new UserMessage({
+          type: UserMessageType.welcome,
+          title: "Patient assigned",
+          description: "Carol Patient has been assigned to your care.",
+          action: "users/patient-user-1",
+          createdAt: new Date("2026-02-01T00:05:00.000Z"),
         }),
       },
     ],
