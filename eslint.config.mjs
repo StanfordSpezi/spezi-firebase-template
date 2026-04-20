@@ -23,7 +23,6 @@ export default [
       "eslint.config.mjs",
       ".prettierrc.js",
       "functions/eslint.config.mjs",
-      "functions/seed.mjs",
       "functions/serve-seeded.mjs",
       "functions/vitest.config.ts",
       "functions/src/tests/",

@@ -19,7 +19,6 @@ export default [
       "models/**/*",
       "dist/**/*",
       "eslint.config.mjs",
-      "seed.mjs",
       "serve-seeded.mjs",
       "src/tests/**/*",
       "vitest.config.ts",

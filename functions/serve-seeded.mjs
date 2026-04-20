@@ -27,7 +27,7 @@ if (existsSync(accountsPath)) {
 if (needsSeed) {
   console.log("No seeded data found. Running initial seed...");
   execSync(
-    'firebase emulators:exec --only auth,firestore,storage --import=./emulator-data --export-on-exit=./.emulator-cache "node seed.mjs"',
+    'firebase emulators:exec --only auth,firestore,storage --export-on-exit=./.emulator-cache "node lib/scripts/seed.js"',
     { stdio: "inherit", cwd: __dirname },
   );
   console.log("Seed complete. Starting emulators with seeded data...\n");

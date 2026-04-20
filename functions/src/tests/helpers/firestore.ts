@@ -112,7 +112,7 @@ export const createMessageDoc = async (
     .doc(userId)
     .collection("messages")
     .add({
-      type: data.type ?? "info",
+      type: data.type ?? "welcome",
       title: data.title,
       description: data.description,
       isDismissed: data.isDismissed ?? false,

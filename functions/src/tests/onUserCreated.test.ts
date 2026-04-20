@@ -25,7 +25,7 @@ describe("onUserCreated", () => {
 
     const messageData = messages[0].data();
     expect(messageData.title).toBe("Welcome to Your Health Journey!");
-    expect(messageData.type).toBe("info");
+    expect(messageData.type).toBe("welcome");
     expect(messageData.isDismissed).toBe(false);
   });
 
