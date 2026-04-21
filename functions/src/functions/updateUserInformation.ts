@@ -1,0 +1,63 @@
+// This source file is part of the Stanford Spezi Firebase Template project
+//
+// SPDX-FileCopyrightText: 2026 Stanford University and the project authors (see CONTRIBUTORS.md)
+// SPDX-License-Identifier: MIT
+
+import { getFirestore } from "firebase-admin/firestore";
+import { z } from "zod/v4";
+import { validatedOnCall } from "../helpers/validatedOnCall.js";
+import { Credential } from "../services/auth/credential.js";
+import { DefaultDatabaseService } from "../services/database/databaseService.js";
+import { DefaultUserService } from "../services/user/defaultUserService.js";
+import { UserType } from "../types/index.js";
+
+const updateUserInformationInputSchema = z.object({
+  userId: z.string(),
+  data: z.object({
+    auth: z
+      .object({
+        displayName: z.string().optional(),
+        email: z.email().optional(),
+        disabled: z.boolean().optional(),
+        phoneNumber: z.string().optional(),
+      })
+      .optional(),
+    user: z
+      .object({
+        type: z.enum(UserType).optional(),
+        organization: z.string().optional(),
+        clinician: z.string().optional(),
+        displayName: z.string().optional(),
+        email: z.email().optional(),
+        language: z.string().optional(),
+        timeZone: z.string().optional(),
+      })
+      .optional(),
+  }),
+});
+
+export const updateUserInformation = validatedOnCall(
+  updateUserInformationInputSchema,
+  async (request): Promise<{ success: boolean }> => {
+    const credential = new Credential(request.auth);
+    credential.checkSelfOrOwnerOrClinician(request.data.userId);
+
+    const databaseService = new DefaultDatabaseService(getFirestore());
+    const userService = new DefaultUserService(databaseService);
+
+    // Update authentication data
+    if (request.data.data.auth) {
+      await userService.updateAuth(request.data.userId, request.data.data.auth);
+    }
+
+    // Update user document data
+    if (request.data.data.user) {
+      await userService.updateUserInfo(
+        request.data.userId,
+        request.data.data.user,
+      );
+    }
+
+    return { success: true };
+  },
+);

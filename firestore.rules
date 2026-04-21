@@ -1,0 +1,40 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Users can read and write their own user document
+    // Writes must not change the 'type' field to prevent privilege escalation
+    match /users/{userId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+      allow create: if request.auth != null && request.auth.uid == userId;
+      allow update: if request.auth != null && request.auth.uid == userId
+        && request.resource.data.type == resource.data.type;
+      
+      // Users can read and write their own subcollections
+      match /{document=**} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+    }
+    
+    // Organizations are readable by authenticated users
+    match /organizations/{organizationId} {
+      allow read: if request.auth != null;
+    }
+    
+    // Questionnaires are readable by authenticated users
+    match /questionnaires/{questionnaireId} {
+      allow read: if request.auth != null;
+    }
+    
+    // Allow clinicians and owners to read patient data
+    match /users/{userId} {
+      allow read: if request.auth != null && 
+        (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.type in ['clinician', 'owner']);
+      
+      match /{document=**} {
+        allow read: if request.auth != null && 
+          (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.type in ['clinician', 'owner']);
+      }
+    }
+  }
+}

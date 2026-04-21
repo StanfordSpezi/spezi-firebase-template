@@ -1,0 +1,36 @@
+{
+  "name": "spezi-firebase-template",
+  "version": "1.0.0",
+  "description": "A Firebase template for Spezi-build applications w/ FHIR support",
+  "scripts": {
+    "install": "npm --prefix functions install",
+    "build": "npm --prefix functions run build",
+    "clean": "npm --prefix functions run clean",
+    "prepare": "npm run clean && npm run install && npm run build",
+    "lint": "eslint .",
+    "lint:ci": "eslint --output-file eslint_report.json --format json .",
+    "lint:fix": "eslint . --fix",
+    "lint:strict": "npm --prefix functions run lint:strict",
+    "test:ci": "npm run build && firebase emulators:exec --only auth,firestore,storage,functions 'npm --prefix functions run test:emulators'",
+    "serve:seeded": "npm --prefix functions run serve:seeded"
+  },
+  "keywords": [
+    "firebase",
+    "spezi",
+    "fhir",
+    "healthcare",
+    "template"
+  ],
+  "author": "Stanford Biodesign Digital Health Group",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^9.32.0",
+    "prettier": "^3.6.2",
+    "@stanfordspezi/spezi-web-configurations": "^0.6.0"
+  },
+  "dependencies": {
+    "@stanfordspezi/spezi-firebase-cloud-messaging": "^0.1.5",
+    "@stanfordspezi/spezi-firebase-fhir": "^0.1.5",
+    "@stanfordspezi/spezi-firebase-utils": "^0.1.5"
+  }
+}
